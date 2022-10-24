@@ -1,10 +1,20 @@
+import axios from 'axios';
 import styles from "./Login.module.css"
 import Logo from './assets/Logo.png'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+
 
 export default function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+
+    useEffect(() =>{
+      axios.get("https://localhost:7001/api/Users")
+      .then((response) => {
+          console.log(response.data);
+      })
+    }, [])
+
     function handleChange(e) {
         if (e.target.name === 'email') {
             setEmail(e.target.value)
@@ -12,9 +22,26 @@ export default function Login() {
             setPassword(e.target.value)
         }
     }
-    function buttonClick() {
-        console.log(`email: ${email}, pass: ${password}`)
-    }
+
+    const buttonClick = (e) => {
+      e.preventDefault();
+      setEmail(email);
+      setPassword(password);
+      console.log(`email: ${email}, pass: ${password}`)
+      axios.post('https://localhost:7001/Auth/login', {
+        email:email,
+        password:password
+      })
+        .then((response) => {
+          //should return token
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+          console.log('some errorrrrr....');
+        });
+    };
+
     return (
       <>
         <div id={styles.outerContainer}>
