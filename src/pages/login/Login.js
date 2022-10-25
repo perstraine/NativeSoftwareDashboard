@@ -4,60 +4,59 @@ import Logo from './assets/Logo.png'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
-
 export default function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [logintoken, setLoginToken] = useState('')
+    const [loginresponse, setLoginResponse] = useState('')
     const navigate = useNavigate();
 
-  useEffect(() => {
-  if(logintoken)
-    {const config = { headers: { Authorization: `Bearer ${logintoken}` } };
-    axios.get("https://localhost:7001/api/Users",config)
-      .then((response) => {
-        console.log(response);
-        if (response.data == 'User Authorised') {
-          navigate('/dashboard');
-          console.log('User Authorised');
-        }
-      })}
-  }, [logintoken])
-
-  // function loginCheck(logintoken) {
-  //   const config = { headers: { Authorization: `Bearer ${logintoken}` } }
-  //   console.log('inside longin check function', logintoken)
+  // useEffect(() => {
+  // if(logintoken)
+  //   {const config = { headers: { Authorization: `Bearer ${logintoken}` } };
   //   axios.get("https://localhost:7001/api/Users",config)
   //     .then((response) => {
-  //       console.log(response.data);
-  //     } )}
+  //       console.log(response);
+  //       if (response.data === 'User Authorised') {
+  //         navigate('/dashboard');
+  //         console.log('User Authorised');
+  //       }
+  //     })}
+  // }, [logintoken])
 
-    function handleChange(e) {
-        if (e.target.name === 'email') {
-            setEmail(e.target.value)
-        } else {
-            setPassword(e.target.value)
+  useEffect(() => {
+    console.log(loginresponse);
+    if(logintoken)
+          if (loginresponse===200) {
+            navigate('/dashboard');
+            console.log('User Authorised');
         }
-    }
+    }, [logintoken])
+
+  function handleChange(e) {
+      if (e.target.name === 'email') {
+          setEmail(e.target.value)
+      } else {
+          setPassword(e.target.value)
+      }
+  }
 
     const buttonClick = (e) => {
       e.preventDefault();
       setEmail(email);
       setPassword(password);
-      //console.log(`userEmail: ${email}, pass: ${password}`)
       axios.post('https://localhost:7001/Auth/login', {
         userEmail:email,
         password:password
       })
         .then((response) => {
           setLoginToken(response.data);
+          setLoginResponse(response.status);
           // loginCheck(logintoken);
-          console.log(response);
-          
+          //console.log(response);
         })
         .catch((error) => {
           console.log(error);
-          console.log('some errorrrrr....');
         });
     };
 
@@ -91,7 +90,7 @@ export default function Login() {
                 </div>
               </form>
             </div>
-            <div id={styles.button} onClick={buttonClick}>Login</div>
+            <button id={styles.button} onClick={buttonClick}>Login</button>
             <div>{logintoken}</div>
           </div>
         </div>
