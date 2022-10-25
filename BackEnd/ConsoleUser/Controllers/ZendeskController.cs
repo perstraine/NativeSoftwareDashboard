@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using RestSharp;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json.Nodes;
 
 namespace ZendeskTest2.Controllers
 {
@@ -11,12 +12,12 @@ namespace ZendeskTest2.Controllers
     public class ZendeskController : ControllerBase
     {
         [HttpGet]
-        public string Test1()
+        public string ZendeskTickets()
         {
             var options = new RestClientOptions("https://missionreadyhq.zendesk.com")
             {
                 ThrowOnAnyError = true,
-                MaxTimeout = 10000  // 1 second
+                MaxTimeout = -1  // 1 second
             };
             var client = new RestClient(options);
 
@@ -26,7 +27,8 @@ namespace ZendeskTest2.Controllers
             RestResponse response = client.Execute(request);
             Console.WriteLine(response.Content);
             string rawResponse = response.Content;
-            return rawResponse;
+            var jsonResponse = JsonObject.Parse(rawResponse);
+            return jsonResponse.ToString();
         }
     }
 }
