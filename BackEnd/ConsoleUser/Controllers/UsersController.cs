@@ -24,12 +24,13 @@ namespace ConsoleUser.Controllers
             _configuration = configuration;
         }
 
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetUsers()
-        {
-            // return Ok(await dbContext.Users.ToListAsync());
-            return Ok("User Authorised");
-        }
+        //not needed as the endpoint moved to AuthController
+        //[HttpGet]
+        //[Authorize]
+        //public async Task<IActionResult>  GetUsersaw()
+        //{
+        //    // return Ok(await dbContext.Users.ToListAsync());
+        //    return Ok("User Authorised");
+        //}
     }
 }

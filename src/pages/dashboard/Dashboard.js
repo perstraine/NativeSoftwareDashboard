@@ -5,8 +5,10 @@ import { useNavigate } from "react-router-dom";
 function Dashboard() {
 
   const [jira, setJira] = useState('');
+  const [zendesk, setZendesk] = useState('');
   const navigate = useNavigate();
 
+// Jira API
 useEffect(() => {
   axios.get('https://localhost:7001/api/Jira').then((response) => {
     if (jira) {
@@ -20,6 +22,21 @@ useEffect(() => {
     console.log(error);
   });
 }, [jira]);
+
+//Zendesk API
+useEffect(() => {
+  axios.get('https://localhost:7001/api/Zendesk').then((response) => {
+    if (zendesk) {
+      console.log('data already retrieved')
+      console.log(zendesk);
+    }else
+    {setZendesk(response.data.tickets);
+    console.log(zendesk);}
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+}, [zendesk]);
   
   useEffect(() => {
   const logintoken = localStorage.getItem('token')
@@ -27,7 +44,7 @@ useEffect(() => {
     if (logintoken)
     {try {
       axios
-        .get("https://localhost:7001/api/Users", config);
+        .get("https://localhost:7001/Auth/login", config);
     } catch (error) {
       navigate('/');
       }
@@ -43,7 +60,7 @@ useEffect(() => {
 return (
   <div>
     <div>Dashboard</div>
-    <div onClick={logout}>Log Out</div>
+    <button onClick={logout}>Log Out</button>
   </div>
 );
 }

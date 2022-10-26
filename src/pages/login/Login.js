@@ -14,7 +14,7 @@ export default function Login() {
     setLoginToken(localStorage.getItem("token"));
   if(logintoken)
     {const config = { headers: { Authorization: `Bearer ${logintoken}` } };
-    axios.get("https://localhost:7001/api/Users",config)
+    axios.get("https://localhost:7001/Auth/login",config)
       .then((response) => {
         console.log(response);
         if (response.data === 'User Authorised') {

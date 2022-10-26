@@ -2,6 +2,7 @@
 using ConsoleUser.DTO;
 using ConsoleUser.Repositories;
 using System.Diagnostics.CodeAnalysis;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ConsoleUser.Controllers
 {
@@ -30,6 +31,14 @@ namespace ConsoleUser.Controllers
                 return Ok(token);
             }
             return BadRequest("incorrect fields");
+        }
+
+        [HttpGet]
+        [Route("login")]
+        [Authorize]
+        public async Task<IActionResult> GetUsers()
+        {
+            return Ok("User Authorised");
         }
     }
 }
