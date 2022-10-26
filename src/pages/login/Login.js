@@ -6,32 +6,23 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
     const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [logintoken, setLoginToken] = useState('')
-    const [loginresponse, setLoginResponse] = useState('')
+  const [password, setPassword] = useState('')
+  const [logintoken, setLoginToken] = useState('');
     const navigate = useNavigate();
 
-  // useEffect(() => {
-  // if(logintoken)
-  //   {const config = { headers: { Authorization: `Bearer ${logintoken}` } };
-  //   axios.get("https://localhost:7001/api/Users",config)
-  //     .then((response) => {
-  //       console.log(response);
-  //       if (response.data === 'User Authorised') {
-  //         navigate('/dashboard');
-  //         console.log('User Authorised');
-  //       }
-  //     })}
-  // }, [logintoken])
-
   useEffect(() => {
-    console.log(loginresponse);
-    if(logintoken)
-          if (loginresponse===200) {
-            navigate('/dashboard');
-            console.log('User Authorised');
+    setLoginToken(localStorage.getItem("token"));
+  if(logintoken)
+    {const config = { headers: { Authorization: `Bearer ${logintoken}` } };
+    axios.get("https://localhost:7001/api/Users",config)
+      .then((response) => {
+        console.log(response);
+        if (response.data === 'User Authorised') {
+          navigate('/dashboard');
+          console.log('User Authorised');
         }
-    }, [logintoken])
+      })}
+  }, [logintoken])
 
   function handleChange(e) {
       if (e.target.name === 'email') {
@@ -50,10 +41,8 @@ export default function Login() {
         password:password
       })
         .then((response) => {
-          setLoginToken(response.data);
-          setLoginResponse(response.status);
-          // loginCheck(logintoken);
-          //console.log(response);
+          localStorage.setItem('token', `${response.data}`)
+          setLoginToken(localStorage.getItem("token"));
         })
         .catch((error) => {
           console.log(error);
@@ -91,7 +80,6 @@ export default function Login() {
               </form>
             </div>
             <button id={styles.button} onClick={buttonClick}>Login</button>
-            <div>{logintoken}</div>
           </div>
         </div>
       </>
