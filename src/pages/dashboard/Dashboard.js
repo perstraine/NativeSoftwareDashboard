@@ -30,7 +30,7 @@ useEffect(() => {
       console.log('data already retrieved')
       console.log(zendesk);
     }else
-    {setZendesk(response.data.tickets);
+    {setZendesk(response.data);
     console.log(zendesk);}
   })
   .catch((error) => {

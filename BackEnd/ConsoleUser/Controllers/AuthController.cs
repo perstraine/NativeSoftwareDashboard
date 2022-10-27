@@ -33,12 +33,13 @@ namespace ConsoleUser.Controllers
             return BadRequest("incorrect fields");
         }
 
-        [HttpGet]
-        [Route("login")]
-        [Authorize]
-        public async Task<IActionResult> GetUsers()
-        {
-            return Ok("User Authorised");
-        }
+        //Not used any more
+        //[HttpGet]
+        //[Route("login")]
+        //[Authorize]
+        //public async Task<IActionResult> GetUsers()
+        //{
+        //    return Ok("User Authorised");
+        //}
     }
 }
