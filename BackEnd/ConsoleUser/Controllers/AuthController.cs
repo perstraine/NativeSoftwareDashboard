@@ -34,12 +34,12 @@ namespace ConsoleUser.Controllers
         }
 
         //Not used any more
-        //[HttpGet]
-        //[Route("login")]
-        //[Authorize]
-        //public async Task<IActionResult> GetUsers()
-        //{
-        //    return Ok("User Authorised");
-        //}
+        [HttpGet]
+        [Route("login")]
+        [Authorize]
+        public async Task<IActionResult> GetUsers()
+        {
+            return Ok("User Authorised");
+        }
     }
 }

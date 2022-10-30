@@ -12,17 +12,17 @@ export default function Login() {
 
   useEffect(() => {
     setLoginToken(localStorage.getItem("token"));
-  if(logintoken)
-    {const config = { headers: { Authorization: `Bearer ${logintoken}` } };
-    axios.get("https://localhost:7001/Auth/login",config)
-      .then((response) => {
-        console.log(response);
-        if (response.data === 'User Authorised') {
-          navigate('/dashboard');
-          console.log('User Authorised');
-        }
-      })}
-  }, [logintoken])
+    if(logintoken)
+      {const config = { headers: { Authorization: `Bearer ${logintoken}` } };
+      axios.get("https://localhost:7001/Auth/login",config)
+        .then((response) => {
+          console.log(response);
+          if (response.data === 'User Authorised') {
+            navigate('/dashboard');
+            console.log('User Authorised');
+          }
+        })}
+  }, [logintoken, navigate])
 
   function handleChange(e) {
       if (e.target.name === 'email') {
