@@ -2,7 +2,7 @@
 
 namespace ConsoleUser.Models.Domain
 {
-    public class ZendeskTicketData
+    public class DashboardTicketData
     {
         [AllowNull] public string Organisation { get; set; }
         [AllowNull] public string Subject { get; set; }
@@ -11,7 +11,8 @@ namespace ConsoleUser.Models.Domain
         [AllowNull] public string Priority { get; set; }
         [AllowNull] public DateTime RequestedTime { get; set; } // TODO confirm requested or creted time
         [AllowNull] public DateTime TimeDue { get; set; } 
-        [AllowNull] public string type { get; set; }
+        [AllowNull] public string Type { get; set; }
+        [AllowNull] public string url { get; set; }
     }
 }
 
