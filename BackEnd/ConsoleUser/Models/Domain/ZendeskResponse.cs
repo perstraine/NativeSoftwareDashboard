@@ -1,9 +1,11 @@
 ﻿// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
+// TODO delete unwanted fields
+
 using System.Diagnostics.CodeAnalysis;
 
 namespace ConsoleUser.Models.Domain
 {
-    public class Root
+    public class ZendeskData
     {
         [AllowNull] public List<Ticket> tickets { get; set; }
         [AllowNull] public object next_page { get; set; }
@@ -11,15 +13,9 @@ namespace ConsoleUser.Models.Domain
         [AllowNull] public int count { get; set; }
     }
 
-    public class Source
-    {
-        [AllowNull] public From from { get; set; }
-        [AllowNull] public To to { get; set; }
-        [AllowNull] public object rel { get; set; }
-    }
-
     public class Ticket
     {
+        [AllowNull] public string testData { get; set; }
         [AllowNull] public string url { get; set; }
         [AllowNull] public int id { get; set; }
         [AllowNull] public object external_id { get; set; }
@@ -65,6 +61,13 @@ namespace ConsoleUser.Models.Domain
 
     public class To
     {
+    }
+
+    public class Source
+    {
+        [AllowNull] public From from { get; set; }
+        [AllowNull] public To to { get; set; }
+        [AllowNull] public object rel { get; set; }
     }
 
     public class Via

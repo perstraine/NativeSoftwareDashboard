@@ -33,7 +33,6 @@ namespace ConsoleUser.Controllers
             return BadRequest("incorrect fields");
         }
 
-        //Not used any more
         [HttpGet]
         [Route("login")]
         [Authorize]
