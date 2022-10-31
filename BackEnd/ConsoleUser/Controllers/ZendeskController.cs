@@ -39,6 +39,7 @@ namespace Zendesk.Controllers
             foreach (var ticket in zendeskData.tickets)
             {
                 var dashboardTicket = new DashboardTicketData();
+                dashboardTicket.id = ticket.id; 
                 if (ticket.organization_id != null) dashboardTicket.Organisation = ticket.organization_id.ToString();
                 if (ticket.subject != null) dashboardTicket.Subject = ticket.subject;
                 if (ticket.assignee_id != null) dashboardTicket.Recipient = ticket.assignee_id.ToString();//TODO assignee or recepient

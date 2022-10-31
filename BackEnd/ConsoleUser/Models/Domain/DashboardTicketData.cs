@@ -4,6 +4,7 @@ namespace ConsoleUser.Models.Domain
 {
     public class DashboardTicketData
     {
+        [AllowNull] public int id { get; set; }
         [AllowNull] public string Organisation { get; set; }
         [AllowNull] public string Subject { get; set; }
         [AllowNull] public string Recipient { get; set; }

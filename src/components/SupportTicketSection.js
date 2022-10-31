@@ -5,29 +5,27 @@ import styles from "./SupportTicket.module.css"
 import SupportTicket from './SupportTicket'
 
 function SupportTicketSection() {
-  const [ticketList, setTicketList] = useState();
-  //const [TicketElement, setSupportTicketElement] = useState();
+  const [ticketList, setTicketList] = useState([] );
 
   //Zendesk API
   useEffect(() => {
-    axios.get('https://localhost:7001/api/Zendesk').then((response) => {
-      if (ticketList) {
-        console.log('data already retrieved')
-        console.log(ticketList);
-      }else
-      {setTicketList(response.data);
-      console.log(ticketList);}
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  }, [ticketList]);
+    getTicket();
+  },[]);
 
-  //if(ticketList){
-    const TicketElement = ticketList.map((element) =>{
-      return <SupportTicket key={element.id} ticket={element}/>;
-    });
-  //}
+  async function getTicket() {
+      try {
+        const response = await axios.get('https://localhost:7001/api/Zendesk')
+        setTicketList(response.data);
+        //console.log(response.data);
+      }
+      catch (error) {
+        console.error(error);
+      }
+  }
+
+  const TicketElement = ticketList.map((element) =>{
+    return <SupportTicket key={element.id} ticket={element}/>;
+  });
   
   return (
     <div id={styles.supportticketsection}>
@@ -42,9 +40,6 @@ function SupportTicketSection() {
           <p> Type</p>
       </div>
       {TicketElement}
-      <SupportTicket/>
-      <SupportTicket/>
-      <SupportTicket/>
     </div>
   )
 }
