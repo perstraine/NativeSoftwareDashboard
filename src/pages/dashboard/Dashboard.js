@@ -1,11 +1,12 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
+import SupportTicketSection from '../../components/SupportTicketSection';
+import styles from "./Dashboard.module.css"
 
 function Dashboard() {
 
   const [jira, setJira] = useState('');
-  const [zendesk, setZendesk] = useState('');
   const navigate = useNavigate();
 
 // Jira API
@@ -22,21 +23,6 @@ useEffect(() => {
     console.log(error);
   });
 }, [jira]);
-
-//Zendesk API
-useEffect(() => {
-  axios.get('https://localhost:7001/api/Zendesk').then((response) => {
-    if (zendesk) {
-      console.log('data already retrieved')
-      console.log(zendesk);
-    }else
-    {setZendesk(response.data);
-    console.log(zendesk);}
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-}, [zendesk]);
   
   useEffect(() => {
   const logintoken = localStorage.getItem('token')
@@ -58,8 +44,9 @@ useEffect(() => {
     navigate('/')
   }
 return (
-  <div>
-    <div>Dashboard</div>
+  <div id={styles.dashboard}>
+    <h1>Dashboard</h1>
+    <SupportTicketSection/>
     <button onClick={logout}>Log Out</button>
   </div>
 );
