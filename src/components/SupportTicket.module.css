@@ -2,30 +2,122 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 }
 #ticketheadings{
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: center;
+    width: 98%;
 }
 #ticketheadings p{
     text-align: center;
     color: #000000;
-    width: 12%;
+    /* width: 12%; */
     margin-bottom: 0%;
 }
-#ticket{
+#org{
+    width: 5%;
+}
+#sub{
+    width: 40%;
+}
+#assign{
+    width: 10%;
+}
+#bill{
+    width: 5%;
+}
+#priority{
+    width: 5%;
+}
+#reqtime{
+    width: 12%;
+}
+#due{
+    width: 10%;
+}
+#type{
+    width: 10%;
+}
+#links{
+    width: 1%;
+}
+.ticket{
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    width: 98%;
     height: 40px;
     background-color: #dc2a2a;
     margin: 10px;
     border-radius: 15px;
 }
-#ticket p{
-    text-align: center;
-    color: #ffffff;
-    width: 12%;
+.ticket[status-bg-colour="urgent"]{
+    background-color: #ff0000;
 }
+.ticket[status-bg-colour="high"]{
+    background-color: #ff8c00;
+}
+.ticket[status-bg-colour="normal"]{
+    background-color: #fff200;
+}
+.ticket[status-bg-colour="low"]{
+    background-color: #26be00;
+}
+
+.ticketText{
+    text-align: center;
+    width: 12%;
+    font-weight: 2px;
+}
+
+.ticketText[status-text-colour="urgent"]{
+    color: #ffffff;
+}
+.ticketText[status-text-colour="high"]{
+    color: #ffffff;
+}
+.ticketText[status-text-colour="normal"]{
+    color: #000000;
+}
+.ticketText[status-text-colour="low"]{
+    color: #ffffff;
+}
+
+.externalLinks{
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.dot{
+    height: 6px;
+    width: 6px;
+    margin:1.5px;
+    padding: 0%;
+    border-radius: 50%;
+    display: inline-block;
+}
+.dot[status-dot-colour="urgent"]{
+    background-color: #ffffff;
+}
+.dot[status-dot-colour="high"]{
+    background-color: #ffffff;
+}
+.dot[status-dot-colour="normal"]{
+    background-color: #000000;
+}
+.dot[status-dot-colour="low"]{
+    background-color: #ffffff;
+}
+#chevronArrowDown {
+    display: inline-block;
+    border-right: 4px solid black;
+    border-bottom: 4px solid black;
+    width: 10px; height: 10px;
+    transform: rotate(45deg);
+    cursor: pointer;
+  }

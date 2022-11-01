@@ -47,7 +47,7 @@ namespace Zendesk.Controllers
                 if (ticket.priority != null) dashboardTicket.Priority = ticket.priority;
                 if (ticket.created_at != null) dashboardTicket.RequestedTime = ticket.created_at;
                 if (ticket.due_at != null) dashboardTicket.TimeDue = ticket.updated_at; //TODO tobe calculated
-                if (ticket.priority != null) dashboardTicket.Type = ticket.priority;
+                if (ticket.type != null) dashboardTicket.Type = ticket.type;
                 if (ticket.url != null) dashboardTicket.url = ticket.url;
                 ticketList.Add(dashboardTicket);
             }

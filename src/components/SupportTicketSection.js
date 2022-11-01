@@ -9,7 +9,7 @@ function SupportTicketSection() {
 
   //Zendesk API
   useEffect(() => {
-    getTicket();
+      getTicket();
   },[]);
 
   async function getTicket() {
@@ -30,16 +30,20 @@ function SupportTicketSection() {
   return (
     <div id={styles.supportticketsection}>
       <div id={styles.ticketheadings}>
-          <p> Organisation</p>
-          <p> Subject</p>
-          <p> Assigned</p>
-          <p> Billable</p>
-          <p> Priority</p>
-          <p> Requested Time</p>
-          <p> Time Due</p>
-          <p> Type</p>
+          <p id={styles.org}> Organisation</p>
+          <p id={styles.sub}> Subject</p>
+          <p id={styles.assign}> Assigned</p>
+          <p id={styles.bill}> Billable</p>
+          <p id={styles.priority}> Priority</p>
+          <p id={styles.reqtime}> Requested Time</p>
+          <p id={styles.due}> Time Due</p>
+          <p id={styles.type}> Type</p>
+          <div id = {styles.links}></div>
       </div>
       {TicketElement}
+      <div >
+      <div id={styles.chevronArrowDown}></div>
+      </div>
     </div>
   )
 }
