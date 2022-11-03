@@ -47,8 +47,10 @@ namespace Zendesk.Controllers
                 dashboardTicket.Billable = true; //TODO tobe decided
                 //replacing numbers instead strings for comparison
                 if (ticket.priority != null) dashboardTicket.Priority = (ticket.priority=="urgent" ? 4 : ticket.priority == "high" ? 3 : ticket.priority == "normal" ? 2 : 1).ToString();
-                if (ticket.created_at != null) dashboardTicket.RequestedTime = ticket.created_at;
-                if (ticket.due_at != null) dashboardTicket.TimeDue = ticket.updated_at; //TODO tobe calculated
+                // trying Enums
+                //if (ticket.priority != null) dashboardTicket.PriorityType = ticket.priority=="urgent" ? dashboardTicket.PriorityType = Priority.urgent : ticket.priority == "high" ? dashboardTicket.PriorityType = Priority.high : ticket.priority == "normal" ? dashboardTicket.PriorityType = Priority.normal : dashboardTicket.PriorityType = Priority.low;
+                dashboardTicket.RequestedDate = ticket.created_at.ToString();
+                dashboardTicket.TimeDue =  ticket.created_at.AddDays(3).ToString(); //TODO tobe calculated
                 if (ticket.type != null) dashboardTicket.Type = ticket.type;
                 if (ticket.url != null) dashboardTicket.url = ticket.url;
                 ticketList.Add(dashboardTicket);
@@ -82,6 +84,17 @@ namespace Zendesk.Controllers
                 {
                     j--;
                 }
+
+                // trying Enums
+                //while (ticketListToSort[i].PriorityType > pivot.PriorityType)
+                //{
+                //    i++;
+                //}
+
+                //while (ticketListToSort[j].PriorityType < pivot.PriorityType)
+                //{
+                //    j--;
+                //}
 
                 if (i <= j)
                 {

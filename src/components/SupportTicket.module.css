@@ -50,10 +50,11 @@
     align-items: center;
     justify-content: center;
     width: 98%;
-    height: 40px;
-    background-color: #dc2a2a;
-    margin: 10px;
-    border-radius: 15px;
+    height: 35px;
+    background-color: #ff0000;
+    /* margin: 10px; */
+    margin-top: 8px;
+    border-radius: 10px;
 }
 .ticket[status-bg-colour="urgent"]{
     background-color: #ff0000;
@@ -69,9 +70,10 @@
 }
 
 .ticketText{
+    margin: 0%;
     text-align: center;
     width: 12%;
-    font-weight: 2px;
+    font-weight: 3px;
 }
 
 .ticketText[status-text-colour="urgent"]{

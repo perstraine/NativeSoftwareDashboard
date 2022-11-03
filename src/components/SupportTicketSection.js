@@ -6,6 +6,8 @@ import SupportTicket from './SupportTicket'
 
 function SupportTicketSection() {
   const [ticketList, setTicketList] = useState([] );
+  const [firstSetTickets, setFirstSetTickets] = useState([]);
+  const [count, setCount] = useState(0);
 
   //Zendesk API
   useEffect(() => {
@@ -13,17 +15,23 @@ function SupportTicketSection() {
   },[]);
 
   async function getTicket() {
-      try {
-        const response = await axios.get('https://localhost:7001/api/Zendesk')
-        setTicketList(response.data);
-        //console.log(response.data);
-      }
-      catch (error) {
-        console.error(error);
-      }
-  }
+    try {
+      const response = await axios.get('https://localhost:7001/api/Zendesk')
+      setTicketList(response.data);
+      //console.log(response.data);
 
-  const TicketElement = ticketList.map((element) =>{
+    }
+    catch (error) {
+      console.error(error);
+    }
+  }
+  //TODO select first 10 tickets
+  // for(let i = 0;i<10;i++){
+  //   setFirstSetTickets(prevArray => [...prevArray, ticketList[i]]);
+  //   console.log(firstSetTickets);
+  // } 
+  
+  const TicketElements = ticketList.map((element) =>{
     return <SupportTicket key={element.id} ticket={element}/>;
   });
   
@@ -40,7 +48,7 @@ function SupportTicketSection() {
           <p id={styles.type}> Type</p>
           <div id = {styles.links}></div>
       </div>
-      {TicketElement}
+      {TicketElements}
       <div >
       <div id={styles.chevronArrowDown}></div>
       </div>
