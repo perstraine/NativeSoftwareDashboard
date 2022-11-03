@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using RestSharp;
+using System.Collections.Immutable;
 using System.Diagnostics;
 
 namespace Zendesk.Controllers
@@ -32,7 +33,7 @@ namespace Zendesk.Controllers
             return Ok(dashboardTickets);
         }
 
-        // Dashboard JSON creation function
+        // Dashboard specific JSON creation
         private static List<DashboardTicketData> CreateTicketInfo(ZendeskData? zendeskData)
         {
             var ticketList = new List<DashboardTicketData>();
@@ -44,14 +45,61 @@ namespace Zendesk.Controllers
                 if (ticket.subject != null) dashboardTicket.Subject = ticket.subject;
                 if (ticket.assignee_id != null) dashboardTicket.Recipient = ticket.assignee_id.ToString();//TODO assignee or recepient
                 dashboardTicket.Billable = true; //TODO tobe decided
-                if (ticket.priority != null) dashboardTicket.Priority = ticket.priority;
+                //replacing numbers instead strings for comparison
+                if (ticket.priority != null) dashboardTicket.Priority = (ticket.priority=="urgent" ? 4 : ticket.priority == "high" ? 3 : ticket.priority == "normal" ? 2 : 1).ToString();
                 if (ticket.created_at != null) dashboardTicket.RequestedTime = ticket.created_at;
                 if (ticket.due_at != null) dashboardTicket.TimeDue = ticket.updated_at; //TODO tobe calculated
                 if (ticket.type != null) dashboardTicket.Type = ticket.type;
                 if (ticket.url != null) dashboardTicket.url = ticket.url;
                 ticketList.Add(dashboardTicket);
             }
+
+            ticketList = QuickSortTickets(ticketList, 0, ticketList.Count - 1);
+
+            //replacing back the strings for priority after sorting.
+            foreach (var ticket in ticketList)
+            {
+                ticket.Priority = ticket.Priority == "4" ? "urgent" : ticket.Priority == "3" ? "high" : ticket.Priority == "2" ? "normal" : "low";
+            }
+
             return ticketList;
+        }
+
+        public static List<DashboardTicketData> QuickSortTickets(List<DashboardTicketData> ticketListToSort, int leftIndex, int rightIndex)
+        {
+            var i = leftIndex;
+            var j = rightIndex;
+            var pivot = ticketListToSort[leftIndex];
+
+            while (i <= j)
+            {
+                while (Int32.Parse(ticketListToSort[i].Priority) > Int32.Parse(pivot.Priority))
+                {
+                    i++;
+                }
+
+                while (Int32.Parse(ticketListToSort[j].Priority) < Int32.Parse(pivot.Priority))
+                {
+                    j--;
+                }
+
+                if (i <= j)
+                {
+                    var temp = ticketListToSort[i];
+                    ticketListToSort[i] = ticketListToSort[j];
+                    ticketListToSort[j] = temp;
+                    i++;
+                    j--;
+                }
+            }
+
+            if (leftIndex < j)
+                QuickSortTickets(ticketListToSort, leftIndex, j);
+
+            if (i < rightIndex)
+                QuickSortTickets(ticketListToSort, i, rightIndex);
+
+            return ticketListToSort;
         }
     }
 }
