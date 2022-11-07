@@ -19,7 +19,6 @@ function SupportTicketSection() {
       const response = await axios.get('https://localhost:7001/api/Zendesk')
       setTicketList(response.data);
       //console.log(response.data);
-
     }
     catch (error) {
       console.error(error);
@@ -40,6 +39,7 @@ function SupportTicketSection() {
       <div id={styles.ticketheadings}>
           <p id={styles.org}> Organisation</p>
           <p id={styles.sub}> Subject</p>
+          <p id={styles.status}> Status</p>
           <p id={styles.assign}> Assigned</p>
           <p id={styles.bill}> Billable</p>
           <p id={styles.priority}> Priority</p>

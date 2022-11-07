@@ -27,9 +27,11 @@ builder.Services.AddCors(options =>
 
 //builder.Services.AddDbContext<UsersAPIDbContext>(options => options.UseInMemoryDatabase("ConsoleUsersDb"));
 builder.Services.AddDbContext<UsersAPIDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("UsersAPIConnectionString")));
+builder.Services.AddDbContext<CustomerDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("UsersAPIConnectionString")));
 
 builder.Services.AddScoped<ITokenHandler, ConsoleUser.Repositories.TokenHandler>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

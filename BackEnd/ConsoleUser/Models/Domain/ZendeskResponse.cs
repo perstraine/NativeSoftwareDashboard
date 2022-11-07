@@ -1,5 +1,4 @@
-﻿// Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
-// TODO delete unwanted fields
+﻿// TODO delete unwanted fields
 
 using System.Diagnostics.CodeAnalysis;
 
