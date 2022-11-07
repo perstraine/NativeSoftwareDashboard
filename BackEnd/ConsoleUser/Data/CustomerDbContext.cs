@@ -12,6 +12,5 @@ namespace ConsoleUser.Data
         }
 
         public DbSet<Customer> Customer { get; set; }
-        public DbSet<SupportLevel> SupportLevel { get; set; }
     }
 }

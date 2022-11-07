@@ -10,7 +10,7 @@ namespace ConsoleUser.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomerController : ControllerBase
+    public class SupportLevelController : ControllerBase
     {
         
         //private readonly ICustomerRepository customerRepository;

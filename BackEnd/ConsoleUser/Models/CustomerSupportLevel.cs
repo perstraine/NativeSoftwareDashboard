@@ -1,9 +1,12 @@
-﻿namespace ConsoleUser.Models
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace ConsoleUser.Models
 {
-    public class SupportLevel
+    [Keyless]
+    public class CustomerSupportLevel
     {
-        public int Id { get; set; }
-        public int Level { get; set; }   
+        //public int Id { get; set; }
+        public int SupportLevel { get; set; }   
         public int ResponseTimeUrgent { get; set; }
         public int ResponseTimeHigh { get; set; }
         public int ResponseTimeNormal { get; set; }

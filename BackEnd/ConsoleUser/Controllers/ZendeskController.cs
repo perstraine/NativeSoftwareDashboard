@@ -1,6 +1,7 @@
 ﻿using ConsoleUser.Controllers;
 using ConsoleUser.Models.Domain;
 using ConsoleUser.Models.DTO;
+using ConsoleUser.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -14,10 +15,19 @@ namespace Zendesk.Controllers
     [Route("api/[controller]")]
     public class ZendeskController : ControllerBase
     {
+        private readonly ICustomerRepository customerRepository;
+        private readonly ISupportLevelRepository customerSupportLevelRepository;
+
+        public ZendeskController(ICustomerRepository customerRepository, ISupportLevelRepository customerSupportLevelRepository)
+        {
+            this.customerRepository = customerRepository;
+            this.customerSupportLevelRepository = customerSupportLevelRepository;
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetTickets()
         {
-            var options = new RestClientOptions("https://missionready5835.zendesk.com")
+            var options = new RestClientOptions("https://native9107.zendesk.com")
             {
                 ThrowOnAnyError = true,
                 MaxTimeout = -1  // 1 second
@@ -25,22 +35,38 @@ namespace Zendesk.Controllers
             var client = new RestClient(options);
             var ticketRequest = new RestRequest("/api/v2/tickets", Method.Get);
             var metricsRequest = new RestRequest("/api/v2/ticket_metrics.json", Method.Get);
-            ticketRequest.AddHeader("Authorization", "Basic cmFuanVyYXZlQGdtYWlsLmNvbTpXZWJkZXZfMjAyMg==");
-            metricsRequest.AddHeader("Authorization", "Basic cmFuanVyYXZlQGdtYWlsLmNvbTpXZWJkZXZfMjAyMg==");
+            ticketRequest.AddHeader("Authorization", "Basic cmF2ZWVuZHJhbnJhbmp1QGdtYWlsLmNvbTpXZWJkZXZfMjAyMg==");
+            metricsRequest.AddHeader("Authorization", "Basic cmF2ZWVuZHJhbnJhbmp1QGdtYWlsLmNvbTpXZWJkZXZfMjAyMg==");
             //TODO do we actually need cookies
-            ticketRequest.AddHeader("Cookie", "__cfruid=453dcbc27454258463f1141b2d97bb40b6e79538-1666769874; _zendesk_cookie=BAhJIhl7ImRldmljZV90b2tlbnMiOnt9fQY6BkVU--459ed01949a36415c1716b5711271c3d08918307; _zendesk_session=TU9uMjhreXZMQWR5M0YyMThRYVBpWlBEV2VHWW5WWTJmZEdXZE13T2FGeG9zN2ZuOWEwaU1rSStlR29KSUpFbitqbXZZY2dyOUx1SHF4ZTZWU1AxdGpDSy9MeWlNRThtalRWQ0tmUlI5OERDRk0zK0NjdW9TOXo4Z3RpTmhYbUMtLUMzc0RUOGZNVkVkOElLVHg3bTJFMkE9PQ%3D%3D--90ca0ca180d8b1630519eeffa7e18f3dd2ece3e7");
-            metricsRequest.AddHeader("Cookie", "__cfruid=255c74db82f91303485bb1dd0bc800f60fc4dbb8-1667806354; _zendesk_cookie=BAhJIhl7ImRldmljZV90b2tlbnMiOnt9fQY6BkVU--459ed01949a36415c1716b5711271c3d08918307");
+            ticketRequest.AddHeader("Cookie", "__cfruid=48f83724a725243fd95c678dd50f3dd2d953d978-1667859886; _zendesk_cookie=BAhJIhl7ImRldmljZV90b2tlbnMiOnt9fQY6BkVU--459ed01949a36415c1716b5711271c3d08918307");
+            metricsRequest.AddHeader("Cookie", "__cf_bm=KxlySeaioTuVYvuFk4E5tRI8BOWLks6ByFoscguzUOI-1667859951-0-Ac9xh1i7NuOLkLmngWxRlUgF6yk+oGtLlnHg4MgzJ4VxGYAuk2O39dvMOHMT6RbdxhM5Hqft8CvRxOFHUu7Hqxs6qh6HI1xHSqrrODKXfd/E; __cfruid=d6d7639fe6c226ee32f5b8fed32a369d01cc9511-1667859951; __cfruid=92c90c6eb9ec4f99a11232886662497fe9237eb9-1667859962; _zendesk_cookie=BAhJIhl7ImRldmljZV90b2tlbnMiOnt9fQY6BkVU--459ed01949a36415c1716b5711271c3d08918307");
             RestResponse ticketResponse = await client.ExecuteAsync(ticketRequest);
             RestResponse metricsResponse = await client.ExecuteAsync(metricsRequest);
             var zendeskData = JsonConvert.DeserializeObject<ZendeskData>(ticketResponse.Content);
             var zendeskMetrics = JsonConvert.DeserializeObject<MetricsData>(metricsResponse.Content);
 
+            var customers = customerRepository.GetAll();
+            var supportLevel = customerSupportLevelRepository.GetAll();
+
             // Creating Json for dashboard
             var dashboardTickets = CreateTicketInfo(zendeskData, zendeskMetrics);
 
-            var customerData = new Customer();
-            
-           
+            //var customerData = new Customer();
+
+
+            //return DTO customers
+            //var customersDTO = new List<Customer>();
+            //customers.ToList().ForEach(customer =>
+            //{
+            //    var customerDTO = new Customer()
+            //    {
+            //        CustomerCode = customer.CustomerCode,
+            //        CustomerCodeZendesk = customer.CustomerCodeZendesk,
+            //        SupportLevel = customer.SupportLevel,
+            //    };
+
+            //    customersDTO.Add(customerDTO);
+            //});
 
             return Ok(dashboardTickets);
         }
