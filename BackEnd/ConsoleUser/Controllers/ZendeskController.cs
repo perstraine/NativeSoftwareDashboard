@@ -80,10 +80,8 @@ namespace Zendesk.Controllers
                 if (ticket.status != null) dashboardTicket.Status = ticket.status;
                 if (ticket.assignee_id != null) dashboardTicket.Recipient = ticket.assignee_id.ToString();//TODO assignee or recepient
                 dashboardTicket.Billable = true; //TODO tobe decided
-                //replacing numbers instead strings for comparison
-                dashboardTicket.Priority = (ticket.priority == "urgent" ? 4 : ticket.priority == "high" ? 3 : ticket.priority == "normal" ? 2 : 1).ToString();
+                dashboardTicket.Priority = ticket.priority;
                 dashboardTicket.RequestedDate = ticket.created_at.ToString();
-                //dashboardTicket.TimeDue = ticket.created_at.AddDays(3).ToString(); //TODO tobe calculated
                 dashboardTicket.TimeDue = GetTimeDue(dashboardTicket.Organisation, dashboardTicket.Priority, ticket.created_at, customers, supportLevel).ToString();
                 if (ticket.type != null) dashboardTicket.Type = ticket.type;
                 if (ticket.url != null) dashboardTicket.url = ticket.url;
@@ -92,12 +90,6 @@ namespace Zendesk.Controllers
             }
 
             ticketList = QuickSortTickets(ticketList, 0, ticketList.Count - 1);
-
-            //replacing back the strings for priority after sorting.
-            foreach (var ticket in ticketList)
-            {
-                ticket.Priority = ticket.Priority == "4" ? "urgent" : ticket.Priority == "3" ? "high" : ticket.Priority == "2" ? "normal" : "low";
-            }
 
             return ticketList;
 
@@ -118,18 +110,23 @@ namespace Zendesk.Controllers
 
         public static List<DashboardTicketData> QuickSortTickets(List<DashboardTicketData> ticketListToSort, int leftIndex, int rightIndex)
         {
+            foreach(var ticket in ticketListToSort)
+            {
+                ticket.SortPriority = (DateTime.Parse(ticket.TimeDue) - DateTime.Parse(ticket.RequestedDate)).TotalHours;
+            }
+
             var i = leftIndex;
             var j = rightIndex;
             var pivot = ticketListToSort[leftIndex];
 
             while (i <= j)
             {
-                while (Int32.Parse(ticketListToSort[i].Priority) > Int32.Parse(pivot.Priority))
+                while (ticketListToSort[i].SortPriority < pivot.SortPriority)
                 {
                     i++;
                 }
 
-                while (Int32.Parse(ticketListToSort[j].Priority) < Int32.Parse(pivot.Priority))
+                while (ticketListToSort[j].SortPriority > pivot.SortPriority)
                 {
                     j--;
                 }
@@ -166,7 +163,7 @@ namespace Zendesk.Controllers
                     {
                         if(level.SupportLevel == customerSupportLevel)
                         {
-                            var resolutionTime = priority == "4" ? level.ResolutionTimeUrgent : priority == "3" ? level.ResolutionTimeHigh : priority == "2" ? level.ResolutionTimeNormal : level.ResolutionTimeLow;
+                            var resolutionTime = priority == "urgent" ? level.ResolutionTimeUrgent : priority == "high" ? level.ResolutionTimeHigh : priority == "normal" ? level.ResolutionTimeNormal : level.ResolutionTimeLow;
                             return requestedDate.AddHours(resolutionTime);
                         }
                     }
@@ -182,8 +179,7 @@ namespace Zendesk.Controllers
             int normal = 8;
             int low = 24;
             double dueHours = (timeDue - created_at).TotalHours;
-            string light = "";
-            return light = dueHours <= veryHigh ? "red" : dueHours <= high ? "orange" : dueHours <= normal ? "yellow" : "green";
+            return dueHours <= veryHigh ? "red" : dueHours <= high ? "orange" : dueHours <= normal ? "yellow" : "green";
         }
     }
 }

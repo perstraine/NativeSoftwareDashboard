@@ -4,7 +4,7 @@ import styles from "./SupportTicket.module.css"
 function SupportTicket(props) {
   //console.log(props.ticket);
   return (
-    <div status-bg-colour={props.ticket.priority} className={styles.ticket}>
+    <div status-bg-colour={props.ticket.trafficLight} className={styles.ticket}>
       <p status-text-colour={props.ticket.priority} className={styles.ticketText} id={styles.org}> {props.ticket.organisation ? props.ticket.organisation :"Null" }</p>
       <p status-text-colour={props.ticket.priority} className={styles.ticketText} id={styles.sub}> {props.ticket.subject}</p>
       <p status-text-colour={props.ticket.priority} className={styles.ticketText} id={styles.status}> {props.ticket.status}</p>

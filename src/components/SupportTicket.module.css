@@ -59,16 +59,16 @@
     margin-top: 8px;
     border-radius: 10px;
 }
-.ticket[status-bg-colour="urgent"]{
+.ticket[status-bg-colour="red"]{
     background-color: #ff0000;
 }
-.ticket[status-bg-colour="high"]{
+.ticket[status-bg-colour="orange"]{
     background-color: #ff8c00;
 }
-.ticket[status-bg-colour="normal"]{
+.ticket[status-bg-colour="yellow"]{
     background-color: #fff200;
 }
-.ticket[status-bg-colour="low"]{
+.ticket[status-bg-colour="green"]{
     background-color: #26be00;
 }
 

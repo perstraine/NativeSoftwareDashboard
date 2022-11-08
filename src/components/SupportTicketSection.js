@@ -6,8 +6,8 @@ import SupportTicket from './SupportTicket'
 
 function SupportTicketSection() {
   const [ticketList, setTicketList] = useState([] );
-  const [firstSetTickets, setFirstSetTickets] = useState([]);
-  const [count, setCount] = useState(0);
+  //const [firstSetTickets, setFirstSetTickets] = useState([]);
+  //const [count, setCount] = useState(0);
 
   //Zendesk API
   useEffect(() => {
@@ -18,7 +18,7 @@ function SupportTicketSection() {
     try {
       const response = await axios.get('https://localhost:7001/api/Zendesk')
       setTicketList(response.data);
-      console.log(response.data);
+      //console.log(response.data);
     }
     catch (error) {
       console.error(error);
