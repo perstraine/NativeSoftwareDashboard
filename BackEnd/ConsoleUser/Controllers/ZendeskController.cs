@@ -4,6 +4,7 @@ using ConsoleUser.Models.DTO;
 using ConsoleUser.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Newtonsoft.Json;
 using RestSharp;
 using System.Collections.Immutable;
@@ -83,9 +84,10 @@ namespace Zendesk.Controllers
                 dashboardTicket.Priority = (ticket.priority == "urgent" ? 4 : ticket.priority == "high" ? 3 : ticket.priority == "normal" ? 2 : 1).ToString();
                 dashboardTicket.RequestedDate = ticket.created_at.ToString();
                 //dashboardTicket.TimeDue = ticket.created_at.AddDays(3).ToString(); //TODO tobe calculated
-                dashboardTicket.TimeDue = GetTimeDue(dashboardTicket.Organisation, dashboardTicket.Priority, dashboardTicket.RequestedDate, customers, supportLevel);
+                dashboardTicket.TimeDue = GetTimeDue(dashboardTicket.Organisation, dashboardTicket.Priority, ticket.created_at, customers, supportLevel).ToString();
                 if (ticket.type != null) dashboardTicket.Type = ticket.type;
                 if (ticket.url != null) dashboardTicket.url = ticket.url;
+                dashboardTicket.TrafficLight = GetTrafficLight(ticket.created_at, Convert.ToDateTime(dashboardTicket.TimeDue));
                 ticketList.Add(dashboardTicket);
             }
 
@@ -100,6 +102,7 @@ namespace Zendesk.Controllers
             return ticketList;
 
         }
+
         //Finding user name from zendesk users api
         static string GetZendeskUserName(ZendeskUsers? zendeskUsers, Ticket ticket)
         {
@@ -150,17 +153,9 @@ namespace Zendesk.Controllers
             return ticketListToSort;
         }
 
-        private static string GetTimeDue(string organisation, string priority, string requestedDate, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel)
+        private static DateTime GetTimeDue(string organisation, string priority, DateTime requestedDate, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel)
         {
             int customerSupportLevel = 0;
-            int responseTimeUrgent = 0;
-            int responseTimeHigh = 0;
-            int responseTimeNormal = 0;
-            int responseTimeLow = 0;            
-            int resolutionTimeUrgent = 0;
-            int resolutionTimeHigh = 0;
-            int resolutionTimeNormal = 0;
-            int resolutionTimeLow = 0;
             foreach (var customer in customers)
             {
                 if(customer.CustomerCode == organisation)
@@ -171,14 +166,24 @@ namespace Zendesk.Controllers
                     {
                         if(level.SupportLevel == customerSupportLevel)
                         {
-                            var resolutionTime = priority == "4" ? level.ResponseTimeLow : priority == "3" ? level.ResponseTimeNormal : priority == "2" ? level.ResponseTimeHigh : level.ResponseTimeUrgent;
+                            var resolutionTime = priority == "4" ? level.ResolutionTimeUrgent : priority == "3" ? level.ResolutionTimeHigh : priority == "2" ? level.ResolutionTimeNormal : level.ResolutionTimeLow;
+                            return requestedDate.AddHours(resolutionTime);
                         }
                     }
                 }
             }
+            return requestedDate;
+        }
 
-
-            return "";
+        private static string GetTrafficLight(DateTime created_at, DateTime timeDue)
+        {
+            int veryHigh = 2;
+            int high = 4;
+            int normal = 8;
+            int low = 24;
+            double dueHours = (timeDue - created_at).TotalHours;
+            string light = "";
+            return light = dueHours <= veryHigh ? "red" : dueHours <= high ? "orange" : dueHours <= normal ? "yellow" : "green";
         }
     }
 }

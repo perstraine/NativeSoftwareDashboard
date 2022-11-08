@@ -18,7 +18,7 @@ function SupportTicketSection() {
     try {
       const response = await axios.get('https://localhost:7001/api/Zendesk')
       setTicketList(response.data);
-      //console.log(response.data);
+      console.log(response.data);
     }
     catch (error) {
       console.error(error);

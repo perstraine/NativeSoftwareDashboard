@@ -16,6 +16,8 @@ namespace ConsoleUser.Models.Domain
         [AllowNull] public string Type { get; set; }
         [AllowNull] public string url { get; set; }
         [AllowNull] public string TrafficLight { get; set; }
+        [AllowNull] public int SortPriority { get; set; }
+
         // trying Enums
         //private Priority _priority; 
         //public Priority PriorityType
