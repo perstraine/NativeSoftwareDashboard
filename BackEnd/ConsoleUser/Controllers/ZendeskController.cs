@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Net.Sockets;
 
 namespace Zendesk.Controllers
 {
@@ -32,70 +33,57 @@ namespace Zendesk.Controllers
                 ThrowOnAnyError = true,
                 MaxTimeout = -1  // 1 second
             };
+
             var client = new RestClient(options);
             var ticketRequest = new RestRequest("/api/v2/tickets", Method.Get);
             var metricsRequest = new RestRequest("/api/v2/ticket_metrics.json", Method.Get);
+            var usersRequest = new RestRequest("/api/v2/users", Method.Get);
+
             ticketRequest.AddHeader("Authorization", "Basic cmF2ZWVuZHJhbnJhbmp1QGdtYWlsLmNvbTpXZWJkZXZfMjAyMg==");
             metricsRequest.AddHeader("Authorization", "Basic cmF2ZWVuZHJhbnJhbmp1QGdtYWlsLmNvbTpXZWJkZXZfMjAyMg==");
+            usersRequest.AddHeader("Authorization", "Basic cmF2ZWVuZHJhbnJhbmp1QGdtYWlsLmNvbTpXZWJkZXZfMjAyMg==");
+
             //TODO do we actually need cookies
             ticketRequest.AddHeader("Cookie", "__cfruid=48f83724a725243fd95c678dd50f3dd2d953d978-1667859886; _zendesk_cookie=BAhJIhl7ImRldmljZV90b2tlbnMiOnt9fQY6BkVU--459ed01949a36415c1716b5711271c3d08918307");
             metricsRequest.AddHeader("Cookie", "__cf_bm=KxlySeaioTuVYvuFk4E5tRI8BOWLks6ByFoscguzUOI-1667859951-0-Ac9xh1i7NuOLkLmngWxRlUgF6yk+oGtLlnHg4MgzJ4VxGYAuk2O39dvMOHMT6RbdxhM5Hqft8CvRxOFHUu7Hqxs6qh6HI1xHSqrrODKXfd/E; __cfruid=d6d7639fe6c226ee32f5b8fed32a369d01cc9511-1667859951; __cfruid=92c90c6eb9ec4f99a11232886662497fe9237eb9-1667859962; _zendesk_cookie=BAhJIhl7ImRldmljZV90b2tlbnMiOnt9fQY6BkVU--459ed01949a36415c1716b5711271c3d08918307");
+            usersRequest.AddHeader("Cookie", "__cf_bm=Bvy1dB189VHVzvKE06rhF45I9xeeULscC4tLWYi.uFU-1667868863-0-AcBBs4QbNfD3hICdAoad6zeSnfs8GpkPaqMlf2Uf8+LI1xraXEPOT7uSYsBDF50EB0TOCt4zn4qzdVSpAFImPUcNS7plBTGERKxB9rEa6Isq; __cfruid=d6d7639fe6c226ee32f5b8fed32a369d01cc9511-1667859951; __cfruid=64d825a7586ffffb2903a6ea42c4775ebdaa1f20-1667868990; _zendesk_cookie=BAhJIhl7ImRldmljZV90b2tlbnMiOnt9fQY6BkVU--459ed01949a36415c1716b5711271c3d08918307");
+
             RestResponse ticketResponse = await client.ExecuteAsync(ticketRequest);
             RestResponse metricsResponse = await client.ExecuteAsync(metricsRequest);
+            RestResponse usersResponse = await client.ExecuteAsync(usersRequest);
+
             var zendeskData = JsonConvert.DeserializeObject<ZendeskData>(ticketResponse.Content);
-            var zendeskMetrics = JsonConvert.DeserializeObject<MetricsData>(metricsResponse.Content);
+            var zendeskMetrics = JsonConvert.DeserializeObject<ZendeskMetrics>(metricsResponse.Content);
+            var zendeskUsers = JsonConvert.DeserializeObject<ZendeskUsers>(usersResponse.Content);
 
             var customers = customerRepository.GetAll();
             var supportLevel = customerSupportLevelRepository.GetAll();
 
             // Creating Json for dashboard
-            var dashboardTickets = CreateTicketInfo(zendeskData, zendeskMetrics);
-
-            //var customerData = new Customer();
-
-
-            //return DTO customers
-            //var customersDTO = new List<Customer>();
-            //customers.ToList().ForEach(customer =>
-            //{
-            //    var customerDTO = new Customer()
-            //    {
-            //        CustomerCode = customer.CustomerCode,
-            //        CustomerCodeZendesk = customer.CustomerCodeZendesk,
-            //        SupportLevel = customer.SupportLevel,
-            //    };
-
-            //    customersDTO.Add(customerDTO);
-            //});
+            var dashboardTickets = CreateTicketInfo(zendeskData, zendeskUsers, customers, supportLevel);
 
             return Ok(dashboardTickets);
         }
 
         // Dashboard specific JSON creation
-        private static List<DashboardTicketData> CreateTicketInfo(ZendeskData? zendeskData, MetricsData? metricsData)
+        private static List<DashboardTicketData> CreateTicketInfo(ZendeskData? zendeskData, ZendeskUsers? zendeskUsers, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel)
         {
             var ticketList = new List<DashboardTicketData>();
             foreach (var ticket in zendeskData.tickets)
             {
                 var dashboardTicket = new DashboardTicketData();
+
                 dashboardTicket.id = ticket.id;
-                object organisationId = null;
-                foreach (var metric in metricsData.ticket_metrics)
-                {
-                    if( ticket.id == metric.ticket_id)
-                    {
-                        organisationId = metric.id;
-                    }
-                }
-                dashboardTicket.Organisation = organisationId.ToString();
+                dashboardTicket.Organisation = GetZendeskUserName(zendeskUsers, ticket);
                 if (ticket.subject != null) dashboardTicket.Subject = ticket.subject;
                 if (ticket.status != null) dashboardTicket.Status = ticket.status;
                 if (ticket.assignee_id != null) dashboardTicket.Recipient = ticket.assignee_id.ToString();//TODO assignee or recepient
                 dashboardTicket.Billable = true; //TODO tobe decided
                 //replacing numbers instead strings for comparison
-                if (ticket.priority != null) dashboardTicket.Priority = (ticket.priority=="urgent" ? 4 : ticket.priority == "high" ? 3 : ticket.priority == "normal" ? 2 : 1).ToString();              
+                dashboardTicket.Priority = (ticket.priority == "urgent" ? 4 : ticket.priority == "high" ? 3 : ticket.priority == "normal" ? 2 : 1).ToString();
                 dashboardTicket.RequestedDate = ticket.created_at.ToString();
-                dashboardTicket.TimeDue =  ticket.created_at.AddDays(3).ToString(); //TODO tobe calculated
+                //dashboardTicket.TimeDue = ticket.created_at.AddDays(3).ToString(); //TODO tobe calculated
+                dashboardTicket.TimeDue = GetTimeDue(dashboardTicket.Organisation, dashboardTicket.Priority, dashboardTicket.RequestedDate, customers, supportLevel);
                 if (ticket.type != null) dashboardTicket.Type = ticket.type;
                 if (ticket.url != null) dashboardTicket.url = ticket.url;
                 ticketList.Add(dashboardTicket);
@@ -110,6 +98,19 @@ namespace Zendesk.Controllers
             }
 
             return ticketList;
+
+        }
+        //Finding user name from zendesk users api
+        static string GetZendeskUserName(ZendeskUsers? zendeskUsers, Ticket ticket)
+        {
+            foreach (var user in zendeskUsers.users)
+            {
+                if (ticket.requester_id.ToString() == user.id.ToString())
+                {
+                    return user.name;
+                }
+            }
+            return "null";
         }
 
         public static List<DashboardTicketData> QuickSortTickets(List<DashboardTicketData> ticketListToSort, int leftIndex, int rightIndex)
@@ -147,6 +148,37 @@ namespace Zendesk.Controllers
                 QuickSortTickets(ticketListToSort, i, rightIndex);
 
             return ticketListToSort;
+        }
+
+        private static string GetTimeDue(string organisation, string priority, string requestedDate, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel)
+        {
+            int customerSupportLevel = 0;
+            int responseTimeUrgent = 0;
+            int responseTimeHigh = 0;
+            int responseTimeNormal = 0;
+            int responseTimeLow = 0;            
+            int resolutionTimeUrgent = 0;
+            int resolutionTimeHigh = 0;
+            int resolutionTimeNormal = 0;
+            int resolutionTimeLow = 0;
+            foreach (var customer in customers)
+            {
+                if(customer.CustomerCode == organisation)
+                {
+                    customerSupportLevel = customer.SupportLevel;
+
+                    foreach (var level in supportLevel)
+                    {
+                        if(level.SupportLevel == customerSupportLevel)
+                        {
+                            var resolutionTime = priority == "4" ? level.ResponseTimeLow : priority == "3" ? level.ResponseTimeNormal : priority == "2" ? level.ResponseTimeHigh : level.ResponseTimeUrgent;
+                        }
+                    }
+                }
+            }
+
+
+            return "";
         }
     }
 }

@@ -41,7 +41,7 @@ namespace ConsoleUser.Models.Domain
         public int? business { get; set; }
     }
 
-    public class MetricsData
+    public class ZendeskMetrics
     {
         public List<TicketMetric> ticket_metrics { get; set; }
         public object next_page { get; set; }
