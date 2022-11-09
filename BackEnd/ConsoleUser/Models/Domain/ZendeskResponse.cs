@@ -11,7 +11,16 @@ namespace ConsoleUser.Models.Domain
         [AllowNull] public object previous_page { get; set; }
         [AllowNull] public int count { get; set; }
     }
-
+    public class CustomField
+    {
+        public object id { get; set; }
+        public bool value { get; set; }
+    }
+    public class Field
+    {
+        public object id { get; set; }
+        public bool value { get; set; }
+    }
     public class Ticket
     {
         [AllowNull] public string testData { get; set; }

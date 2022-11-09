@@ -17,22 +17,6 @@ namespace ConsoleUser.Models.Domain
         [AllowNull] public string url { get; set; }
         [AllowNull] public string TrafficLight { get; set; }
         [AllowNull] public double SortPriority { get; set; }
-
-        // trying Enums
-        //private Priority _priority; 
-        //public Priority PriorityType
-        //{
-        //    get { return _priority; }
-        //    set { _priority = value; }
-        //}
     }
-    // trying Enums
-    //public enum Priority
-    //{
-    //    low,
-    //    normal,
-    //    high,
-    //    urgent
-    //}
 }
 

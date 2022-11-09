@@ -4,8 +4,10 @@ using ConsoleUser.Models.DTO;
 using ConsoleUser.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using RestSharp;
 using System.Collections.Immutable;
 using System.Diagnostics;
@@ -50,11 +52,11 @@ namespace Zendesk.Controllers
             usersRequest.AddHeader("Cookie", "__cf_bm=Bvy1dB189VHVzvKE06rhF45I9xeeULscC4tLWYi.uFU-1667868863-0-AcBBs4QbNfD3hICdAoad6zeSnfs8GpkPaqMlf2Uf8+LI1xraXEPOT7uSYsBDF50EB0TOCt4zn4qzdVSpAFImPUcNS7plBTGERKxB9rEa6Isq; __cfruid=d6d7639fe6c226ee32f5b8fed32a369d01cc9511-1667859951; __cfruid=64d825a7586ffffb2903a6ea42c4775ebdaa1f20-1667868990; _zendesk_cookie=BAhJIhl7ImRldmljZV90b2tlbnMiOnt9fQY6BkVU--459ed01949a36415c1716b5711271c3d08918307");
 
             RestResponse ticketResponse = await client.ExecuteAsync(ticketRequest);
-            RestResponse metricsResponse = await client.ExecuteAsync(metricsRequest);
+            //RestResponse metricsResponse = await client.ExecuteAsync(metricsRequest);
             RestResponse usersResponse = await client.ExecuteAsync(usersRequest);
 
             var zendeskData = JsonConvert.DeserializeObject<ZendeskData>(ticketResponse.Content);
-            var zendeskMetrics = JsonConvert.DeserializeObject<ZendeskMetrics>(metricsResponse.Content);
+            //var zendeskMetrics = JsonConvert.DeserializeObject<ZendeskMetrics>(metricsResponse.Content);
             var zendeskUsers = JsonConvert.DeserializeObject<ZendeskUsers>(usersResponse.Content);
 
             var customers = customerRepository.GetAll();
@@ -79,23 +81,27 @@ namespace Zendesk.Controllers
                 if (ticket.subject != null) dashboardTicket.Subject = ticket.subject;
                 if (ticket.status != null) dashboardTicket.Status = ticket.status;
                 if (ticket.assignee_id != null) dashboardTicket.Recipient = ticket.assignee_id.ToString();//TODO assignee or recepient
-                dashboardTicket.Billable = true; //TODO add from the new field
+                dashboardTicket.Billable = GetBillableCustomField(ticket.custom_fields[0]);
                 dashboardTicket.Priority = ticket.priority;
                 dashboardTicket.RequestedDate = ticket.created_at.AddHours(12).ToString();
                 dashboardTicket.TimeDue = GetTimeDue(dashboardTicket.Organisation, dashboardTicket.Priority, DateTime.Parse(dashboardTicket.RequestedDate), customers, supportLevel).ToString();
                 if (ticket.type != null) dashboardTicket.Type = ticket.type;
                 if (ticket.url != null) dashboardTicket.url = ticket.url;
+                dashboardTicket.TrafficLight = GetTrafficLight(DateTime.Parse(dashboardTicket.TimeDue));
                 ticketList.Add(dashboardTicket);
             }
 
             ticketList = QuickSortTickets(ticketList, 0, ticketList.Count - 1);
 
-            foreach(var ticket in ticketList)
-            {
-                ticket.TrafficLight = GetTrafficLight(DateTime.Parse(ticket.TimeDue));
-            }
-
             return ticketList;
+        }
+
+        //Getting billable field
+        private static bool GetBillableCustomField(object jObject)
+        {
+            var jsonString = JsonConvert.SerializeObject(jObject);
+            var fieldDict = JObject.Parse(jsonString);
+            return fieldDict["value"].ToObject<bool>();
         }
 
         //Finding user name from zendesk users api
@@ -111,13 +117,9 @@ namespace Zendesk.Controllers
             return "null";
         }
 
+        //Sort tickets on time due to finish
         public static List<DashboardTicketData> QuickSortTickets(List<DashboardTicketData> ticketListToSort, int leftIndex, int rightIndex)
         {
-            //foreach(var ticket in ticketListToSort)
-            //{
-            //    ticket.SortPriority = (DateTime.Parse(ticket.TimeDue) - DateTime.Parse(ticket.RequestedDate)).TotalHours;
-            //}
-
             var i = leftIndex;
             var j = rightIndex;
             var pivot = ticketListToSort[leftIndex];
@@ -136,9 +138,7 @@ namespace Zendesk.Controllers
 
                 if (i <= j)
                 {
-                    var temp = ticketListToSort[i];
-                    ticketListToSort[i] = ticketListToSort[j];
-                    ticketListToSort[j] = temp;
+                    (ticketListToSort[j], ticketListToSort[i]) = (ticketListToSort[i], ticketListToSort[j]); // swap using tuples
                     i++;
                     j--;
                 }
@@ -153,14 +153,15 @@ namespace Zendesk.Controllers
             return ticketListToSort;
         }
 
+        //Creating time due based on user tier and ticket priority
         private static DateTime GetTimeDue(string organisation, string priority, DateTime requestedDate, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel)
         {
-            int customerSupportLevel = 0;
+            //int customerSupportLevel = 0;
             foreach (var customer in customers)
             {
                 if(customer.CustomerCode == organisation)
                 {
-                    customerSupportLevel = customer.SupportLevel;
+                    int customerSupportLevel = customer.SupportLevel;
 
                     foreach (var level in supportLevel)
                     {
@@ -175,16 +176,15 @@ namespace Zendesk.Controllers
             return requestedDate;
         }
 
+        //Generating colour codes based on 4 different time frames
         private static string GetTrafficLight(DateTime timeDue)
         {
             int veryHigh = 2;
             int high = 11;
             int normal = 24;
             int low = 32;
-            double dueHours = (timeDue - DateTime.Today).TotalHours;
-            string colour = "";
-            colour = dueHours <= veryHigh ? "red" : dueHours <= high ? "orange" : dueHours <= normal ? "yellow" : dueHours <= low ? "green" : "green";
-            return colour;
+            double dueHours = (timeDue - DateTime.Today).TotalHours;            
+            return dueHours <= veryHigh ? "red" : dueHours <= high ? "orange" : dueHours <= normal ? "yellow" : dueHours <= low ? "green" : "green"; 
         }
     }
 }
