@@ -13,24 +13,15 @@ namespace ConsoleUser.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UsersController : Controller
+    public class CustomerController2 : Controller
     {
         private readonly UsersAPIDbContext dbContext;
         private readonly IConfiguration _configuration;
 
-        public UsersController(UsersAPIDbContext dbContext, IConfiguration configuration)
+        public CustomerController2(UsersAPIDbContext dbContext, IConfiguration configuration)
         {
             this.dbContext = dbContext;
             _configuration = configuration;
         }
-
-        //not needed as the endpoint moved to AuthController
-        //[HttpGet]
-        //[Authorize]
-        //public async Task<IActionResult>  GetUsersaw()
-        //{
-        //    // return Ok(await dbContext.Users.ToListAsync());
-        //    return Ok("User Authorised");
-        //}
     }
 }

@@ -34,7 +34,7 @@ function Dashboard() {
     <>{loggedIn && <div id={styles.dashboard}>
       <h1>Dashboard</h1>
       <JiraEpicSection />
-      {/* <SupportTicketSection/> */}
+      <SupportTicketSection/>
       <button onClick={logout}>Log Out</button>
     </div>}
       </>

@@ -18,10 +18,13 @@
     margin-bottom: 0%;
 }
 #org{
-    width: 5%;
+    width: 10%;
 }
 #sub{
-    width: 40%;
+    width: 30%;
+}
+#status{
+    width: 5%;
 }
 #assign{
     width: 10%;
@@ -50,40 +53,41 @@
     align-items: center;
     justify-content: center;
     width: 98%;
-    height: 40px;
-    background-color: #dc2a2a;
-    margin: 10px;
+    height: 35px;
+    background-color: #cc0000;
+    margin-top: 8px;
     border-radius: 15px;
 }
-.ticket[status-bg-colour="urgent"]{
-    background-color: #ff0000;
+.ticket[status-bg-colour="red"]{
+    background-color: #c70000;
 }
-.ticket[status-bg-colour="high"]{
+.ticket[status-bg-colour="orange"]{
     background-color: #ff8c00;
 }
-.ticket[status-bg-colour="normal"]{
-    background-color: #fff200;
+.ticket[status-bg-colour="yellow"]{
+    background-color: #e7dc00;
 }
-.ticket[status-bg-colour="low"]{
+.ticket[status-bg-colour="green"]{
     background-color: #26be00;
 }
 
 .ticketText{
+    margin: 0%;
     text-align: center;
     width: 12%;
-    font-weight: 2px;
+    font-weight: 3px;
 }
 
-.ticketText[status-text-colour="urgent"]{
+.ticketText[status-text-colour="red"]{
     color: #ffffff;
 }
-.ticketText[status-text-colour="high"]{
+.ticketText[status-text-colour="orange"]{
     color: #ffffff;
 }
-.ticketText[status-text-colour="normal"]{
+.ticketText[status-text-colour="yellow"]{
     color: #000000;
 }
-.ticketText[status-text-colour="low"]{
+.ticketText[status-text-colour="green"]{
     color: #ffffff;
 }
 
@@ -101,16 +105,16 @@
     border-radius: 50%;
     display: inline-block;
 }
-.dot[status-dot-colour="urgent"]{
+.dot[status-dot-colour="red"]{
     background-color: #ffffff;
 }
-.dot[status-dot-colour="high"]{
+.dot[status-dot-colour="orange"]{
     background-color: #ffffff;
 }
-.dot[status-dot-colour="normal"]{
+.dot[status-dot-colour="yellow"]{
     background-color: #000000;
 }
-.dot[status-dot-colour="low"]{
+.dot[status-dot-colour="green"]{
     background-color: #ffffff;
 }
 #chevronArrowDown {

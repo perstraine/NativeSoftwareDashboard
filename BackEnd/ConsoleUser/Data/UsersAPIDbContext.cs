@@ -6,7 +6,7 @@ namespace ConsoleUser.Data
 {
     public class UsersAPIDbContext : DbContext
     {
-        public UsersAPIDbContext(DbContextOptions options) : base(options)
+        public UsersAPIDbContext(DbContextOptions<UsersAPIDbContext> options) : base(options)
         {
 
         }

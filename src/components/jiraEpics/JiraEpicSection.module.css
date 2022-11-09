@@ -8,7 +8,7 @@
 #jiraEpicTitles{
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     width: 98%;
 }
@@ -41,16 +41,17 @@
     width: 7%
 }
 #complete{
-    width: 7%
+    width: 5%
 }
 #extra{
-    width: 3%;
+    width: 4%;
     display: flex;
+    align-self: flex-end;
     flex-direction: column;
 }
 
 #extra2{
-        width: 3%;
+        width: 4%;
     display: flex;
     flex-direction: column;
     cursor: pointer;
@@ -61,24 +62,24 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     width: 98%;
-    height: 40px;
-    margin: 5px;
+    height: 35px;
+    margin-top: 8px;
     border-radius: 15px;
     text-align: center;
 }
 #epic[statusColor="red"]{
-    background-color: #dc2a2a;
+    background-color: #cc0000;
     color: #ffffff;
 }
 #epic[statusColor="orange"]{
-    background-color: #ff8c00;
+    background-color: #ee8300;
     color: #ffffff;
 
 }
 #epic[statusColor="yellow"]{
-    background-color: #fff200;
+    background-color: #e7dc00;
     color: #000000;
 }
 #epic[statusColor="green"]{
@@ -95,7 +96,7 @@
     cursor: pointer;
   }
 
-  .dot{
+.dot{
     height: 6px;
     width: 6px;
     margin:1.5px;
@@ -104,4 +105,16 @@
     display: inline-block;
     background-color: #000000;
     cursor: pointer;
+}
+.dot[statusColor="red"]{
+    background-color: #ffffff;
+}
+.dot[statusColor="orange"]{
+    background-color: #ffffff;
+}
+.dot[statusColor="yellow"]{
+    background-color: #000000;
+}
+.dot[statusColor="green"]{
+    background-color: #ffffff;
 }

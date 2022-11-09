@@ -12,15 +12,9 @@ export default function JiraEpicIssue({ epic }) {
         <div id={styles.spent}>{epic.timeSpent}</div>
         <div id={styles.complete}>{`${epic.complete}%`}</div>
         <div id={styles.extra2}>
-          <div
-            className={styles.dot}
-          ></div>
-          <div
-            className={styles.dot}
-          ></div>
-          <div
-            className={styles.dot}
-          ></div>
+          <div className={styles.dot} statusColor={epic.urgencyColour}></div>
+          <div className={styles.dot} statusColor={epic.urgencyColour}></div>
+          <div className={styles.dot} statusColor={epic.urgencyColour}></div>
         </div>
       </div>
     );
