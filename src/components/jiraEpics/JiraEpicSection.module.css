@@ -1,0 +1,120 @@
+#jiraEpicSection{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#jiraEpicTitles{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 98%;
+}
+
+#jiraEpicTitles div{
+    text-align: center;
+    color: #000000;
+    margin-bottom: 0%;
+}
+
+#account{
+    width: 15%
+}
+#name{
+    width: 22%
+}
+#start{
+    width: 11%
+}
+#due{
+    width: 11%
+}
+#story{
+    width: 7%
+}
+#budget{
+    width: 7%
+}
+#spent{
+    width: 7%
+}
+#complete{
+    width: 5%
+}
+#extra{
+    width: 4%;
+    display: flex;
+    align-self: flex-end;
+    flex-direction: column;
+}
+
+#extra2{
+        width: 4%;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    align-items: center;
+}
+
+#epic{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 98%;
+    height: 35px;
+    margin-top: 8px;
+    border-radius: 15px;
+    text-align: center;
+}
+#epic[statusColor="red"]{
+    background-color: #cc0000;
+    color: #ffffff;
+}
+#epic[statusColor="orange"]{
+    background-color: #ee8300;
+    color: #ffffff;
+
+}
+#epic[statusColor="yellow"]{
+    background-color: #e7dc00;
+    color: #000000;
+}
+#epic[statusColor="green"]{
+    background-color: #26be00;
+    color: #ffffff;
+}
+
+#chevronArrowDown {
+    display: inline-block;
+    border-right: 4px solid black;
+    border-bottom: 4px solid black;
+    width: 10px; height: 10px;
+    transform: rotate(45deg);
+    cursor: pointer;
+  }
+
+.dot{
+    height: 6px;
+    width: 6px;
+    margin:1.5px;
+    padding: 0%;
+    border-radius: 50%;
+    display: inline-block;
+    background-color: #000000;
+    cursor: pointer;
+}
+.dot[statusColor="red"]{
+    background-color: #ffffff;
+}
+.dot[statusColor="orange"]{
+    background-color: #ffffff;
+}
+.dot[statusColor="yellow"]{
+    background-color: #000000;
+}
+.dot[statusColor="green"]{
+    background-color: #ffffff;
+}

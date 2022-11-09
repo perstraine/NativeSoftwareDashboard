@@ -54,19 +54,18 @@
     justify-content: center;
     width: 98%;
     height: 35px;
-    background-color: #ff0000;
-    /* margin: 10px; */
+    background-color: #cc0000;
     margin-top: 8px;
-    border-radius: 10px;
+    border-radius: 15px;
 }
 .ticket[status-bg-colour="red"]{
-    background-color: #ff0000;
+    background-color: #c70000;
 }
 .ticket[status-bg-colour="orange"]{
     background-color: #ff8c00;
 }
 .ticket[status-bg-colour="yellow"]{
-    background-color: #fff200;
+    background-color: #e7dc00;
 }
 .ticket[status-bg-colour="green"]{
     background-color: #26be00;
