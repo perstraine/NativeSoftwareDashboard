@@ -79,16 +79,16 @@
     font-weight: 3px;
 }
 
-.ticketText[status-text-colour="urgent"]{
+.ticketText[status-text-colour="red"]{
     color: #ffffff;
 }
-.ticketText[status-text-colour="high"]{
+.ticketText[status-text-colour="orange"]{
     color: #ffffff;
 }
-.ticketText[status-text-colour="normal"]{
+.ticketText[status-text-colour="yellow"]{
     color: #000000;
 }
-.ticketText[status-text-colour="low"]{
+.ticketText[status-text-colour="green"]{
     color: #ffffff;
 }
 
@@ -106,16 +106,16 @@
     border-radius: 50%;
     display: inline-block;
 }
-.dot[status-dot-colour="urgent"]{
+.dot[status-dot-colour="red"]{
     background-color: #ffffff;
 }
-.dot[status-dot-colour="high"]{
+.dot[status-dot-colour="orange"]{
     background-color: #ffffff;
 }
-.dot[status-dot-colour="normal"]{
+.dot[status-dot-colour="yellow"]{
     background-color: #000000;
 }
-.dot[status-dot-colour="low"]{
+.dot[status-dot-colour="green"]{
     background-color: #ffffff;
 }
 #chevronArrowDown {
