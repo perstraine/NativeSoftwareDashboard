@@ -9,10 +9,14 @@ namespace ConsoleUser.Models.Domain
         [AllowNull] public string Name { get; set; }
         [AllowNull] public DateTime StartDate { get; set; } // TODO confirm requested or creted time
         [AllowNull] public DateTime DueDate { get; set; }
-        [AllowNull] public int? StoryPoints { get; set; }
-        [AllowNull] public string Budget { get; set; }
-        [AllowNull] public int TimeSpent { get; set; }
-        [AllowNull] public int Complete { get; set; }
+        [AllowNull] public double? StoryPoints { get; set; }
+        [AllowNull] public double? Budget { get; set; }
+        [AllowNull] public double? TimeSpent { get; set; }
+        [AllowNull] public double Complete { get; set; }
+        [AllowNull] public double? BudgetRemaining { get; set; }
+        [AllowNull] public string urgencyColour { get; set; }
+
+
         [AllowNull] public string url { get; set; }
     }
 }

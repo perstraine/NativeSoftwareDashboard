@@ -2,53 +2,43 @@ import axios from 'axios';
 import { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import SupportTicketSection from '../../components/SupportTicketSection';
+import JiraEpicSection from '../../components/jiraEpics/JiraEpicSection';
 import styles from "./Dashboard.module.css"
 
 function Dashboard() {
-
-  const [jira, setJira] = useState('');
+  const [loggedIn,setLoggedIn] = useState(false)
   const navigate = useNavigate();
-
-// Jira API
-useEffect(() => {
-  axios.get('https://localhost:7001/api/Jira').then((response) => {
-    if (jira) {
-      console.log('data already retrieved')
-      console.log(jira);
-    }else
-    {setJira(response.data.issues);
-    console.log(jira);}
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-}, [jira]);
-  
   useEffect(() => {
+  checkLogin();
+  })
+  async function checkLogin() {
   const logintoken = localStorage.getItem('token')
     const config = { headers: { Authorization: `Bearer ${logintoken}` } };
     if (logintoken)
     {try {
-      axios
+      await axios
         .get("https://localhost:7001/Auth/login", config);
+      setLoggedIn(true)
     } catch (error) {
       navigate('/');
       }
     } else {
       navigate("/");
     }
-  })
-
+}
   function logout() {
     localStorage.removeItem('token')
     navigate('/')
   }
-return (
-  <div id={styles.dashboard}>
-    <h1>Dashboard</h1>
-    <SupportTicketSection/>
-    <button onClick={logout}>Log Out</button>
-  </div>
+  return (
+    <>{loggedIn && <div id={styles.dashboard}>
+      <h1>Dashboard</h1>
+      <JiraEpicSection />
+      {/* <SupportTicketSection/> */}
+      <button onClick={logout}>Log Out</button>
+    </div>}
+      </>
+
 );
 }
 

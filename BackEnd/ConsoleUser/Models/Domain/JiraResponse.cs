@@ -36,6 +36,14 @@ namespace ConsoleUser.Models.Domain
         [AllowNull] public NonEditableReason nonEditableReason { get; set; }
     }
 
+    public class Resolution
+    {
+        [AllowNull] public string self { get; set; }
+        [AllowNull] public string id { get; set; }
+        [AllowNull] public string description { get; set; }
+        [AllowNull] public string name { get; set; }
+    }
+
     public class Fields
     {
         public DateTime statuscategorychangedate { get; set; }
@@ -44,7 +52,7 @@ namespace ConsoleUser.Models.Domain
         [AllowNull] public Project project { get; set; }
         [AllowNull] public List<object> fixVersions { get; set; }
         public int? aggregatetimespent { get; set; }
-        [AllowNull] public object resolution { get; set; }
+        [AllowNull] public Resolution resolution { get; set; }
         [AllowNull] public object customfield_10027 { get; set; }
         [AllowNull] public object customfield_10028 { get; set; }
         [AllowNull] public object customfield_10029 { get; set; }
