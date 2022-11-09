@@ -81,11 +81,11 @@ namespace Zendesk.Controllers
                 if (ticket.assignee_id != null) dashboardTicket.Recipient = ticket.assignee_id.ToString();//TODO assignee or recepient
                 dashboardTicket.Billable = true; //TODO tobe decided
                 dashboardTicket.Priority = ticket.priority;
-                dashboardTicket.RequestedDate = ticket.created_at.ToString();
-                dashboardTicket.TimeDue = GetTimeDue(dashboardTicket.Organisation, dashboardTicket.Priority, ticket.created_at, customers, supportLevel).ToString();
+                dashboardTicket.RequestedDate = ticket.created_at.AddHours(12).ToString();
+                dashboardTicket.TimeDue = GetTimeDue(dashboardTicket.Organisation, dashboardTicket.Priority, DateTime.Parse(dashboardTicket.RequestedDate), customers, supportLevel).ToString();
                 if (ticket.type != null) dashboardTicket.Type = ticket.type;
                 if (ticket.url != null) dashboardTicket.url = ticket.url;
-                dashboardTicket.TrafficLight = GetTrafficLight(ticket.created_at, Convert.ToDateTime(dashboardTicket.TimeDue));
+                dashboardTicket.TrafficLight = GetTrafficLight(DateTime.Parse(dashboardTicket.RequestedDate), DateTime.Parse(dashboardTicket.TimeDue));
                 ticketList.Add(dashboardTicket);
             }
 
