@@ -12,7 +12,7 @@ namespace ConsoleUser.Models.Domain
         [AllowNull] public bool Billable { get; set; }
         [AllowNull] public string Priority { get; set; }
         [AllowNull] public string RequestedDate { get; set; } // TODO confirm requested or creted time
-        [AllowNull] public string TimeDue { get; set; } 
+        [AllowNull] public string TimeDue { get; set; }
         [AllowNull] public string Type { get; set; }
         [AllowNull] public string url { get; set; }
         [AllowNull] public string TrafficLight { get; set; }

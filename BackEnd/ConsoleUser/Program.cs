@@ -25,7 +25,6 @@ builder.Services.AddCors(options =>
     });
 });
 
-//builder.Services.AddDbContext<UsersAPIDbContext>(options => options.UseInMemoryDatabase("ConsoleUsersDb"));
 builder.Services.AddDbContext<UsersAPIDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("UsersAPIConnectionString")));
 builder.Services.AddDbContext<CustomerDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("UsersAPIConnectionString")));
 builder.Services.AddDbContext<SupportLevelDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("UsersAPIConnectionString")));

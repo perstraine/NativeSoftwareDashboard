@@ -74,21 +74,24 @@ namespace Zendesk.Controllers
             var ticketList = new List<DashboardTicketData>();
             foreach (var ticket in zendeskData.tickets)
             {
-                var dashboardTicket = new DashboardTicketData();
+                if(ticket.status != "solved" && ticket.status != "closed")
+                {
+                    var dashboardTicket = new DashboardTicketData();
 
-                dashboardTicket.id = ticket.id;
-                dashboardTicket.Organisation = GetZendeskUserName(zendeskUsers, ticket);
-                if (ticket.subject != null) dashboardTicket.Subject = ticket.subject;
-                if (ticket.status != null) dashboardTicket.Status = ticket.status;
-                if (ticket.assignee_id != null) dashboardTicket.Recipient = ticket.assignee_id.ToString();//TODO assignee or recepient
-                dashboardTicket.Billable = GetBillableCustomField(ticket.custom_fields[0]);
-                dashboardTicket.Priority = ticket.priority;
-                dashboardTicket.RequestedDate = ticket.created_at.AddHours(12).ToString();
-                dashboardTicket.TimeDue = GetTimeDue(dashboardTicket.Organisation, dashboardTicket.Priority, DateTime.Parse(dashboardTicket.RequestedDate), customers, supportLevel).ToString();
-                if (ticket.type != null) dashboardTicket.Type = ticket.type;
-                if (ticket.url != null) dashboardTicket.url = ticket.url;
-                dashboardTicket.TrafficLight = GetTrafficLight(DateTime.Parse(dashboardTicket.TimeDue));
-                ticketList.Add(dashboardTicket);
+                    dashboardTicket.id = ticket.id;
+                    dashboardTicket.Organisation = GetZendeskUserName(zendeskUsers, ticket);
+                    if (ticket.subject != null) dashboardTicket.Subject = ticket.subject;
+                    if (ticket.status != null) dashboardTicket.Status = ticket.status;
+                    if (ticket.assignee_id != null) dashboardTicket.Recipient = ticket.assignee_id.ToString();//TODO assignee or recepient
+                    dashboardTicket.Billable = GetBillableCustomField(ticket.custom_fields[0]);
+                    dashboardTicket.Priority = ticket.priority;
+                    dashboardTicket.RequestedDate = ticket.created_at.AddHours(12).ToString();
+                    dashboardTicket.TimeDue = GetTimeDue(dashboardTicket.Organisation, dashboardTicket.Priority, DateTime.Parse(dashboardTicket.RequestedDate), customers, supportLevel).ToString();
+                    if (ticket.type != null) dashboardTicket.Type = ticket.type;
+                    if (ticket.url != null) dashboardTicket.url = ticket.url;
+                    dashboardTicket.TrafficLight = GetTrafficLight(DateTime.Parse(dashboardTicket.TimeDue));
+                    ticketList.Add(dashboardTicket);
+                }
             }
 
             ticketList = QuickSortTickets(ticketList, 0, ticketList.Count - 1);
