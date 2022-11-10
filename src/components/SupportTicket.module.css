@@ -14,8 +14,8 @@
 #ticketheadings p{
     text-align: center;
     color: #000000;
-    /* width: 12%; */
     margin-bottom: 0%;
+    font-weight: bold;
 }
 #org{
     width: 10%;
@@ -54,21 +54,21 @@
     justify-content: center;
     width: 98%;
     height: 35px;
-    background-color: #cc0000;
+    background-color: #bd2024;
     margin-top: 8px;
     border-radius: 15px;
 }
 .ticket[status-bg-colour="red"]{
-    background-color: #c70000;
+    background-color: #bd2024;
 }
 .ticket[status-bg-colour="orange"]{
-    background-color: #ff8c00;
+    background-color: #ff7900;
 }
 .ticket[status-bg-colour="yellow"]{
-    background-color: #e7dc00;
+    background-color: #ffe100;
 }
 .ticket[status-bg-colour="green"]{
-    background-color: #26be00;
+    background-color: #7aff64;
 }
 
 .ticketText{
@@ -88,7 +88,7 @@
     color: #000000;
 }
 .ticketText[status-text-colour="green"]{
-    color: #ffffff;
+    color: #000000;
 }
 
 .externalLinks{
@@ -115,7 +115,7 @@
     background-color: #000000;
 }
 .dot[status-dot-colour="green"]{
-    background-color: #ffffff;
+    background-color: #000000;
 }
 #chevronArrowDown {
     display: inline-block;

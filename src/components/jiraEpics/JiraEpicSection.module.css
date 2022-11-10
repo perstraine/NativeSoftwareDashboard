@@ -17,6 +17,7 @@
     text-align: center;
     color: #000000;
     margin-bottom: 0%;
+    font-weight: bold;
 }
 
 #account{
@@ -51,7 +52,7 @@
 }
 
 #extra2{
-        width: 4%;
+    width: 4%;
     display: flex;
     flex-direction: column;
     cursor: pointer;
@@ -70,21 +71,21 @@
     text-align: center;
 }
 #epic[statusColor="red"]{
-    background-color: #cc0000;
+    background-color: #bd2024;
     color: #ffffff;
 }
 #epic[statusColor="orange"]{
-    background-color: #ee8300;
+    background-color: #ff7900;
     color: #ffffff;
 
 }
 #epic[statusColor="yellow"]{
-    background-color: #e7dc00;
+    background-color: #ffe100;
     color: #000000;
 }
 #epic[statusColor="green"]{
-    background-color: #26be00;
-    color: #ffffff;
+    background-color: #7aff64;
+    color: #000000;
 }
 
 #chevronArrowDown {
@@ -116,5 +117,5 @@
     background-color: #000000;
 }
 .dot[statusColor="green"]{
-    background-color: #ffffff;
+    background-color: #000000;
 }
