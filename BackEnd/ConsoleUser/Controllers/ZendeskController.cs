@@ -87,7 +87,8 @@ namespace Zendesk.Controllers
                     dashboardTicket.Billable = GetBillableCustomField(ticket.custom_fields[0]);
                     dashboardTicket.Priority = ticket.priority;
                     dashboardTicket.RequestedDate = ticket.created_at.ToLocalTime().ToString();
-                    dashboardTicket.TimeDue = GetTimeDue(dashboardTicket.Organisation, dashboardTicket.Priority, DateTime.Parse(dashboardTicket.RequestedDate), customers, supportLevel).ToString();
+                    //dashboardTicket.TimeDue = GetTimeDue(dashboardTicket.Organisation, dashboardTicket.Priority, DateTime.Parse(dashboardTicket.RequestedDate), customers, supportLevel).ToString();
+                    dashboardTicket.TimeDue = GetTimeDueMinusOffHours(dashboardTicket.Organisation, dashboardTicket.Priority, DateTime.Parse(dashboardTicket.RequestedDate), customers, supportLevel).ToString();
                     if (ticket.type != null) dashboardTicket.Type = ticket.type;
                     if (ticket.url != null) dashboardTicket.url = ticket.url;
                     dashboardTicket.TrafficLight = GetTrafficLight(DateTime.Parse(dashboardTicket.TimeDue));
@@ -160,16 +161,6 @@ namespace Zendesk.Controllers
         //Creating time due based on user tier and ticket priority
         private static DateTime GetTimeDue(string organisation, string priority, DateTime requestedDate, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel)
         {
-            //If ticket logged after hours, then log time changed to next working day morning.
-            //DateTime dayEnd = DateTime.Today.ToLocalTime().AddHours(17.5);
-            //DateTime businessDayEnd = DateTime.Today.AddHours(17.5);
-            //DateTime businessHoursEnd = new DateTime(requestedDate.Year, requestedDate.Month, requestedDate.Day, 17, 0, 0);
-            //DateTime businessHoursStart = new DateTime(requestedDate.Year, requestedDate.Month, requestedDate.Day + 1, 8, 30, 0);
-            //if (requestedDate.TimeOfDay > businessHoursEnd.TimeOfDay || requestedDate.TimeOfDay < businessHoursStart.TimeOfDay)
-            //{
-            //    requestedDate = businessHoursStart;
-            //}
-
             DateTime timeDue = DateTime.Now;
             foreach (var customer in customers)
             {
@@ -189,12 +180,58 @@ namespace Zendesk.Controllers
                 }
             }
             
+            return timeDue;
+        }
+
+        private static DateTime GetTimeDueMinusOffHours(string organisation, string priority, DateTime requestedDate, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel)
+        {
+            //If ticket logged after hours, then log time changed to next working day morning.
+            double resolutionTime = 0;
+            DateTime businessHoursEnd = new DateTime(requestedDate.Year, requestedDate.Month, requestedDate.Day, 17, 0, 0);
+            DateTime businessHoursStart = new DateTime(requestedDate.Year, requestedDate.Month, requestedDate.Day + 1, 8, 30, 0);
+            if (requestedDate.TimeOfDay > businessHoursEnd.TimeOfDay || requestedDate.TimeOfDay < businessHoursStart.TimeOfDay)
+            {
+                requestedDate = businessHoursStart;
+                businessHoursEnd = new DateTime(businessHoursStart.Year, businessHoursStart.Month, businessHoursStart.Day, 17, 0, 0);
+            }
+
+            foreach (var customer in customers)
+            {
+                if (customer.CustomerCode == organisation)
+                {
+                    int customerSupportLevel = customer.SupportLevel;
+
+                    foreach (var level in supportLevel)
+                    {
+                        if (level.SupportLevel == customerSupportLevel)
+                        {
+                            resolutionTime = priority == "urgent" ? level.ResolutionTimeUrgent : priority == "high" ? level.ResolutionTimeHigh : priority == "normal" ? level.ResolutionTimeNormal : level.ResolutionTimeLow;
+                        }
+                    }
+                }
+            }
+
             //Adding off business hours to time due
-            //while (timeDue > businessDayEnd)
-            //{
-            //    timeDue = timeDue.AddHours(15.5);
-            //    businessDayEnd = businessDayEnd.AddDays(1);
-            //}
+            DateTime timeDue = requestedDate; //setting timeDue to ticker requested date
+            businessHoursEnd = new DateTime(timeDue.Year, timeDue.Month, timeDue.Day, 17, 0, 0); // setting business hours end time for the current timeDue
+            double timeLeftInDay = businessHoursEnd.Subtract(timeDue).TotalHours; // Balance time left in that day.
+
+            if (resolutionTime <= timeLeftInDay) // If work can be finished in the same day.
+            {
+                timeDue = timeDue.AddHours(resolutionTime); // Adding response time to timeDue
+                return timeDue;
+            }
+
+            // If cannot be completed in same day
+            while (resolutionTime > timeLeftInDay) // Loop reducing 8 hrs until balance time is enough for the day
+            {
+                resolutionTime -= timeLeftInDay; // reducing work done for the day.
+                timeLeftInDay = 8;  // Adding next days 8 hours.
+                timeDue = new DateTime(timeDue.Year, timeDue.Month, timeDue.Day + 1, 8, 30, 0); // Adding a day to timeDue
+            }
+
+            timeDue = new DateTime(timeDue.Year, timeDue.Month, timeDue.Day + 1, 8, 30, 0); // Adding a day to timeDue
+            timeDue = timeDue.AddHours(resolutionTime); // Adding balance time to 
             
             return timeDue;
         }
