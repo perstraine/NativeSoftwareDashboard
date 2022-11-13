@@ -7,6 +7,10 @@
     color: #81E8FF;
 }
 
+#logo{
+    border-radius: 8px;
+}
+
 .infoContainer{
     display: flex;
     width: 15%;
