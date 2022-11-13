@@ -187,12 +187,31 @@ namespace Zendesk.Controllers
         {
             //If ticket logged after hours, then log time changed to next working day morning.
             double resolutionTime = 0;
-            DateTime businessHoursEnd = new DateTime(requestedDate.Year, requestedDate.Month, requestedDate.Day, 17, 0, 0);
-            DateTime businessHoursStart = new DateTime(requestedDate.Year, requestedDate.Month, requestedDate.Day + 1, 8, 30, 0);
-            if (requestedDate.TimeOfDay > businessHoursEnd.TimeOfDay || requestedDate.TimeOfDay < businessHoursStart.TimeOfDay)
+            double workHoursPerDay = 8;
+            int dayStartHours = 8;
+            int dayStartMinutes = 30;
+            int dayEndHours = 17;
+            int dayEndMinutes = 0;
+            DateTime businessHoursEnd = new DateTime(requestedDate.Year, requestedDate.Month, requestedDate.Day, dayEndHours, dayEndMinutes, 0);
+            DateTime nextBusinessDay = new DateTime(requestedDate.Year, requestedDate.Month, requestedDate.Day + 1, dayStartHours, dayStartMinutes, 0);
+
+            // if next day is weekend find next Monday
+            if (nextBusinessDay.DayOfWeek == DayOfWeek.Saturday) 
             {
-                requestedDate = businessHoursStart;
-                businessHoursEnd = new DateTime(businessHoursStart.Year, businessHoursStart.Month, businessHoursStart.Day, 17, 0, 0);
+                nextBusinessDay = nextBusinessDay.AddDays(2);
+            }
+            else if (nextBusinessDay.DayOfWeek == DayOfWeek.Sunday)
+            {
+                nextBusinessDay = nextBusinessDay.AddDays(1);
+            }
+
+            // If requested date is off hours or on weekend then requested date is the next working day.
+            if (requestedDate.TimeOfDay > businessHoursEnd.TimeOfDay || 
+                requestedDate.TimeOfDay < nextBusinessDay.TimeOfDay || 
+                requestedDate.DayOfWeek == DayOfWeek.Saturday || 
+                requestedDate.DayOfWeek == DayOfWeek.Sunday)
+            {
+                requestedDate = nextBusinessDay;
             }
 
             foreach (var customer in customers)
@@ -212,8 +231,8 @@ namespace Zendesk.Controllers
             }
 
             //Adding off business hours to time due
-            DateTime timeDue = requestedDate; //setting timeDue to ticker requested date
-            businessHoursEnd = new DateTime(timeDue.Year, timeDue.Month, timeDue.Day, 17, 0, 0); // setting business hours end time for the current timeDue
+            DateTime timeDue = requestedDate; //starting timeDue to ticket requested date
+            businessHoursEnd = new DateTime(timeDue.Year, timeDue.Month, timeDue.Day, dayEndHours, dayEndMinutes, 0); // setting business hours end time for the current timeDue
             double timeLeftInDay = businessHoursEnd.Subtract(timeDue).TotalHours; // Balance time left in that day.
 
             if (resolutionTime <= timeLeftInDay) // If work can be finished in the same day.
@@ -226,11 +245,20 @@ namespace Zendesk.Controllers
             while (resolutionTime > timeLeftInDay) // Loop reducing 8 hrs until balance time is enough for the day
             {
                 resolutionTime -= timeLeftInDay; // reducing work done for the day.
-                timeLeftInDay = 8;  // Adding next days 8 hours.
-                timeDue = new DateTime(timeDue.Year, timeDue.Month, timeDue.Day + 1, 8, 30, 0); // Adding a day to timeDue
+                timeLeftInDay = workHoursPerDay;  // Adding next days 8 hours.
+                timeDue = new DateTime(timeDue.Year, timeDue.Month, timeDue.Day + 1, dayStartHours, dayStartMinutes, 0); // Adding a day to timeDue
+                if (timeDue.DayOfWeek == DayOfWeek.Saturday)
+                {
+                    timeDue = timeDue.AddDays(2);
+                }
             }
 
-            timeDue = new DateTime(timeDue.Year, timeDue.Month, timeDue.Day + 1, 8, 30, 0); // Adding a day to timeDue
+            timeDue = new DateTime(timeDue.Year, timeDue.Month, timeDue.Day + 1, dayStartHours, dayStartMinutes, 0); // Adding a day to timeDue
+            // If added day is on saturday then skip to next Monday
+            if (timeDue.DayOfWeek == DayOfWeek.Saturday)
+            {
+                timeDue = timeDue.AddDays(2);
+            }
             timeDue = timeDue.AddHours(resolutionTime); // Adding balance time to 
             
             return timeDue;
