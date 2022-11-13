@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
+import DashboardHeader from '../../components/dashboardHeader/DashboardHeader';
 import SupportTicketSection from '../../components/SupportTicketSection';
 import JiraEpicSection from '../../components/jiraEpics/JiraEpicSection';
 import styles from "./Dashboard.module.css"
@@ -26,16 +27,12 @@ function Dashboard() {
       navigate("/");
     }
 }
-  function logout() {
-    localStorage.removeItem('token')
-    navigate('/')
-  }
   return (
     <>{loggedIn && <div id={styles.dashboard}>
-      <h1>Dashboard</h1>
+      {/* <h1>Dashboard</h1> */}
+      <DashboardHeader/>
       <JiraEpicSection />
       <SupportTicketSection/>
-      <button onClick={logout}>Log Out</button>
     </div>}
       </>
 

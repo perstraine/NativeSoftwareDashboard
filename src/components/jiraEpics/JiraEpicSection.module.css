@@ -65,25 +65,27 @@
     align-items: center;
     justify-content: space-between;
     width: 98%;
-    height: 35px;
+    height: 30px;
     margin-top: 8px;
     border-radius: 15px;
     text-align: center;
+    font-weight: 500;
+
 }
-#epic[statusColor="red"]{
+#epic[statuscolor="red"]{
     background-color: #bd2024;
     color: #ffffff;
 }
-#epic[statusColor="orange"]{
+#epic[statuscolor="orange"]{
     background-color: #ff7900;
     color: #ffffff;
 
 }
-#epic[statusColor="yellow"]{
+#epic[statuscolor="yellow"]{
     background-color: #ffe100;
     color: #000000;
 }
-#epic[statusColor="green"]{
+#epic[statuscolor="green"]{
     background-color: #7aff64;
     color: #000000;
 }
@@ -107,15 +109,28 @@
     background-color: #000000;
     cursor: pointer;
 }
-.dot[statusColor="red"]{
+.dot[statuscolor="red"]{
     background-color: #ffffff;
 }
-.dot[statusColor="orange"]{
+.dot[statuscolor="orange"]{
     background-color: #ffffff;
 }
-.dot[statusColor="yellow"]{
+.dot[statuscolor="yellow"]{
     background-color: #000000;
 }
-.dot[statusColor="green"]{
+.dot[statuscolor="green"]{
     background-color: #000000;
+}
+
+#dropdown{
+    margin-top: 30px ;
+    position: absolute;
+    background-color: white;
+    color: #000000;
+    border-radius: 5px;
+}
+
+.dropdownItem{
+    padding: 2px 4px;
+    text-decoration: none;
 }

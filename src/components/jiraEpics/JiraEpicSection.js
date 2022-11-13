@@ -13,7 +13,6 @@ export default function JiraEpicSection() {
           const response = await axios.get("https://localhost:7001/api/Jira")
           let sorted = quickSort(response.data)
             setJira(sorted);
-            console.log(sorted)
         }
               catch(error) {
                 console.log(error);
