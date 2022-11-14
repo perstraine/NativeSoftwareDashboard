@@ -193,27 +193,28 @@ namespace Zendesk.Controllers
             int dayEndHours = 17;
             int dayEndMinutes = 0;
             DateTime businessHoursEnd = new DateTime(requestedDate.Year, requestedDate.Month, requestedDate.Day, dayEndHours, dayEndMinutes, 0);
-            DateTime nextBusinessDay = new DateTime(requestedDate.Year, requestedDate.Month, requestedDate.Day + 1, dayStartHours, dayStartMinutes, 0);
+            DateTime nextBusinessDayStart = new DateTime(requestedDate.Year, requestedDate.Month, requestedDate.Day + 1, dayStartHours, dayStartMinutes, 0);
 
             // if next day is weekend find next Monday
-            if (nextBusinessDay.DayOfWeek == DayOfWeek.Saturday) 
+            if (nextBusinessDayStart.DayOfWeek == DayOfWeek.Saturday) 
             {
-                nextBusinessDay = nextBusinessDay.AddDays(2);
+                nextBusinessDayStart = nextBusinessDayStart.AddDays(2);
             }
-            else if (nextBusinessDay.DayOfWeek == DayOfWeek.Sunday)
+            else if (nextBusinessDayStart.DayOfWeek == DayOfWeek.Sunday)
             {
-                nextBusinessDay = nextBusinessDay.AddDays(1);
+                nextBusinessDayStart = nextBusinessDayStart.AddDays(1);
             }
 
             // If requested date is off hours or on weekend then requested date is the next working day.
             if (requestedDate.TimeOfDay > businessHoursEnd.TimeOfDay || 
-                requestedDate.TimeOfDay < nextBusinessDay.TimeOfDay || 
+                requestedDate.TimeOfDay < nextBusinessDayStart.TimeOfDay || 
                 requestedDate.DayOfWeek == DayOfWeek.Saturday || 
                 requestedDate.DayOfWeek == DayOfWeek.Sunday)
             {
-                requestedDate = nextBusinessDay;
+                requestedDate = nextBusinessDayStart;
             }
 
+            //Finding resolution time based on customer tier and ticket priority
             foreach (var customer in customers)
             {
                 if (customer.CustomerCode == organisation)
