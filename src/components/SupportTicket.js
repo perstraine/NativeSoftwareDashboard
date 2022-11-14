@@ -1,8 +1,11 @@
-import React from 'react'
 import styles from "./SupportTicket.module.css"
+import {useState} from "react";
 
 function SupportTicket(props) {
-  //console.log(props.ticket);
+  const [isOpen, setIsOpen] = useState(false);
+  function handleClick() {
+    setIsOpen(!isOpen)
+  }
   return (
     <div status-bg-colour={props.ticket.trafficLight} className={styles.ticket}>
       <p status-text-colour={props.ticket.trafficLight} className={styles.ticketText} id={styles.org}> {props.ticket.organisation ? props.ticket.organisation :"Null" }</p>
@@ -14,10 +17,11 @@ function SupportTicket(props) {
       <p status-text-colour={props.ticket.trafficLight} className={styles.ticketText} id={styles.reqtime}> {props.ticket.requestedDate}</p>
       <p status-text-colour={props.ticket.trafficLight} className={styles.ticketText} id={styles.due}> {props.ticket.timeDue}</p>
       <p status-text-colour={props.ticket.trafficLight} className={styles.ticketText} id={styles.type}> {props.ticket.type ? props.ticket.type :"Null" }</p>
-      <div className = {styles.externalLinks} id={styles.links}>
+      <div className = {styles.externalLinks} id={styles.links} onClick={handleClick}>
         <div status-dot-colour={props.ticket.trafficLight} className = {styles.dot}></div>
         <div status-dot-colour={props.ticket.trafficLight} className = {styles.dot}></div>
         <div status-dot-colour={props.ticket.trafficLight} className = {styles.dot}></div>
+        {isOpen && <div id={styles.dropdown}><a href={props.ticket.url} target="_blank" className={styles.dropdownItem}>View in Zendesk</a></div>}
       </div>
     </div>
   )

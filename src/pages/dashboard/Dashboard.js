@@ -28,14 +28,13 @@ function Dashboard() {
     }
 }
   return (
-    <>{loggedIn && <div id={styles.dashboard}>
-      {/* <h1>Dashboard</h1> */}
-      <DashboardHeader/>
-      <JiraEpicSection />
-      <SupportTicketSection/>
-    </div>}
-      </>
-
+    <>
+      {loggedIn && <div id={styles.dashboard}>
+        <DashboardHeader/>
+        <JiraEpicSection />
+        <SupportTicketSection/>
+      </div>}
+    </>
 );
 }
 
