@@ -41,8 +41,8 @@ export default function DashboardHeader() {
       <div className={styles.infoContainer}>
         <div className={styles.infoTitle}>Closed Tickets This Week</div>
         <div className={styles.infoValue}>{closed}</div>
-          </div>
-          <div id={styles.logout} onClick={logout}>Logout</div>
+      </div>
+      <div id={styles.logout} onClick={logout}>Logout</div>
     </div>
   );
 }

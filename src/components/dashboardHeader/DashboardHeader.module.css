@@ -2,6 +2,7 @@
     display: flex;
     width: 100%;
     justify-content: space-around;
+    align-items: center;
     padding: 10px 0;
     font-weight: 500;
     color: #81E8FF;
@@ -20,12 +21,13 @@
     font-size: 30px;
     width: 80%;
     text-align: center;
-
+    font-weight: lighter;
 }
 .infoValue{
     width: 20%;
     text-align: center;
-    font-size: 50px;
+    font-size: 75px;
+    margin-left: 20px;
 }
 
 #logout{

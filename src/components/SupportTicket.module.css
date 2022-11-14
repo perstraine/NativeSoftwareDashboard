@@ -98,7 +98,6 @@
     flex-direction: column;
     cursor: pointer;
 }
-
 .dot{
     height: 6px;
     width: 6px;
@@ -130,6 +129,7 @@
 #dropdown{
     margin-top: 30px ;
     position: absolute;
+    right: 10px;
     background-color: white;
     color: #000000;
     border-radius: 5px;

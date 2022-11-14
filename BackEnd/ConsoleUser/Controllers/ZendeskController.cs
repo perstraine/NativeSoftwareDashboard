@@ -90,7 +90,7 @@ namespace Zendesk.Controllers
                     //dashboardTicket.TimeDue = GetTimeDue(dashboardTicket.Organisation, dashboardTicket.Priority, DateTime.Parse(dashboardTicket.RequestedDate), customers, supportLevel).ToString();
                     dashboardTicket.TimeDue = GetTimeDueMinusOffHours(dashboardTicket.Organisation, dashboardTicket.Priority, DateTime.Parse(dashboardTicket.RequestedDate), customers, supportLevel).ToString();
                     if (ticket.type != null) dashboardTicket.Type = ticket.type;
-                    if (ticket.url != null) dashboardTicket.url = ticket.url;
+                    if (ticket.url != null) dashboardTicket.url = "https://native9107.zendesk.com/agent/tickets/" + ticket.id.ToString();
                     dashboardTicket.TrafficLight = GetTrafficLight(DateTime.Parse(dashboardTicket.TimeDue));
                     ticketList.Add(dashboardTicket);
                 }

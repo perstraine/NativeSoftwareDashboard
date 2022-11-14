@@ -1,11 +1,24 @@
 import styles from "./SupportTicket.module.css"
-import {useState} from "react";
+import {useState, useEffect, useRef} from "react";
 
 function SupportTicket(props) {
   const [isOpen, setIsOpen] = useState(false);
+  let refUrl = useRef();
+  useEffect(() => {
+    let handler = (event) =>{
+      if(!refUrl.current.contains(event.target)){
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handler);
+    return() => {
+      document.removeEventListener("mousedown", handler);
+    }
+  })
   function handleClick() {
-    setIsOpen(!isOpen)
+    setIsOpen(!isOpen);
   }
+
   return (
     <div status-bg-colour={props.ticket.trafficLight} className={styles.ticket}>
       <p status-text-colour={props.ticket.trafficLight} className={styles.ticketText} id={styles.org}> {props.ticket.organisation ? props.ticket.organisation :"Null" }</p>
@@ -17,7 +30,7 @@ function SupportTicket(props) {
       <p status-text-colour={props.ticket.trafficLight} className={styles.ticketText} id={styles.reqtime}> {props.ticket.requestedDate}</p>
       <p status-text-colour={props.ticket.trafficLight} className={styles.ticketText} id={styles.due}> {props.ticket.timeDue}</p>
       <p status-text-colour={props.ticket.trafficLight} className={styles.ticketText} id={styles.type}> {props.ticket.type ? props.ticket.type :"Null" }</p>
-      <div className = {styles.externalLinks} id={styles.links} onClick={handleClick}>
+      <div className = {styles.externalLinks} id={styles.links} onClick={handleClick} ref={refUrl}>
         <div status-dot-colour={props.ticket.trafficLight} className = {styles.dot}></div>
         <div status-dot-colour={props.ticket.trafficLight} className = {styles.dot}></div>
         <div status-dot-colour={props.ticket.trafficLight} className = {styles.dot}></div>
