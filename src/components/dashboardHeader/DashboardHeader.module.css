@@ -1,0 +1,38 @@
+#headerContainer{
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    padding: 10px 0;
+    font-weight: 500;
+    color: #81E8FF;
+}
+
+#logo{
+    border-radius: 8px;
+}
+
+.infoContainer{
+    display: flex;
+    width: 15%;
+}
+
+.infoTitle{
+    font-size: 30px;
+    width: 80%;
+    text-align: center;
+
+}
+.infoValue{
+    width: 20%;
+    text-align: center;
+    font-size: 50px;
+}
+
+#logout{
+    cursor: pointer;
+    color: black;
+    background-color: white;
+    height: min-content;
+    padding: 3px 8px;
+    border-radius: 8px;
+}
