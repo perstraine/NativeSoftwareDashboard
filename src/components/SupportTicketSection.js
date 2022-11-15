@@ -5,15 +5,8 @@ import styles from "./SupportTicket.module.css"
 import SupportTicket from './SupportTicket'
 import FadeLoader  from "react-spinners/FadeLoader";
 
-const override = {
-  display: "block",
-  margin: "0 auto",
-  borderColor: "red",
-};
-
 function SupportTicketSection() {
   const [loading, setLoading] = useState(true)
-  let [color, setColor] = useState("#ffffff");
   const [ticketList, setTicketList] = useState([]);
 
   useEffect(() =>{

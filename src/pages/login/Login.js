@@ -3,6 +3,7 @@ import styles from "./Login.module.css"
 import Logo from './assets/Logo.png'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import FadeLoader  from "react-spinners/FadeLoader";
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -10,7 +11,13 @@ export default function Login() {
   const [logintoken, setLoginToken] = useState('');
   const [errorMessage, setErrorMessage] = useState('sadfas');
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(false);
+  useEffect(() =>{
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false)
+    })
+  },[])
   useEffect(() => {
     setLoginToken(localStorage.getItem("token"));
     if(logintoken)
@@ -25,7 +32,10 @@ export default function Login() {
           else{
             setErrorMessage("Email and password does not match. Please try again.")
           }
-        })}
+        })
+      .catch((err) =>{
+
+      })}
   }, [logintoken, navigate])
 
   function handleChange(e) {
@@ -37,6 +47,7 @@ export default function Login() {
   }
 
     const buttonClick = (e) => {
+      setLoading(!loading);
       e.preventDefault();
       setEmail(email);
       setPassword(password);
@@ -55,6 +66,16 @@ export default function Login() {
 
     return (
       <>
+        { 
+        loading?
+        <div className = {styles.loader}>
+        <FadeLoader
+          color="#7b73ff"
+          height={30}
+          margin={6}
+          width={5}
+        /> 
+        </div>:
         <div id={styles.outerContainer}>
           <div id={styles.innerContainer}>
             <div id={styles.logo}>
@@ -83,12 +104,10 @@ export default function Login() {
                 </div>
               </form>
             </div>
-              
-            {!errorMessage && <div id={styles.dropdown}></div>}
-
             <button id={styles.button} onClick={buttonClick}>Login</button>
           </div>
         </div>
+        }
       </>
     );
 }
