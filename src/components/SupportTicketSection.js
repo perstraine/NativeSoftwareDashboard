@@ -1,14 +1,28 @@
 import React from 'react'
 import axios from 'axios';
-import { useEffect, useState } from 'react'
+import { useEffect, useState, CSSProperties } from 'react'
 import styles from "./SupportTicket.module.css"
 import SupportTicket from './SupportTicket'
+import FadeLoader  from "react-spinners/FadeLoader";
+
+const override = {
+  display: "block",
+  margin: "0 auto",
+  borderColor: "red",
+};
 
 function SupportTicketSection() {
-  const [ticketList, setTicketList] = useState([] );
-  //const [firstSetTickets, setFirstSetTickets] = useState([]);
-  //const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(true)
+  let [color, setColor] = useState("#ffffff");
+  const [ticketList, setTicketList] = useState([]);
 
+  useEffect(() =>{
+    setLoading(false);
+    setTimeout(() => {
+      setLoading(true)
+    })
+  },[])
+  
   //Zendesk API
   useEffect(() => {
       getTicket();
@@ -18,18 +32,13 @@ function SupportTicketSection() {
     try {
       const response = await axios.get('https://localhost:7001/api/Zendesk')
       setTicketList(response.data);
-      //console.log(response.data);
+      setLoading(!loading);
     }
     catch (error) {
       console.error(error);
     }
   }
-  //TODO select first 10 tickets
-  // for(let i = 0;i<10;i++){
-  //   setFirstSetTickets(prevArray => [...prevArray, ticketList[i]]);
-  //   console.log(firstSetTickets);
-  // } 
-  
+
   const TicketElements = ticketList.map((element) =>{
     return <SupportTicket key={element.id} ticket={element}/>;
   });
@@ -48,9 +57,20 @@ function SupportTicketSection() {
           <p id={styles.type}> Type</p>
           <div id = {styles.links}></div>
       </div>
-      {TicketElements}
-      <div >
-      <div id={styles.chevronArrowDown}></div>
+
+      { 
+      loading?
+      <FadeLoader
+        color="#81E8FF"
+        height={17}
+        margin={6}
+        width={2}
+      /> :
+      TicketElements
+      } 
+
+      <div>
+        <div id={styles.chevronArrowDown}></div>
       </div>
     </div>
   )

@@ -5,10 +5,11 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
 export default function Login() {
-    const [email, setEmail] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [logintoken, setLoginToken] = useState('');
-    const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState('sadfas');
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoginToken(localStorage.getItem("token"));
@@ -20,6 +21,9 @@ export default function Login() {
           if (response.data === 'User Authorised') {
             navigate('/dashboard');
             console.log('User Authorised');
+          }
+          else{
+            setErrorMessage("Email and password does not match. Please try again.")
           }
         })}
   }, [logintoken, navigate])
@@ -79,6 +83,9 @@ export default function Login() {
                 </div>
               </form>
             </div>
+              
+            {!errorMessage && <div id={styles.dropdown}></div>}
+
             <button id={styles.button} onClick={buttonClick}>Login</button>
           </div>
         </div>
