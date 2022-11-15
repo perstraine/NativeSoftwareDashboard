@@ -6,7 +6,7 @@ import SupportTicket from './SupportTicket'
 import FadeLoader  from "react-spinners/FadeLoader";
 
 function SupportTicketSection() {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
   const [ticketList, setTicketList] = useState([]);
 
   useEffect(() =>{
@@ -57,7 +57,7 @@ function SupportTicketSection() {
         color="#81E8FF"
         height={17}
         margin={6}
-        width={2}
+        width={4}
       /> :
       TicketElements
       } 

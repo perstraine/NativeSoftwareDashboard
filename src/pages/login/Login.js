@@ -71,9 +71,9 @@ export default function Login() {
         <div className = {styles.loader}>
         <FadeLoader
           color="#7b73ff"
-          height={30}
+          height={17}
           margin={6}
-          width={5}
+          width={4}
         /> 
         </div>:
         <div id={styles.outerContainer}>
