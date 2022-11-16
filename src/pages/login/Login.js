@@ -9,7 +9,7 @@ export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [logintoken, setLoginToken] = useState('');
-  const [errorMessage, setErrorMessage] = useState('sadfas');
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   useEffect(() =>{
@@ -58,56 +58,61 @@ export default function Login() {
         .then((response) => {
           localStorage.setItem('token', `${response.data}`)
           setLoginToken(localStorage.getItem("token"));
+          setLoading(false);
+
         })
         .catch((error) => {
-          console.log(error);
+          console.log('wew',error);
+            setErrorMessage(
+              "Email and password does not match. Please try again."
+            );
+          setLoading(false);
+
         });
     };
 
     return (
       <>
-        { 
-        loading?
-        <div className = {styles.loader}>
-        <FadeLoader
-          color="#7b73ff"
-          height={17}
-          margin={6}
-          width={4}
-        /> 
-        </div>:
-        <div id={styles.outerContainer}>
-          <div id={styles.innerContainer}>
-            <div id={styles.logo}>
-              <img src={Logo} alt="Logo" />
-            </div>
-            <div id={styles.title}>Dashboard Login</div>
-            <div id={styles.fields}>
-              <form>
-                <div className={styles.field}>
-                  <input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    name="email"
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className={styles.field}>
-                  <input
-                    type="Password"
-                    placeholder="Password"
-                    value={password}
-                    name="password"
-                    onChange={handleChange}
-                  ></input>
-                </div>
-              </form>
-            </div>
-            <button id={styles.button} onClick={buttonClick}>Login</button>
+        {loading ? (
+          <div className={styles.loader}>
+            <FadeLoader color="#7b73ff" height={17} margin={6} width={4} />
           </div>
-        </div>
-        }
+        ) : (
+          <div id={styles.outerContainer}>
+            <div id={styles.innerContainer}>
+              <div id={styles.logo}>
+                <img src={Logo} alt="Logo" />
+              </div>
+              <div id={styles.title}>Dashboard Login</div>
+              <div id={styles.fields}>
+                <form>
+                  <div className={styles.field}>
+                    <input
+                      type="email"
+                      placeholder="Email"
+                      value={email}
+                      name="email"
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className={styles.field}>
+                    <input
+                      type="Password"
+                      placeholder="Password"
+                      value={password}
+                      name="password"
+                      onChange={handleChange}
+                    ></input>
+                  </div>
+                </form>
+              </div>
+              <button id={styles.button} onClick={buttonClick}>
+                Login
+              </button>
+              <div>{errorMessage}</div>
+            </div>
+          </div>
+        )}
       </>
     );
 }
