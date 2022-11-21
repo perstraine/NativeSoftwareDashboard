@@ -15,7 +15,7 @@ namespace ConsoleUser.Repositories
         public async Task<User> AuthenticateAsync(string useremail, string password)
         {
             var user = await usersAPIDbContext.Users
-                .FirstOrDefaultAsync(x => x.Email.ToLower() == useremail.ToLower() && x.Password == password);
+                .FirstOrDefaultAsync(x => x.Email.ToLower() == useremail.ToLower() && x.Password == password && x.Active == "Yes");
             if(user == null)
             {
                 return null;

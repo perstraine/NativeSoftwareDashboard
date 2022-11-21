@@ -23,6 +23,7 @@ export default function DashboardHeader() {
     }
     function logout() {
       localStorage.removeItem("token");
+      localStorage.removeItem('userType');
       navigate("/");
     }
   return (

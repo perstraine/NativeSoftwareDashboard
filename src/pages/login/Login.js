@@ -56,7 +56,8 @@ export default function Login() {
         password:password
       })
         .then((response) => {
-          localStorage.setItem('token', `${response.data}`)
+          localStorage.setItem('token', `${response.data.token}`)
+          localStorage.setItem('userType',`${response.data.userType}`)
           setLoginToken(localStorage.getItem("token"));
           setLoading(false);
 
