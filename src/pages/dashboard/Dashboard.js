@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import DashboardHeader from '../../components/dashboardHeader/DashboardHeader';
-import SupportTicketSection from '../../components/SupportTicketSection';
+import SupportTicketSection from '../../components/ZendeskTickets/SupportTicketSection';
 import JiraEpicSection from '../../components/jiraEpics/JiraEpicSection';
 import styles from "./Dashboard.module.css"
 
