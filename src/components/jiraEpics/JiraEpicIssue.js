@@ -1,8 +1,21 @@
 import styles from "./JiraEpicSection.module.css";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function JiraEpicIssue({ epic }) {
   const [isOpen, setIsOpen] = useState(false);
+  
+  let refUrl = useRef();
+  useEffect(() => {
+    let handler = (event) =>{
+      if(!refUrl.current.contains(event.target)){
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handler);
+    return() => {
+      document.removeEventListener("mousedown", handler);
+    }
+  })
   function handleClick() {
     setIsOpen(!isOpen)
   }
@@ -16,7 +29,7 @@ export default function JiraEpicIssue({ epic }) {
         <div id={styles.budget}>{epic.budget}</div>
         <div id={styles.spent}>{epic.timeSpent}</div>
         <div id={styles.complete}>{`${epic.complete}%`}</div>
-        <div id={styles.extra2} onClick={handleClick}>
+        <div id={styles.extra2} onClick={handleClick} ref={refUrl}>
           <div className={styles.dot} statuscolor={epic.urgencyColour}></div>
           <div className={styles.dot} statuscolor={epic.urgencyColour}></div>
           <div className={styles.dot} statuscolor={epic.urgencyColour}></div>
