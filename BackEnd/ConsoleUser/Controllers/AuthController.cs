@@ -28,7 +28,8 @@ namespace ConsoleUser.Controllers
             {
                 //generate token
                 var token = await  tokenHandler.CreateTokenAsync(user);
-                return Ok(token);
+                var returnObject = new { Token = token, userType = user.UserType };
+                return Ok(returnObject);
             }
             return BadRequest("incorrect fields");
         }
