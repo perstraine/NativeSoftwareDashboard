@@ -22,7 +22,10 @@ namespace Zendesk.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTickets()
         {
-            var options = new RestClientOptions("https://native9107.zendesk.com")
+            string BasicAuth = "Basic cmFuanVyYXZlZGV2QGdtYWlsLmNvbTpXZWJkZXZfMjAyMg==";
+            string Cookie = "__cf_bm=NV4J3cTJmKvuqQCpPM5uYQygQbMa1KqcKC74uEfpYRE-1669145356-0-AQ8bmpK/6KOJqFK753Q+XKYR/nOaz6GgpzbhtlKOOBFY/Do8Z5sRIUYKKWLDpkXAsMbZGbWPNXA/jgWFl1wblgDcguCWBfSeLrxzRVI4UGcD; __cfruid=353ffba05ab8b9f0ee0a58e3b51e838c95d2159f-1669143409; __cfruid=5b67cf441a7537636be54b819fa8ae1bf4e0c42a-1669145370; _zendesk_cookie=BAhJIhl7ImRldmljZV90b2tlbnMiOnt9fQY6BkVU--459ed01949a36415c1716b5711271c3d08918307";
+
+            var options = new RestClientOptions("https://native2881.zendesk.com")
             {
                 ThrowOnAnyError = true,
                 MaxTimeout = -1  // 1 second
@@ -32,12 +35,12 @@ namespace Zendesk.Controllers
             var ticketRequest = new RestRequest("/api/v2/tickets", Method.Get);
             var metricsRequest = new RestRequest("/api/v2/ticket_metrics.json", Method.Get);
 
-            ticketRequest.AddHeader("Authorization", "Basic cmF2ZWVuZHJhbnJhbmp1QGdtYWlsLmNvbTpXZWJkZXZfMjAyMg==");
-            metricsRequest.AddHeader("Authorization", "Basic cmF2ZWVuZHJhbnJhbmp1QGdtYWlsLmNvbTpXZWJkZXZfMjAyMg==");
+            ticketRequest.AddHeader("Authorization", BasicAuth);
+            metricsRequest.AddHeader("Authorization", BasicAuth);
 
             //TODO do we actually need cookies
-            ticketRequest.AddHeader("Cookie", "__cfruid=48f83724a725243fd95c678dd50f3dd2d953d978-1667859886; _zendesk_cookie=BAhJIhl7ImRldmljZV90b2tlbnMiOnt9fQY6BkVU--459ed01949a36415c1716b5711271c3d08918307");
-            metricsRequest.AddHeader("Cookie", "__cf_bm=KxlySeaioTuVYvuFk4E5tRI8BOWLks6ByFoscguzUOI-1667859951-0-Ac9xh1i7NuOLkLmngWxRlUgF6yk+oGtLlnHg4MgzJ4VxGYAuk2O39dvMOHMT6RbdxhM5Hqft8CvRxOFHUu7Hqxs6qh6HI1xHSqrrODKXfd/E; __cfruid=d6d7639fe6c226ee32f5b8fed32a369d01cc9511-1667859951; __cfruid=92c90c6eb9ec4f99a11232886662497fe9237eb9-1667859962; _zendesk_cookie=BAhJIhl7ImRldmljZV90b2tlbnMiOnt9fQY6BkVU--459ed01949a36415c1716b5711271c3d08918307");
+            ticketRequest.AddHeader("Cookie", Cookie);
+            metricsRequest.AddHeader("Cookie", Cookie);
 
             RestResponse ticketResponse = await client.ExecuteAsync(ticketRequest);
             RestResponse metricsResponse = await client.ExecuteAsync(metricsRequest);

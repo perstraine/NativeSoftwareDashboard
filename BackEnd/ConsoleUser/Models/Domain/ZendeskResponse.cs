@@ -1,6 +1,4 @@
-﻿// TODO delete unwanted fields
-
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace ConsoleUser.Models.Domain
 {

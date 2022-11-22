@@ -23,8 +23,9 @@ function CustomerTicketSection() {
   
     async function getTicket() {
       try {
-        //let userType = localStorage.getItem(userType);
-        const response = await axios.get('https://localhost:7001/api/Zendesk')
+        let userType = localStorage.getItem('userType');
+        //const response = await axios.get('https://localhost:7001/api/CustomerView');
+        const response = await axios.get('https://localhost:7001/api/CustomerView', { params: { userType: userType } });
         setTicketList(response.data);
         setLoading(!loading);
       }
@@ -39,14 +40,12 @@ function CustomerTicketSection() {
   return (
     <div id={styles.customerticketsection}>
       <div id={styles.ticketheadings}>
-          <p id={styles.org}> Organisation</p>
           <p id={styles.sub}> Subject</p>
-          <p id={styles.status}> Status</p>
-          <p id={styles.assign}> Assigned</p>
-          <p id={styles.bill}> Billable</p>
-          <p id={styles.priority}> Priority</p>
-          <p id={styles.reqtime}> Requested Time</p>
+          <p id={styles.reqTime}> Requested Date</p>
+          <p id={styles.firstRes}> First Response</p>
+          <p id={styles.lastUpdate}> Last Update</p>
           <p id={styles.due}> Time Due</p>
+          <p id={styles.priority}> Priority</p>
           <p id={styles.type}> Type</p>
           <div id = {styles.links}></div>
       </div>

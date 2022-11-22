@@ -21,7 +21,10 @@ namespace ConsoleUser.Repositories
                 return null;
             }
             return user;
-
+        }
+        public IEnumerable<User> GetAll()
+        {
+            return usersAPIDbContext.Users.ToList();
         }
     }
 }

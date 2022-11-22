@@ -22,35 +22,30 @@
     margin-bottom: 0%;
     font-weight: bold;
 }
-#org{
-    width: 10%;
-}
+
 #sub{
-    width: 30%;
+    width: 25%;
 }
-#status{
-    width: 5%;
+#reqTime{
+    width: 12%;
 }
-#assign{
-    width: 10%;
+#firstRes{
+    width: 12%;
 }
-#bill{
-    width: 5%;
-}
-#priority{
-    width: 5%;
-}
-#reqtime{
+#lastUpdate{
     width: 12%;
 }
 #due{
-    width: 10%;
+    width: 12%;
+}
+#priority{
+    width: 12%;
 }
 #type{
-    width: 10%;
+    width: 12%;
 }
 #links{
-    width: 1%;
+    width: 3%;
 }
 .ticket{
     display: flex;
@@ -59,23 +54,23 @@
     justify-content: center;
     width: 98%;
     height: 30px;
-    background-color: #3161ff;
+    background-color: #848ae4;
     margin-top: 8px;
     border-radius: 15px;
     font-weight: 500;
 
 }
 .ticket[status-bg-colour="red"]{
-    background-color: #727cef;
+    background-color: #848ae4;
 }
 .ticket[status-bg-colour="orange"]{
-    background-color: #ff7900;
+    background-color: #d59660;
 }
 .ticket[status-bg-colour="yellow"]{
-    background-color: #ffe100;
+    background-color: #cac283;
 }
 .ticket[status-bg-colour="green"]{
-    background-color: #7aff64;
+    background-color: #9edf92;
 }
 
 .ticketText{
