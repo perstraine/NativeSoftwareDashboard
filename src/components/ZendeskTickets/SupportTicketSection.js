@@ -23,6 +23,7 @@ function SupportTicketSection() {
 
   async function getTicket() {
     try {
+      //let userType = localStorage.getItem(userType);
       const response = await axios.get('https://localhost:7001/api/Zendesk')
       setTicketList(response.data);
       setLoading(!loading);

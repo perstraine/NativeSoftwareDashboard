@@ -12,12 +12,14 @@ export default function Login() {
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
   useEffect(() =>{
     setLoading(true);
     setTimeout(() => {
       setLoading(false)
     })
   },[])
+
   useEffect(() => {
     setLoginToken(localStorage.getItem("token"));
     if(logintoken)
@@ -32,6 +34,7 @@ export default function Login() {
           else{
             setErrorMessage("Email and password does not match. Please try again.")
           }
+
         })
       .catch((err) =>{
 
@@ -59,8 +62,14 @@ export default function Login() {
           localStorage.setItem('token', `${response.data.token}`)
           localStorage.setItem('userType',`${response.data.userType}`)
           setLoginToken(localStorage.getItem("token"));
-          setLoading(false);
 
+          if(localStorage.getItem('userType') === 'Staff'){
+            navigate('/dashboard');
+          }
+          else{
+            navigate('/customerdashboard');
+          }
+          setLoading(false);
         })
         .catch((error) => {
           console.log('wew',error);
@@ -68,7 +77,6 @@ export default function Login() {
               "Email and password does not match. Please try again."
             );
           setLoading(false);
-
         });
     };
 

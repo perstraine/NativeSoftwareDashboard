@@ -13,18 +13,23 @@ function Dashboard() {
   checkLogin();
   })
   async function checkLogin() {
-  const logintoken = localStorage.getItem('token')
+  const logintoken = localStorage.getItem('token');
+  const userType = localStorage.getItem('userType');
     const config = { headers: { Authorization: `Bearer ${logintoken}` } };
-    if (logintoken)
-    {try {
-      await axios
-        .get("https://localhost:7001/Auth/login", config);
-      setLoggedIn(true)
-    } catch (error) {
-      navigate('/');
+    if (logintoken) // && userType === 'Staff')
+    {
+      try {
+        await axios
+          .get("https://localhost:7001/Auth/login", config);
+        setLoggedIn(true)
+      } 
+      catch (error) {
+        navigate('/');
       }
-    } else {
-      navigate("/");
+    } 
+    else 
+    {
+      navigate('/');
     }
 }
   return (

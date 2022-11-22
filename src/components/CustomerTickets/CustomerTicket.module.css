@@ -1,0 +1,144 @@
+#customerticketsection{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#loader{
+    width: 10px;
+    margin: 20px;
+    color: #81E8FF;
+}
+#ticketheadings{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 98%;
+}
+#ticketheadings p{
+    text-align: center;
+    color: #000000;
+    margin-bottom: 0%;
+    font-weight: bold;
+}
+#org{
+    width: 10%;
+}
+#sub{
+    width: 30%;
+}
+#status{
+    width: 5%;
+}
+#assign{
+    width: 10%;
+}
+#bill{
+    width: 5%;
+}
+#priority{
+    width: 5%;
+}
+#reqtime{
+    width: 12%;
+}
+#due{
+    width: 10%;
+}
+#type{
+    width: 10%;
+}
+#links{
+    width: 1%;
+}
+.ticket{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 98%;
+    height: 30px;
+    background-color: #3161ff;
+    margin-top: 8px;
+    border-radius: 15px;
+    font-weight: 500;
+
+}
+.ticket[status-bg-colour="red"]{
+    background-color: #727cef;
+}
+.ticket[status-bg-colour="orange"]{
+    background-color: #ff7900;
+}
+.ticket[status-bg-colour="yellow"]{
+    background-color: #ffe100;
+}
+.ticket[status-bg-colour="green"]{
+    background-color: #7aff64;
+}
+
+.ticketText{
+    margin: 0%;
+    text-align: center;
+    width: 12%;
+    font-weight: 3px;
+}
+
+.ticketText[status-text-colour="red"]{
+    color: #000000;
+}
+.ticketText[status-text-colour="orange"]{
+    color: #000000;
+}
+.ticketText[status-text-colour="yellow"]{
+    color: #000000;
+}
+.ticketText[status-text-colour="green"]{
+    color: #000000;
+}
+.externalLinks{
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+.dot{
+    height: 6px;
+    width: 6px;
+    margin:1.5px;
+    padding: 0%;
+    border-radius: 50%;
+    display: inline-block;
+}
+.dot[status-dot-colour="red"]{
+    background-color: #000000;
+}
+.dot[status-dot-colour="orange"]{
+    background-color: #000000;
+}
+.dot[status-dot-colour="yellow"]{
+    background-color: #000000;
+}
+.dot[status-dot-colour="green"]{
+    background-color: #000000;
+}
+#chevronArrowDown {
+    display: inline-block;
+    border-right: 4px solid black;
+    border-bottom: 4px solid black;
+    width: 10px; height: 10px;
+    transform: rotate(45deg);
+    cursor: pointer;
+}
+#dropdown{
+    margin-top: 30px ;
+    position: absolute;
+    right: 10px;
+    background-color: white;
+    color: #000000;
+    border-radius: 5px;
+}
+.dropdownItem{
+    padding: 2px 4px;
+    text-decoration: none;
+}
