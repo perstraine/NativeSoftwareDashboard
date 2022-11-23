@@ -1,0 +1,60 @@
+#headerContainer{
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px 0;
+    font-weight: 500;
+    color: #81E8FF;
+}
+
+
+#logo{
+    border-radius: 8px;
+}
+
+
+.infoContainer{
+    display: flex;
+    width: 15%;
+}
+
+.infoTitle{
+    font-size: 30px;
+    width: 80%;
+    text-align: center;
+    font-weight: lighter;
+}
+.infoValue{
+    width: 20%;
+    text-align: center;
+    font-size: 75px;
+    margin-left: 20px;
+}
+#settings{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#userName{
+    font-size: 20px;
+    margin: 10px;
+}
+#cogwheel{
+    width: 40px;
+    margin: 10px;
+    cursor: pointer;
+}
+#cogwheel:hover{
+    width: 45px;
+    filter: saturate(2);
+}
+#logout{
+    cursor: pointer;
+    color: black;
+    background-color: white;
+    height: min-content;
+    padding: 3px 8px;
+    margin: 10px;
+    border-radius: 8px;
+}

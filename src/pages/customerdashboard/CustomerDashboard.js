@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
-import DashboardHeader from '../../components/dashboardHeader/DashboardHeader';
+
+import CustomerDashboardHeader from '../../components/customerDashboardHeader/CustomerDashboardHeader';
 import CustomerTicketSection from '../../components/CustomerTickets/CustomerTicketSection';
 import JiraEpicSection from '../../components/jiraEpics/JiraEpicSection';
 import styles from "./CustomerDashboard.module.css"
@@ -35,7 +36,7 @@ function CustomerDashboard() {
     return (
       <>
         {loggedIn && <div id={styles.dashboard}>
-          <DashboardHeader/>
+          <CustomerDashboardHeader/>
           <JiraEpicSection />
           <CustomerTicketSection/>
         </div>}
