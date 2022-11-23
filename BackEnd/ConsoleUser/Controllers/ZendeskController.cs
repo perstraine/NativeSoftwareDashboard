@@ -194,32 +194,31 @@ namespace Zendesk.Controllers
             int dayStartMinutes = 30;
             int dayEndHours = 17;
             int dayEndMinutes = 0;
+            DateTime requestedDayStart = new DateTime(requestedDate.Year, requestedDate.Month, requestedDate.Day, dayStartHours, dayStartMinutes, 0);
             DateTime businessHoursEnd = new DateTime(requestedDate.Year, requestedDate.Month, requestedDate.Day, dayEndHours, dayEndMinutes, 0);
-            DateTime nextBusinessDayStart = new DateTime(requestedDate.Year, requestedDate.Month, requestedDate.Day + 1, dayStartHours, dayStartMinutes, 0);
+            DateTime nextBusinessHoursStart = requestedDate.AddDays(1);
+            nextBusinessHoursStart = new DateTime(nextBusinessHoursStart.Year, nextBusinessHoursStart.Month, nextBusinessHoursStart.Day, dayStartHours, dayStartMinutes, 0);
 
             // if next day is weekend find next Monday
-            if (nextBusinessDayStart.DayOfWeek == DayOfWeek.Saturday) 
+            if (nextBusinessHoursStart.DayOfWeek == DayOfWeek.Saturday) 
             {
-                nextBusinessDayStart = nextBusinessDayStart.AddDays(2);
+                nextBusinessHoursStart = nextBusinessHoursStart.AddDays(2);
             }
-            else if (nextBusinessDayStart.DayOfWeek == DayOfWeek.Sunday)
+            else if (nextBusinessHoursStart.DayOfWeek == DayOfWeek.Sunday)
             {
-                nextBusinessDayStart = nextBusinessDayStart.AddDays(1);
+                nextBusinessHoursStart = nextBusinessHoursStart.AddDays(1);
             }
 
             // If requested date is off hours or on weekend then requested date is the next working day.
-            if (requestedDate.TimeOfDay > businessHoursEnd.TimeOfDay || 
-                requestedDate.TimeOfDay < nextBusinessDayStart.TimeOfDay || 
-                requestedDate.DayOfWeek == DayOfWeek.Saturday || 
-                requestedDate.DayOfWeek == DayOfWeek.Sunday)
-            {
-                requestedDate = nextBusinessDayStart;
-            }
+            if(DateTime.Compare(requestedDate, requestedDayStart) < 0 ) { requestedDate = requestedDayStart; }
+            if(DateTime.Compare(requestedDate, businessHoursEnd) > 0 ) { requestedDate = nextBusinessHoursStart; }
+            
+
 
             //Finding resolution time based on customer tier and ticket priority
             foreach (var customer in customers)
             {
-                if (customer.CustomerCode == organisation)
+                if (customer.CustomerCodeZendesk == organisation)
                 {
                     int customerSupportLevel = customer.SupportLevel;
 
@@ -249,14 +248,15 @@ namespace Zendesk.Controllers
             {
                 resolutionTime -= timeLeftInDay; // reducing work done for the day.
                 timeLeftInDay = workHoursPerDay;  // Adding next days 8 hours.
-                timeDue = new DateTime(timeDue.Year, timeDue.Month, timeDue.Day + 1, dayStartHours, dayStartMinutes, 0); // Adding a day to timeDue
+                timeDue = timeDue.AddDays(1); // Adding a day to timeDue
+                timeDue = new DateTime(timeDue.Year, timeDue.Month, timeDue.Day, dayStartHours, dayStartMinutes, 0); //setting day start time
                 if (timeDue.DayOfWeek == DayOfWeek.Saturday)
                 {
                     timeDue = timeDue.AddDays(2);
                 }
             }
-
-            timeDue = new DateTime(timeDue.Year, timeDue.Month, timeDue.Day + 1, dayStartHours, dayStartMinutes, 0); // Adding a day to timeDue
+            timeDue = timeDue.AddDays(1);
+            timeDue = new DateTime(timeDue.Year, timeDue.Month, timeDue.Day, dayStartHours, dayStartMinutes, 0); // Adding a day to timeDue
             // If added day is on saturday then skip to next Monday
             if (timeDue.DayOfWeek == DayOfWeek.Saturday)
             {

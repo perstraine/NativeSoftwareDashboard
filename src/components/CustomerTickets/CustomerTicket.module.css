@@ -1,3 +1,9 @@
+#nodata{
+    width: 100%;
+    text-align: center;
+    margin-top: 50px;
+    color: #81E8FF;
+}
 #customerticketsection{
     display: flex;
     flex-direction: column;

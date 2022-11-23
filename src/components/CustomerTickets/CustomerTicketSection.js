@@ -24,7 +24,6 @@ function CustomerTicketSection() {
     async function getTicket() {
       try {
         let userType = localStorage.getItem('userType');
-        //const response = await axios.get('https://localhost:7001/api/CustomerView');
         const response = await axios.get('https://localhost:7001/api/CustomerView', { params: { userType: userType } });
         setTicketList(response.data);
         setLoading(!loading);
@@ -33,10 +32,17 @@ function CustomerTicketSection() {
         console.error(error);
       }
     }
-  
+    if(ticketList.length === 0) return (
+      <div id={styles.nodata}>
+        No Zendesk Tickets Available
+      </div>
+    )
+
     const TicketElements = ticketList.map((element) =>{
       return <CustomerTicket key={element.id} ticket={element}/>;
     });
+    
+
   return (
     <div id={styles.customerticketsection}>
       <div id={styles.ticketheadings}>
