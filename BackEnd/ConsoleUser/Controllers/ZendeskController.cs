@@ -42,24 +42,19 @@ namespace Zendesk.Controllers
 
             var client = new RestClient(options);
             var ticketRequest = new RestRequest("/api/v2/tickets", Method.Get);
-            //var metricsRequest = new RestRequest("/api/v2/ticket_metrics.json", Method.Get);
             var usersRequest = new RestRequest("/api/v2/users", Method.Get);
 
             ticketRequest.AddHeader("Authorization", BasicAuth);
-            //metricsRequest.AddHeader("Authorization", BasicAuth);
             usersRequest.AddHeader("Authorization", BasicAuth);
 
             //TODO do we actually need cookies
             ticketRequest.AddHeader("Cookie", Cookie);
-            //metricsRequest.AddHeader("Cookie", Cookie);
             usersRequest.AddHeader("Cookie", Cookie);
 
             RestResponse ticketResponse = await client.ExecuteAsync(ticketRequest);
-            //RestResponse metricsResponse = await client.ExecuteAsync(metricsRequest);
             RestResponse usersResponse = await client.ExecuteAsync(usersRequest);
 
             var zendeskData = JsonConvert.DeserializeObject<ZendeskData>(ticketResponse.Content);
-            //var zendeskMetrics = JsonConvert.DeserializeObject<ZendeskMetrics>(metricsResponse.Content);
             var zendeskUsers = JsonConvert.DeserializeObject<ZendeskUsers>(usersResponse.Content);
 
             var customers = customerRepository.GetAll();
@@ -89,7 +84,6 @@ namespace Zendesk.Controllers
                     dashboardTicket.Billable = GetBillableCustomField(ticket.custom_fields[0]);
                     dashboardTicket.Priority = ticket.priority;
                     dashboardTicket.RequestedDate = ticket.created_at.ToLocalTime().ToString();
-                    //dashboardTicket.TimeDue = GetTimeDue(dashboardTicket.Organisation, dashboardTicket.Priority, DateTime.Parse(dashboardTicket.RequestedDate), customers, supportLevel).ToString();
                     dashboardTicket.TimeDue = GetTimeDueMinusOffHours(dashboardTicket.Organisation, dashboardTicket.Priority, DateTime.Parse(dashboardTicket.RequestedDate), customers, supportLevel).ToString();
                     if (ticket.type != null) dashboardTicket.Type = ticket.type;
                     if (ticket.url != null) dashboardTicket.url = "https://native9107.zendesk.com/agent/tickets/" + ticket.id.ToString();
@@ -185,6 +179,7 @@ namespace Zendesk.Controllers
             return timeDue;
         }
 
+        //Creating time due reducing business off hours and weekends
         private static DateTime GetTimeDueMinusOffHours(string organisation, string priority, DateTime requestedDate, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel)
         {
             //If ticket logged after hours, then log time changed to next working day morning.

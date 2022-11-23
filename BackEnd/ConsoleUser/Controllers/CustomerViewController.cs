@@ -56,25 +56,19 @@ namespace Zendesk.Controllers
                 }
             }
   
-
             var client = new RestClient(options);
-            var ticketRequest = new RestRequest("/api/v2/tickets", Method.Get);
             var usersRequest = new RestRequest("/api/v2/users", Method.Get);
             var metricsRequest = new RestRequest("/api/v2/ticket_metrics.json", Method.Get);
 
-            ticketRequest.AddHeader("Authorization", BasicAuth); 
             usersRequest.AddHeader("Authorization", BasicAuth);
             metricsRequest.AddHeader("Authorization", BasicAuth);
 
-            ticketRequest.AddHeader("Cookie", Cookie);
             usersRequest.AddHeader("Cookie", Cookie);
             metricsRequest.AddHeader("Cookie", Cookie);
 
-            RestResponse ticketResponse = await client.ExecuteAsync(ticketRequest);
             RestResponse usersResponse = await client.ExecuteAsync(usersRequest);
             RestResponse metricsResponse = await client.ExecuteAsync(metricsRequest);
 
-            var zendeskData = JsonConvert.DeserializeObject<ZendeskData>(ticketResponse.Content);
             var zendeskUsers = JsonConvert.DeserializeObject<ZendeskUsers>(usersResponse.Content);
             var zendeskMetrics = JsonConvert.DeserializeObject<ZendeskMetrics>(metricsResponse.Content);
 
@@ -96,9 +90,9 @@ namespace Zendesk.Controllers
             var dashboardUserTicketData = CreateUserTicketData(userTicket.tickets, zendeskUsers, zendeskMetrics.ticket_metrics, customers, supportLevel);
 
             return Ok(dashboardUserTicketData);
-            //return Ok(userTicket);
         }
 
+        //Creating the tickets
         private static List<DashboardUserTicketData> CreateUserTicketData(List<UserTicketData.Ticket> tickets, ZendeskUsers? zendeskUsers, List<TicketMetric> ticketMetrices, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel)
         {
             if(tickets == null) { return null; }
@@ -117,11 +111,13 @@ namespace Zendesk.Controllers
                 userTicketData.Priority = ticket.priority;
                 userTicketData.Type = ticket.type;
                 userTicketData.url = ticket.url;
-                userTicketData.TrafficLight = "red";
-                userTicketData.SortPriority = 1;
+                userTicketData.TrafficLight = GetTrafficLight(DateTime.Parse(userTicketData.TimeDue));
 
                 dashboardUserTicketData.Add(userTicketData);
             }
+
+            dashboardUserTicketData = QuickSortTickets(dashboardUserTicketData, 0, dashboardUserTicketData.Count - 1);
+
             return dashboardUserTicketData;
         }
 
@@ -232,7 +228,7 @@ namespace Zendesk.Controllers
             return timeDue.ToString();
         }
 
-        static string GetZendeskUserName(ZendeskUsers? zendeskUsers, UserTicketData.Ticket ticket)
+        private static string GetZendeskUserName(ZendeskUsers? zendeskUsers, UserTicketData.Ticket ticket)
         {
             foreach (var user in zendeskUsers.users)
             {
@@ -242,6 +238,51 @@ namespace Zendesk.Controllers
                 }
             }
             return "null";
+        }
+        
+        private static string GetTrafficLight(DateTime timeDue)
+        {
+            float veryHigh = 2;
+            float high = 8;
+            float normal = 24;
+            float low = 48;
+            double dueHours = (timeDue - DateTime.Now.ToLocalTime()).TotalHours;
+            return dueHours <= veryHigh ? "red" : dueHours <= high ? "orange" : dueHours <= normal ? "yellow" : "green";
+        }
+        
+        private static List<DashboardUserTicketData> QuickSortTickets(List<DashboardUserTicketData> dashboardUserTicketData, int leftIndex, int rightIndex)
+        {
+            var i = leftIndex;
+            var j = rightIndex;
+            var pivot = dashboardUserTicketData[leftIndex];
+
+            while (i <= j)
+            {
+                while (DateTime.Parse(dashboardUserTicketData[i].TimeDue) < DateTime.Parse(pivot.TimeDue))
+                {
+                    i++;
+                }
+
+                while (DateTime.Parse(dashboardUserTicketData[j].TimeDue) > DateTime.Parse(pivot.TimeDue))
+                {
+                    j--;
+                }
+
+                if (i <= j)
+                {
+                    (dashboardUserTicketData[j], dashboardUserTicketData[i]) = (dashboardUserTicketData[i], dashboardUserTicketData[j]); // swap using tuples
+                    i++;
+                    j--;
+                }
+            }
+
+            if (leftIndex < j)
+                QuickSortTickets(dashboardUserTicketData, leftIndex, j);
+
+            if (i < rightIndex)
+                QuickSortTickets(dashboardUserTicketData, i, rightIndex);
+
+            return dashboardUserTicketData;
         }
     }
 }

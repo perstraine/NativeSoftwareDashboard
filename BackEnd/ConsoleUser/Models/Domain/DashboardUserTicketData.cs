@@ -14,7 +14,6 @@ namespace ConsoleUser.Models.Domain
         [AllowNull] public string Type { get; set; }
         [AllowNull] public string url { get; set; }
         [AllowNull] public string TrafficLight { get; set; }
-        [AllowNull] public double SortPriority { get; set; }
     }
 }
 
