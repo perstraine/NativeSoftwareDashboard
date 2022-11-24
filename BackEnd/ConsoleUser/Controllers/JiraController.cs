@@ -43,6 +43,7 @@ namespace ConsoleUser.Controllers
                 jiraEpicIssues = CreateEpicInfoClient(jiraData, userType);
 
             }
+            Console.WriteLine(jiraEpicIssues[0].Name);
 
             return Ok(jiraEpicIssues);
         }

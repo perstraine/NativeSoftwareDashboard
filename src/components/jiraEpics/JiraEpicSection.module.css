@@ -128,8 +128,15 @@
     background-color: white;
     color: #000000;
     border-radius: 5px;
+    padding: 2px 0;
 }
 .dropdownItem{
     padding: 2px 4px;
     text-decoration: none;
+    border-radius: 5px;
+
+}
+
+.dropdownItem:hover{
+    background-color: #d3d3d3;
 }
