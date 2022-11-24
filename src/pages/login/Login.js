@@ -28,8 +28,11 @@ export default function Login() {
         .then((response) => {
           console.log(response);
           if (response.data === 'User Authorised') {
-            navigate('/dashboard');
-            console.log('User Authorised');
+            if (localStorage.getItem("userType") === "Staff") {
+              navigate("/dashboard");
+            } else {
+              navigate("/customerdashboard");
+            }
           }
           else{
             setErrorMessage("Email and password does not match. Please try again.")
