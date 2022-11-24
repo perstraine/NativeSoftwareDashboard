@@ -7,13 +7,9 @@
     font-weight: 500;
     color: #81E8FF;
 }
-
-
 #logo{
     border-radius: 8px;
 }
-
-
 .infoContainer{
     display: flex;
     width: 15%;
@@ -40,15 +36,7 @@
     font-size: 20px;
     margin: 10px;
 }
-#cogwheel{
-    width: 40px;
-    margin: 10px;
-    cursor: pointer;
-}
-#cogwheel:hover{
-    width: 45px;
-    filter: saturate(2);
-}
+
 #logout{
     cursor: pointer;
     color: black;
@@ -58,3 +46,44 @@
     margin: 10px;
     border-radius: 8px;
 }
+
+#menuTrigger img{
+    position:absolute;
+    top: 40px;
+    right: 40px;
+    cursor: pointer;
+    width: 40px; 
+}
+#dropdownMenu{
+    position: absolute;
+    top:80px;
+    right: 20px;
+    background-color:#81E8FF;
+    color: black;
+    border-radius: 10px;
+    width: 200px;
+}
+/* #dropdownMenu::before{
+    content: '';
+    position: absolute;
+    top: -5;
+    right: 20px;
+    height: 20px;
+    width: 20px;
+    background: none;
+    transform: rotate(45deg);
+}*/
+ul{
+    list-style: none;
+    margin-left: 30px;
+    padding: 0;
+}
+#dropdownMenu ul li h3{
+    font-size: 15px;
+    font-weight: normal;
+    color: black;
+    cursor: pointer;
+}
+#dropdownMenu ul li h3:hover{
+    font-weight: bold;
+} 
