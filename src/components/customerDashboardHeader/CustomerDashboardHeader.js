@@ -5,7 +5,6 @@ import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CogWheel from "./assets/cogwheel.png";
-import 'react-dropdown/style.css';
 import AddZendeskTicket from "../popupWindows/AddZendeskTicket";
 
 export default function CustomerDashboardHeader() {
@@ -69,7 +68,10 @@ export default function CustomerDashboardHeader() {
           {open?
             <div id = {styles.dropdownMenu}>
               <ul>
+              <li className={styles.dropdownItem} onClick={()=>setAddZenTicketPopup(true)}><h3>New Jira Request</h3></li>
+              <li className={styles.dropdownItem} onClick={()=>setAddZenTicketPopup(true)}><h3>Add Jira Comment</h3></li>
               <li className={styles.dropdownItem} onClick={()=>setAddZenTicketPopup(true)}><h3>Add Zendesk Ticket</h3></li>
+              <li className={styles.dropdownItem} onClick={()=>setAddZenTicketPopup(true)}><h3>View Response Time</h3></li>
               </ul>
             </div>
             :

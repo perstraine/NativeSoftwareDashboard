@@ -11,5 +11,29 @@
     padding: 32px;
     width: 500px;
     height: 500px;
+    border-radius: 20px;
     background-color: rgb(0, 213, 255);
 }
+#dropdownMenu{
+    position: absolute;
+    top:80px;
+    right: 20px;
+    background-color:#81E8FF;
+    color: black;
+    border-radius: 10px;
+    width: 200px;
+}
+ul{
+    list-style: none;
+    margin-left: 30px;
+    padding: 0;
+}
+#dropdownMenu ul li h3{
+    font-size: 15px;
+    font-weight: normal;
+    color: black;
+    cursor: pointer;
+}
+#dropdownMenu ul li h3:hover{
+    font-weight: bold;
+} 
