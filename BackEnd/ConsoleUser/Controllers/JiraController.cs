@@ -11,6 +11,8 @@ using SendGrid.Helpers.Mail;
 using System;
 using System.Threading.Tasks;
 using ConsoleUser.Models.DTO;
+using Newtonsoft.Json.Linq;
+using System.Xml.Linq;
 
 namespace ConsoleUser.Controllers
 {
@@ -168,10 +170,12 @@ namespace ConsoleUser.Controllers
             {
                 var response = await client.SendEmailAsync(msg);
                 return Ok("Sent Successfully");
-            }catch{
+            }
+            catch
+            {
                 return BadRequest("Failed to Send Request");
             }
-            
+
         }
     }
 }
