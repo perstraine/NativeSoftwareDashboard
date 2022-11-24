@@ -156,7 +156,7 @@ namespace ConsoleUser.Controllers
         [HttpPost]
         [Route("request")]
         public async Task<IActionResult> newJiraRequest(NewJiraRequest newJiraRequest){
-            var apiKey = "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";
+            var apiKey = Environment.GetEnvironmentVariable("SendGrid_API");
             var client = new SendGridClient(apiKey);
             var from = new EmailAddress("prashantk@missionreadyhq.com", newJiraRequest.name);
             var subject = newJiraRequest.subject;
