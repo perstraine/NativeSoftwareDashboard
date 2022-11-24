@@ -15,7 +15,6 @@ function AddZendeskTicket(props) {
     
     const onSubmitClick = (e) => {
         e.preventDefault();
-        console.log("submit");
         setSubject(subject);
         setComment(comment);
         setPriority(priority);
@@ -34,6 +33,7 @@ function AddZendeskTicket(props) {
         console.log(ticket.ticket);
         axios.post('https://localhost:7001/api/NewTicket',ticket)
         .then((response) => {
+            props.setTrigger(false);
             console.log(response);
         })
         .catch((error) => {
@@ -60,40 +60,52 @@ function AddZendeskTicket(props) {
     return (props.trigger)?(
         <div id={styles.popup} >
             <div id={styles.popupinner}>
-                <div>
-                TechSolutions
+                <div id={styles.userName}>
+                    TechSolutions
                 </div>
-                <div>
-                New Zendesk Ticket
+                <div  id={styles.windowName}>
+                    New Zendesk Ticket
                 </div>
-                <form>
-                    <label>Subject:</label>
-                    <input type="subject"
-                      placeholder="Subject"
-                      value={subject}
-                      name="subject"
-                      onChange={handleChange}></input>
-                    <label>Comment:</label>
-                    <input type="comment"
-                      placeholder="Comment"
-                      value={comment}
-                      name="comment"
-                      onChange={handleChange}></input>
-                    <label>Priority:</label>
-                    <input type="priority"
-                      placeholder="Priority"
-                      value={priority}
-                      name="priority"
-                      onChange={handleChange}></input>
-                    <label>Type:</label>
-                    <input type="type"
-                      placeholder="Type"
-                      value={type}
-                      name="type"
-                      onChange={handleChange}></input>
+                <form id={styles.formStyle}>
+                    <div id={styles.subject}>
+                        <label>Subject:</label>
+                        <input type="subject"
+                        placeholder="Subject"
+                        value={subject}
+                        name="subject"
+                        onChange={handleChange}></input>
+                    </div>
+                    <div id={styles.comment}>
+                        <label>Comment:</label>
+                        <input type="comment"
+                        placeholder="Comment"
+                        value={comment}
+                        name="comment"
+                        onChange={handleChange}></input>
+                    </div>
+                    <div id={styles.prioritytype}>
+                        <div id={styles.prioritydropdown}>
+                            <label>Priority:</label>
+                            <input type="priority"
+                            placeholder="Priority"
+                            value={priority}
+                            name="priority"
+                            onChange={handleChange}></input>
+                        </div>
+                        <div id={styles.typedropdown}>
+                            <label>Type:</label>
+                            <input type="type"
+                            placeholder="Type"
+                            value={type}
+                            name="type"
+                            onChange={handleChange}></input>
+                        </div>
+                      </div>
                 </form>
+                <div id={styles.submitbuttons}>
                 <button id={styles.closeButton} onClick={()=> props.setTrigger(false)}>Cancel</button>
                 <button id={styles.closeButton} onClick={onSubmitClick}>Ok</button>
+                </div>
                 {props.children}
             </div>
         </div>

@@ -14,20 +14,21 @@ export default function CustomerDashboardHeader() {
 
   const[addZenTicketPopup, setAddZenTicketPopup] = useState(false);
 
-  // let menuRef = useRef();
-  // useEffect((event)=>{
-  //   let handler = ()=>{
-  //     if(event.target){
-  //       setOpen(false);
-  //     }
-  //   };
-  //   document.addEventListener("mousedown", handler);
-  // });
-
+  
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
   const [closed, setClosed] = useState(0);
   const [open, setOpen] = useState(false);
+  
+  let menuRef = useRef();
+  useEffect(()=>{
+    let handler = (e)=>{
+      if(!menuRef.current.contains(e.target)){
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+  });
 
   async function getInfo() {
     try {
@@ -61,7 +62,7 @@ export default function CustomerDashboardHeader() {
         <p id={styles.userName}>TechSolutions</p>
         <div id={styles.logout} onClick={logout}>Logout</div>
         
-        <div id={styles.menuContainer}>
+        <div id={styles.menuContainer} ref={menuRef}>
           <div id={styles.menuTrigger} onClick={()=>{setOpen(!open)}}>
             <img src={CogWheel} id={styles.cogwheelDropdown} alt="CogWheel" />
           </div>

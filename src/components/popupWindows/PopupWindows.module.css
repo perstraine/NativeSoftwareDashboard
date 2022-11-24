@@ -1,10 +1,11 @@
 #popup{
     position: fixed;
     top: 15%;
-    left: 25%;
+    left: 35%;
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 10;
 }
 #popupinner{
     position: relative;
@@ -13,6 +14,55 @@
     height: 500px;
     border-radius: 20px;
     background-color: rgb(0, 213, 255);
+}
+label{
+    color: black;
+}
+input{
+    height: 40px;
+    border: none;
+    font-size: 20px;
+    border-radius: 10px;
+}
+#userName{
+    color: black;
+    text-align: end;
+}
+#windowName{
+    color: black;
+    font-size: 30px;
+    font-weight: bolder;
+}
+#formStyle{
+    width: 100%;
+}
+#subject{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+#comment{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+#comment input{
+    height: 150px;
+}
+#prioritytype{
+    display: flex;
+    margin-top: 10px;
+    gap: 30px;
+}
+#typedropdown {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+}
+#prioritydropdown {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
 }
 #dropdownMenu{
     position: absolute;
@@ -37,3 +87,15 @@ ul{
 #dropdownMenu ul li h3:hover{
     font-weight: bold;
 } 
+#submitbuttons{
+    display: flex;
+    margin-top: 20px;
+    gap: 20px;
+}
+#submitbuttons button{
+    width: 100%;
+    height: 50px;
+    background-color: #7b73ff;
+    border: none;
+    border-radius: 10px;
+}
