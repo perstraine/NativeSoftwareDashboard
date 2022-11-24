@@ -15,7 +15,7 @@
             public string priority { get; set; }
             public string subject { get; set; }
             public string type { get; set; }
-            public string requester_id { get; set; }
+            //public string requester_id { get; set; }
         }
     }
 }

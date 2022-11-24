@@ -10,22 +10,36 @@ function AddZendeskTicket(props) {
     const[comment, setComment] = useState("");
     const[priority, setPriority] = useState("");
     const[type, setType] = useState("");
+    const[requester_id, setRequester_id] = useState("12765657911065");
 
     
     const onSubmitClick = (e) => {
         e.preventDefault();
+        console.log("submit");
         setSubject(subject);
         setComment(comment);
         setPriority(priority);
         setType(type);
-        const ticket = {"ticket":{"comment":{"body":{comment}},"priority": {priority},"subject": {subject},"type": {type},"requester_id": "12765657911065"}};
-        axios.post('https://localhost:7001/api/Zendesk/NewTicket',ticket)
+        const ticket = 
+        {
+            "ticket": {
+              "comment": {
+                "body": comment
+              },
+              "priority": priority,
+              "subject": subject,
+              "type": type
+            }
+          };
+        console.log(ticket.ticket);
+        axios.post('https://localhost:7001/api/NewTicket',ticket)
         .then((response) => {
+            console.log(response);
         })
         .catch((error) => {
           console.log('Error',error);
             console.log(error);
-            
+
         });
     }
 
