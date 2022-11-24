@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CogWheel from "./assets/cogwheel.png";
 import AddZendeskTicket from "../popupWindows/AddZendeskTicket";
+import AddJiraRequest from "../popupWindows/AddJiraRequest";
 
 export default function CustomerDashboardHeader() {
   useEffect(() => {
@@ -13,6 +14,7 @@ export default function CustomerDashboardHeader() {
   }, []);
 
   const[addZenTicketPopup, setAddZenTicketPopup] = useState(false);
+  const[addJiraRequest, setAddJiraRequest] = useState(false);
 
   
   const navigate = useNavigate();
@@ -44,9 +46,15 @@ export default function CustomerDashboardHeader() {
       localStorage.removeItem('userType');
       navigate("/");
     }
+
+  function OpenPopupWindow(){
+    
+  }
+
   return (
     <div id={styles.headerContainer}>
       <AddZendeskTicket trigger={addZenTicketPopup} setTrigger={setAddZenTicketPopup}></AddZendeskTicket>
+      <AddJiraRequest trigger={addJiraRequest} setTrigger={setAddJiraRequest}></AddJiraRequest>
       <div id={styles.logoContainer}>
         <img src={Logo} id={styles.logo} alt="NativeSoftware Logo" />
       </div>
@@ -69,7 +77,7 @@ export default function CustomerDashboardHeader() {
           {open?
             <div id = {styles.dropdownMenu}>
               <ul>
-              <li className={styles.dropdownItem} onClick={()=>setAddZenTicketPopup(true)}><h3>New Jira Request</h3></li>
+              <li className={styles.dropdownItem} onClick={()=>setAddJiraRequest(true)}><h3>New Jira Request</h3></li>
               <li className={styles.dropdownItem} onClick={()=>setAddZenTicketPopup(true)}><h3>Add Jira Comment</h3></li>
               <li className={styles.dropdownItem} onClick={()=>setAddZenTicketPopup(true)}><h3>Add Zendesk Ticket</h3></li>
               <li className={styles.dropdownItem} onClick={()=>setAddZenTicketPopup(true)}><h3>View Response Time</h3></li>
