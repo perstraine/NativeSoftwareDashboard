@@ -75,10 +75,9 @@ export default function CustomerDashboardHeader() {
             <img src={CogWheel} id={styles.cogwheelDropdown} alt="CogWheel" />
           </div>
           {open?
-            <div id = {styles.dropdownMenu}>
+            <div id={styles.dropdownMenu} onClick={() => { setOpen(!open) }}>
               <ul>
               <li className={styles.dropdownItem} onClick={()=>setAddJiraRequest(true)}><h3>New Jira Request</h3></li>
-              <li className={styles.dropdownItem} onClick={()=>setAddZenTicketPopup(true)}><h3>Add Jira Comment</h3></li>
               <li className={styles.dropdownItem} onClick={()=>setAddZenTicketPopup(true)}><h3>Add Zendesk Ticket</h3></li>
               <li className={styles.dropdownItem} onClick={()=>setAddZenTicketPopup(true)}><h3>View Response Time</h3></li>
               </ul>

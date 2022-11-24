@@ -162,7 +162,7 @@ namespace ConsoleUser.Controllers
             var subject = newJiraRequest.subject;
             var to = new EmailAddress("prashantk@missionreadyhq.com", "Native Staff");
             var plainTextContent = "";
-            var htmlContent = "Email: "+newJiraRequest.email+"\n\n"+newJiraRequest.message;
+            var htmlContent = "<p>From: "+newJiraRequest.email+"</p><p>"+newJiraRequest.message + "</p>";
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             try
             {

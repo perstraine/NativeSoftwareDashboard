@@ -71,34 +71,36 @@ function AddZendeskTicket(props) {
             setType(e.target.value)
         } 
     }
-    return (props.trigger)?(
-        <div id={styles.popup} >
-            <div id={styles.popupinner}>
-                <div id={styles.userName}>
-                    TechSolutions
-                </div>
-                <div  id={styles.windowName}>
-                    New Zendesk Ticket
-                </div>
-                <form id={styles.formStyle}>
-                    <div id={styles.subject}>
-                        <label>Subject:</label>
-                        <input type="subject"
-                        placeholder="Subject"
-                        value={subject}
-                        name="subject"
-                        onChange={handleChange}></input>
-                    </div>
-                    <div id={styles.comment}>
-                        <label>Comment:</label>
-                        <input type="comment"
-                        placeholder="Comment"
-                        value={comment}
-                        name="comment"
-                        onChange={handleChange}></input>
-                    </div>
-                    <div id={styles.prioritytype} >
-                        {/* <div id={styles.menuContainer} ref={menuRef}>
+    return props.trigger ? (
+      <div id={styles.popup}>
+        <div id={styles.popupinner}>
+          <div id={styles.userName}>TechSolutions</div>
+          <div id={styles.windowName}>New Zendesk Ticket</div>
+          <form id={styles.formStyle}>
+            <div id={styles.subject}>
+              <label className={styles.label}>Subject:</label>
+              <input
+                className={styles.input}
+                type="subject"
+                placeholder="Subject"
+                value={subject}
+                name="subject"
+                onChange={handleChange}
+              ></input>
+            </div>
+            <div id={styles.comment}>
+              <label className={styles.label}>Comment:</label>
+              <input
+                className={styles.input}
+                type="comment"
+                placeholder="Comment"
+                value={comment}
+                name="comment"
+                onChange={handleChange}
+              ></input>
+            </div>
+            <div id={styles.prioritytype}>
+              {/* <div id={styles.menuContainer} ref={menuRef}>
                             <div id={styles.menuTrigger}>
                                 <button  onClick={()=>{setPriorityOpen(true)}}>{priority}</button>
                             </div>
@@ -115,32 +117,47 @@ function AddZendeskTicket(props) {
                             null
                             }
                         </div> */}
-                        <div id={styles.prioritydropdown}>
-                            <label>Priority:</label>
-                            <input type="priority"
-                            placeholder="Priority"
-                            value={priority}
-                            name="priority"
-                            onChange={handleChange}></input>
-                        </div>
-                        <div id={styles.typedropdown}>
-                            <label>Type:</label>
-                            <input type="type"
-                            placeholder="Type"
-                            value={type}
-                            name="type"
-                            onChange={handleChange}></input>
-                        </div>
-                      </div>
-                </form>
-                <div id={styles.submitbuttons}>
-                <button id={styles.closeButton} onClick={()=> props.setTrigger(false)}>Cancel</button>
-                <button id={styles.closeButton} onClick={onSubmitClick}>Ok</button>
-                </div>
-                {props.children}
+              <div id={styles.prioritydropdown}>
+                <label className={styles.label}>Priority:</label>
+                <input
+                  className={styles.input}
+                  type="priority"
+                  placeholder="Priority"
+                  value={priority}
+                  name="priority"
+                  onChange={handleChange}
+                ></input>
+              </div>
+              <div id={styles.typedropdown}>
+                <label className={styles.label}>Type:</label>
+                <input
+                  className={styles.input}
+                  type="type"
+                  placeholder="Type"
+                  value={type}
+                  name="type"
+                  onChange={handleChange}
+                ></input>
+              </div>
             </div>
+          </form>
+          <div id={styles.submitbuttons}>
+            <button
+              id={styles.closeButton}
+              onClick={() => props.setTrigger(false)}
+            >
+              Cancel
+            </button>
+            <button id={styles.closeButton} onClick={onSubmitClick}>
+              Ok
+            </button>
+          </div>
+          {props.children}
         </div>
-    ):"";
+      </div>
+    ) : (
+      ""
+    );
 
 }
 

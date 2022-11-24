@@ -73,14 +73,13 @@ export default function JiraEpicSection() {
       {loading ? (
         <FadeLoader color="#81E8FF" height={17} margin={6} width={4} />
       ) : (
-          jira.map((epic) => {
-            if (userType === "Staff") {
-              return <JiraEpicIssue key={epic.id} epic={epic} />;
-            } else {
-              return <JiraEpicCustomer key={epic.id} epic={epic} />;
-              
-            }
-          })
+        jira.map((epic) => {
+          if (userType === "Staff") {
+            return <JiraEpicIssue key={epic.id} epic={epic} />;
+          } else {
+            return <JiraEpicCustomer key={epic.id} epic={epic} />;
+          }
+        })
       )}
       <div>
         <div id={styles.chevronArrowDown}></div>

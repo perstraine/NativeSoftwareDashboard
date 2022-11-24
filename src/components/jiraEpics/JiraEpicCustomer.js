@@ -1,11 +1,12 @@
 import styles from "./JiraEpicSection.module.css";
 import { useState, useEffect, useRef } from "react";
+import AddJiraComment from "./AddJiraComment";
+
 
 export default function JiraEpicCustomer({ epic }) {
-  const [isOpen, setIsOpen] = useState(false);
-    function addComment() {
-        console.log("EEWE")
-    }
+    const [isOpen, setIsOpen] = useState(false);
+  const [addJiraCommentPopup, setAddJiraCommentPopup] = useState(false);
+    
   let refUrl = useRef();
   useEffect(() => {
     let handler = (event) => {
@@ -23,6 +24,11 @@ export default function JiraEpicCustomer({ epic }) {
   }
   return (
     <div id={styles.epic} statuscolor={epic.urgencyColour}>
+      <AddJiraComment
+        trigger={addJiraCommentPopup}
+              setTrigger={setAddJiraCommentPopup}
+              issue = {epic.id}
+      ></AddJiraComment>
       <div id={styles.name}>{epic.name}</div>
       <div id={styles.start}>{epic.startDate.slice(0, 10)}</div>
       <div id={styles.due}>{epic.dueDate.slice(0, 10)}</div>
@@ -42,7 +48,9 @@ export default function JiraEpicCustomer({ epic }) {
                 View in Jira
               </a>
             </div>
-            <div className={styles.dropdownItem} onClick={addComment}>Comment</div>
+            <div className={styles.dropdownItem} onClick={()=>{setAddJiraCommentPopup(true)}}>
+              Comment
+            </div>
           </div>
         )}
       </div>
