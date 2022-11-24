@@ -1,4 +1,5 @@
 ﻿using ConsoleUser.Controllers;
+using ConsoleUser.Models;
 using ConsoleUser.Models.Domain;
 using ConsoleUser.Models.DTO;
 using ConsoleUser.Repositories;
@@ -81,7 +82,7 @@ namespace Zendesk.Controllers
                     if (ticket.subject != null) dashboardTicket.Subject = ticket.subject;
                     if (ticket.status != null) dashboardTicket.Status = ticket.status;
                     if (ticket.assignee_id != null) dashboardTicket.Recipient = ticket.assignee_id.ToString();//TODO assignee or recepient
-                    dashboardTicket.Billable = GetBillableCustomField(ticket.custom_fields[0]);
+                    if (ticket.custom_fields[0] != null) { dashboardTicket.Billable = GetBillableCustomField(ticket.custom_fields[0]); } else { dashboardTicket.Billable = false; }
                     dashboardTicket.Priority = ticket.priority;
                     dashboardTicket.RequestedDate = ticket.created_at.ToLocalTime().ToString();
                     dashboardTicket.TimeDue = GetTimeDueMinusOffHours(dashboardTicket.Organisation, dashboardTicket.Priority, DateTime.Parse(dashboardTicket.RequestedDate), customers, supportLevel).ToString();
