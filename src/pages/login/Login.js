@@ -34,7 +34,6 @@ export default function Login() {
           else{
             setErrorMessage("Email and password does not match. Please try again.")
           }
-
         })
       .catch((err) =>{
 
@@ -53,6 +52,7 @@ export default function Login() {
       setLoading(!loading);
       e.preventDefault();
       setEmail(email);
+      localStorage.setItem('email',email);
       setPassword(password);
       axios.post('https://localhost:7001/Auth/login', {
         userEmail:email,

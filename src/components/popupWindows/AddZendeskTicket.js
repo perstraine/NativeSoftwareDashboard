@@ -30,12 +30,11 @@ function AddZendeskTicket(props) {
         const ticket = 
         {
             "ticket": {
-              "comment": {
-                "body": comment
-              },
+              "description": comment,
               "priority": priority,
               "subject": subject,
               "type": type,
+              "email": localStorage.getItem('email'),
               "custom_fields": [
                 {
                     "id": 12765904262169,
@@ -45,7 +44,7 @@ function AddZendeskTicket(props) {
             }
           };
         console.log(ticket.ticket);
-        axios.post('https://localhost:7001/api/NewTicket',ticket)
+        axios.post('https://localhost:7001/api/NewTicket',ticket.ticket)
         .then((response) => {
             props.setTrigger(false);
             //console.log(response);
