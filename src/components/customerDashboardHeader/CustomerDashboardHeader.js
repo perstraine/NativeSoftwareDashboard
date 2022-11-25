@@ -1,5 +1,4 @@
 import Logo from "./assets/Logo.png";
-
 import styles from "./CustomerDashboardHeader.module.css";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
@@ -16,10 +15,10 @@ export default function CustomerDashboardHeader() {
   const[addZenTicketPopup, setAddZenTicketPopup] = useState(false);
   const[addJiraRequest, setAddJiraRequest] = useState(false);
 
-  
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
   const [closed, setClosed] = useState(0);
+  const [customer, setCustomer] = useState("");
   const [open, setOpen] = useState(false);
   
   let menuRef = useRef();
@@ -32,13 +31,15 @@ export default function CustomerDashboardHeader() {
     document.addEventListener("mousedown", handler);
   });
 
+  let customerEmail = localStorage.getItem('email');
   async function getInfo() {
     try {
       const response = await axios.get(
-        "https://localhost:7001/api/DashboardInfo"
-      );
+        "https://localhost:7001/api/DashboardInfo/customer",customerEmail);
+      console.log(response);
       setActive(response.data.activeTickets);
       setClosed(response.data.closedTickets);
+      setCustomer(response.data.customer);
     } catch (error) {}
     }
     function logout() {
@@ -67,7 +68,7 @@ export default function CustomerDashboardHeader() {
         <div className={styles.infoValue}>{closed}</div>
       </div>
       <div id={styles.settings}>
-        <p id={styles.userName}>TechSolutions</p>
+        <p id={styles.userName}>{customer}</p>
         <div id={styles.logout} onClick={logout}>Logout</div>
         
         <div id={styles.menuContainer} ref={menuRef}>

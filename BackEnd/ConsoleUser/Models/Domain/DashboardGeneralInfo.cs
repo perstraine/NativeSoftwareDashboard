@@ -8,6 +8,7 @@ namespace ConsoleUser.Models.Domain
         [AllowNull] public int ActiveTickets { get; set; }
         [AllowNull] public int UrgentTickets { get; set; }
         [AllowNull] public int ClosedTickets { get; set; }
+        [AllowNull] public string Customer { get; set; }
     }
 }
 
