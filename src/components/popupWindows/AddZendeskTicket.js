@@ -4,13 +4,28 @@ import styles from "./PopupWindows.module.css";
 
 
 function AddZendeskTicket(props) {
+    useEffect(() => {
+        getInfo();
+      }, []);
     const[priorityOpen, setPriorityOpen] = useState(false);
     const[typeOpen, setTypeOpen] = useState(false);
     const[subject, setSubject] = useState("");
     const[comment, setComment] = useState("");
     const[priority, setPriority] = useState("");
     const[type, setType] = useState("");
-    
+    const [customer, setCustomer] = useState("");
+
+    let customerEmail = localStorage.getItem('email');
+    async function getInfo() {
+      try {
+        const response = await axios.get(
+          "https://localhost:7001/api/DashboardInfo/Customer",{ params: { email: customerEmail } });
+        console.log(response);
+        setCustomer(response.data.customer);
+      } catch (error) {}
+      }
+
+
     // let menuRef = useRef();
     // useEffect(()=>{
     //   let handler = (e)=>{
@@ -74,7 +89,7 @@ function AddZendeskTicket(props) {
         <div id={styles.popup} >
             <div id={styles.popupinner}>
                 <div id={styles.userName}>
-                    TechSolutions
+                    {customer}
                 </div>
                 <div  id={styles.windowName}>
                     New Zendesk Ticket

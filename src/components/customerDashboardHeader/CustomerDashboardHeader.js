@@ -6,11 +6,9 @@ import axios from "axios";
 import CogWheel from "./assets/cogwheel.png";
 import AddZendeskTicket from "../popupWindows/AddZendeskTicket";
 import AddJiraRequest from "../popupWindows/AddJiraRequest";
+import AddJiraComment from "../popupWindows/AddJiraComment";
+import ViewResponseTime from "../popupWindows/ViewResponseTime";
 
-let WindowState = {
-  open: false,
-  user: ''
-}
 export default function CustomerDashboardHeader() {
   useEffect(() => {
     getInfo();
@@ -18,6 +16,8 @@ export default function CustomerDashboardHeader() {
 
   const[addZenTicketPopup, setAddZenTicketPopup] = useState(false);
   const[addJiraRequest, setAddJiraRequest] = useState(false);
+  const[addJiraComment, setAddJiraComment] = useState(false);
+  const[viewResponseTime, setViewResponseTime] = useState(false);
 
   const navigate = useNavigate();
   const [active, setActive] = useState(0);
@@ -58,8 +58,10 @@ export default function CustomerDashboardHeader() {
 
   return (
     <div id={styles.headerContainer}>
-      <AddZendeskTicket trigger={addZenTicketPopup} setTrigger={setAddZenTicketPopup}></AddZendeskTicket>
       <AddJiraRequest trigger={addJiraRequest} setTrigger={setAddJiraRequest}></AddJiraRequest>
+      <AddJiraComment trigger={addJiraComment} setTrigger={setAddJiraComment}></AddJiraComment>
+      <AddZendeskTicket trigger={addZenTicketPopup} setTrigger={setAddZenTicketPopup}></AddZendeskTicket>
+      <ViewResponseTime trigger={viewResponseTime} setTrigger={setViewResponseTime}></ViewResponseTime>
       <div id={styles.logoContainer}>
         <img src={Logo} id={styles.logo} alt="NativeSoftware Logo" />
       </div>
@@ -83,9 +85,9 @@ export default function CustomerDashboardHeader() {
             <div id = {styles.dropdownMenu}>
               <ul>
               <li className={styles.dropdownItem} onClick={()=>setAddJiraRequest(true)}><h3>New Jira Request</h3></li>
-              <li className={styles.dropdownItem} onClick={()=>setAddZenTicketPopup(true)}><h3>Add Jira Comment</h3></li>
-              <li className={styles.dropdownItem} onClick={OpenPopupWindow}><h3>Add Zendesk Ticket</h3></li>
-              <li className={styles.dropdownItem} onClick={()=>setAddZenTicketPopup(true)}><h3>View Response Time</h3></li>
+              <li className={styles.dropdownItem} onClick={()=>setAddJiraComment(true)}><h3>Add Jira Comment</h3></li>
+              <li className={styles.dropdownItem} onClick={()=>setAddZenTicketPopup(true)}><h3>Add Zendesk Ticket</h3></li>
+              <li className={styles.dropdownItem} onClick={()=>setViewResponseTime(true)}><h3>View Response Time</h3></li>
               </ul>
             </div>
             :

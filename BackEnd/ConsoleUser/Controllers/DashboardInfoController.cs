@@ -172,30 +172,33 @@ namespace Zendesk.Controllers
 
             foreach (var ticket in zendeskData.tickets)
             {
-                if (ticket.status == "solved" || ticket.status == "closed" && ticket.requester_id == loggedInUser.id)
+                if (ticket.requester_id.ToString() == loggedInUser.id.ToString())
                 {
-                    var ticketid = ticket.id;
-                    foreach (var metrics in zendeskMetrics.ticket_metrics)
+                    if (ticket.status == "solved" || ticket.status == "closed")
                     {
-                        if (metrics.ticket_id == ticketid)
+                        var ticketid = ticket.id;
+                        foreach (var metrics in zendeskMetrics.ticket_metrics)
                         {
-                            DateTime solvedDate = (DateTime)metrics.solved_at;
-                            // closed tickets added only if ticket is solved beween sunday and 7 days after it.
-                            if (solvedDate.ToLocalTime() >= sundayDate && solvedDate <= sundayDate.AddDays(7))
+                            if (metrics.ticket_id == ticketid)
                             {
-                                dashboardGeneralInfo.ClosedTickets++;
+                                DateTime solvedDate = (DateTime)metrics.solved_at;
+                                // closed tickets added only if ticket is solved beween sunday and 7 days after it.
+                                if (solvedDate.ToLocalTime() >= sundayDate && solvedDate <= sundayDate.AddDays(7))
+                                {
+                                    dashboardGeneralInfo.ClosedTickets++;
+                                }
                             }
                         }
                     }
-                }
-                else if (ticket.status != "on_hold" && ticket.status != "pending")
-                {
-                    dashboardGeneralInfo.ActiveTickets++;
-                }
+                    else if (ticket.status != "on_hold" && ticket.status != "pending")
+                    {
+                        dashboardGeneralInfo.ActiveTickets++;
+                    }
 
-                if (ticket.priority == "urgent" && ticket.status != "solved" && ticket.status != "closed")
-                {
-                    dashboardGeneralInfo.UrgentTickets++;
+                    if (ticket.priority == "urgent" && ticket.status != "solved" && ticket.status != "closed")
+                    {
+                        dashboardGeneralInfo.UrgentTickets++;
+                    }
                 }
             }
 
