@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -21,11 +22,13 @@ namespace Zendesk.Controllers
     [Route("api/[controller]")]
     public class ZendeskController : ControllerBase
     {
+        private readonly IConfiguration configuration;
         private readonly ICustomerRepository customerRepository;
         private readonly ISupportLevelRepository customerSupportLevelRepository;
 
-        public ZendeskController(ICustomerRepository customerRepository, ISupportLevelRepository customerSupportLevelRepository)
+        public ZendeskController(IConfiguration configuration, ICustomerRepository customerRepository, ISupportLevelRepository customerSupportLevelRepository)
         {
+            this.configuration = configuration;
             this.customerRepository = customerRepository;
             this.customerSupportLevelRepository = customerSupportLevelRepository;
         }
@@ -33,17 +36,21 @@ namespace Zendesk.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTickets()
         {
-            string BasicAuth = "Basic cmFuanVyYXZlZGV2QGdtYWlsLmNvbTpXZWJkZXZfMjAyMg==";
-            string Cookie = "__cf_bm=NV4J3cTJmKvuqQCpPM5uYQygQbMa1KqcKC74uEfpYRE-1669145356-0-AQ8bmpK/6KOJqFK753Q+XKYR/nOaz6GgpzbhtlKOOBFY/Do8Z5sRIUYKKWLDpkXAsMbZGbWPNXA/jgWFl1wblgDcguCWBfSeLrxzRVI4UGcD; __cfruid=353ffba05ab8b9f0ee0a58e3b51e838c95d2159f-1669143409; __cfruid=5b67cf441a7537636be54b819fa8ae1bf4e0c42a-1669145370; _zendesk_cookie=BAhJIhl7ImRldmljZV90b2tlbnMiOnt9fQY6BkVU--459ed01949a36415c1716b5711271c3d08918307";
-            var options = new RestClientOptions("https://native2881.zendesk.com")
+            var BasicAuth = configuration.GetValue<string>("ZendeskAuthKey");
+            var Cookie = configuration.GetValue<string>("ZendeskCookieKey");
+            var DomainUrl = configuration.GetSection("ZendeskAPI:Domain").Value;
+            var TicketUrl = configuration.GetSection("ZendeskAPI:Tickets").Value;
+            var UsersUrl = configuration.GetSection("ZendeskAPI:Users").Value;
+
+            var options = new RestClientOptions(DomainUrl)
             {
                 ThrowOnAnyError = true,
                 MaxTimeout = -1  // 1 second
             };
 
             var client = new RestClient(options);
-            var ticketRequest = new RestRequest("/api/v2/tickets", Method.Get);
-            var usersRequest = new RestRequest("/api/v2/users", Method.Get);
+            var ticketRequest = new RestRequest(TicketUrl, Method.Get);
+            var usersRequest = new RestRequest(UsersUrl, Method.Get);
 
             ticketRequest.AddHeader("Authorization", BasicAuth);
             usersRequest.AddHeader("Authorization", BasicAuth);
@@ -155,31 +162,6 @@ namespace Zendesk.Controllers
             return ticketListToSort;
         }
 
-        //Creating time due based on user tier and ticket priority
-        private static DateTime GetTimeDue(string organisation, string priority, DateTime requestedDate, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel)
-        {
-            DateTime timeDue = DateTime.Now;
-            foreach (var customer in customers)
-            {
-                if(customer.CustomerCode == organisation)
-                {
-                    int customerSupportLevel = customer.SupportLevel;
-
-                    foreach (var level in supportLevel)
-                    {
-                        if(level.SupportLevel == customerSupportLevel)
-                        {
-                            var resolutionTime = priority == "urgent" ? level.ResolutionTimeUrgent : priority == "high" ? level.ResolutionTimeHigh : priority == "normal" ? level.ResolutionTimeNormal : level.ResolutionTimeLow;
-                            timeDue = requestedDate.AddHours(resolutionTime);
-                            //return requestedDate.AddHours(resolutionTime);
-                        }
-                    }
-                }
-            }
-            
-            return timeDue;
-        }
-
         //Creating time due reducing business off hours and weekends
         private static DateTime GetTimeDueMinusOffHours(string organisation, string priority, DateTime requestedDate, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel)
         {
@@ -190,10 +172,10 @@ namespace Zendesk.Controllers
             int dayStartMinutes = 30;
             int dayEndHours = 17;
             int dayEndMinutes = 0;
-            DateTime requestedDayStart = new DateTime(requestedDate.Year, requestedDate.Month, requestedDate.Day, dayStartHours, dayStartMinutes, 0);
-            DateTime businessHoursEnd = new DateTime(requestedDate.Year, requestedDate.Month, requestedDate.Day, dayEndHours, dayEndMinutes, 0);
+            DateTime requestedDayStart = new(requestedDate.Year, requestedDate.Month, requestedDate.Day, dayStartHours, dayStartMinutes, 0);
+            DateTime businessHoursEnd = new(requestedDate.Year, requestedDate.Month, requestedDate.Day, dayEndHours, dayEndMinutes, 0);
             DateTime nextBusinessHoursStart = requestedDate.AddDays(1);
-            nextBusinessHoursStart = new DateTime(nextBusinessHoursStart.Year, nextBusinessHoursStart.Month, nextBusinessHoursStart.Day, dayStartHours, dayStartMinutes, 0);
+            nextBusinessHoursStart = new(nextBusinessHoursStart.Year, nextBusinessHoursStart.Month, nextBusinessHoursStart.Day, dayStartHours, dayStartMinutes, 0);
 
             // if next day is weekend find next Monday
             if (nextBusinessHoursStart.DayOfWeek == DayOfWeek.Saturday) 

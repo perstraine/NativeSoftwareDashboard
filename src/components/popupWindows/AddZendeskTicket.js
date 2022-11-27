@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useEffect, useState, useRef } from "react";
 import styles from "./PopupWindows.module.css";
 
-
 function AddZendeskTicket(props) {
     useEffect(() => {
         getInfo();
@@ -15,26 +14,19 @@ function AddZendeskTicket(props) {
     const[type, setType] = useState("");
     const [customer, setCustomer] = useState("");
 
+    const handlePriorityOpen = () => {
+        setPriorityOpen(!priorityOpen);
+      };
+
     let customerEmail = localStorage.getItem('email');
     async function getInfo() {
       try {
         const response = await axios.get(
           "https://localhost:7001/api/DashboardInfo/Customer",{ params: { email: customerEmail } });
-        console.log(response);
+        //console.log(response);
         setCustomer(response.data.customer);
       } catch (error) {}
       }
-
-
-    // let menuRef = useRef();
-    // useEffect(()=>{
-    //   let handler = (e)=>{
-    //     if(!menuRef.current.contains(e.target)){
-    //         setPriorityOpen(false);
-    //     }
-    //   };
-    //   document.addEventListener("mousedown", handler);
-    // });
 
     const onSubmitClick = (e) => {
         e.preventDefault();
@@ -112,30 +104,34 @@ function AddZendeskTicket(props) {
                         onChange={handleChange}></input>
                     </div>
                     <div id={styles.prioritytype} >
-                        {/* <div id={styles.menuContainer} ref={menuRef}>
-                            <div id={styles.menuTrigger}>
-                                <button  onClick={()=>{setPriorityOpen(true)}}>{priority}</button>
-                            </div>
-                            {priorityOpen?
-                            <div id = {styles.dropdownMenuPriority}>
-                                <ul>
-                                    <li className={styles.dropdownItem} onClick={()=>setPriority("low")}><h3>Low</h3></li>
-                                    <li className={styles.dropdownItem} onClick={()=>setPriority("normal")}><h3>Normal</h3></li>
-                                    <li className={styles.dropdownItem} onClick={()=>setPriority("high")}><h3>High</h3></li>
-                                    <li className={styles.dropdownItem} onClick={()=>setPriority("urgent")}><h3>Urgent</h3></li>
-                                </ul>
-                            </div>
-                            :
-                            null
-                            }
-                        </div> */}
                         <div id={styles.prioritydropdown}>
+
+                            {/* <button onClick={handlePriorityOpen}>Priority</button>
+                            {priorityOpen ? (
+                                <ul >
+                                    <li>
+                                        <button>Low</button>
+                                    </li>
+                                    <li>
+                                        <button>Normal</button>
+                                    </li>
+                                    <li>
+                                        <button>High</button>
+                                    </li>
+                                    <li>
+                                        <button>Urgent</button>
+                                    </li>
+                                </ul>
+                            ) : null}
+                            {priorityOpen ? <div>Is Open</div> : <div>Is Closed</div>} */}
+
                             <label>Priority:</label>
                             <input type="priority"
                             placeholder="Priority"
                             value={priority}
                             name="priority"
                             onChange={handleChange}></input>
+
                         </div>
                         <div id={styles.typedropdown}>
                             <label>Type:</label>
@@ -159,40 +155,3 @@ function AddZendeskTicket(props) {
 }
 
 export default AddZendeskTicket
-
-
-{/* <div id={styles.menuContainer}>
-<div id={styles.menuTrigger}>
-    <button  onClick={()=>{setPriorityOpen(true)}}>{priority}</button>
-</div>
-{priorityOpen?
-    <div id = {styles.dropdownMenu}>
-        <ul>
-            <li className={styles.dropdownItem} onClick={()=>setPriority("low")}><h3>Low</h3></li>
-            <li className={styles.dropdownItem} onClick={()=>setPriority("normal")}><h3>Normal</h3></li>
-            <li className={styles.dropdownItem} onClick={()=>setPriority("high")}><h3>High</h3></li>
-            <li className={styles.dropdownItem} onClick={()=>setPriority("urgent")}><h3>Urgent</h3></li>
-        </ul>
-    </div>
-    :
-    null
-    }
-</div>
-
-<div id={styles.menuContainer}>
-<div id={styles.menuTrigger} onClick={()=>{setTypeOpen(true)}}>
-    <button>{type}</button>
-</div>
-{priorityOpen?
-<div id = {styles.dropdownMenu}>
-    <ul>
-        <li className={styles.dropdownItem} onClick={()=>setType("question")}><h3>Question</h3></li>
-        <li className={styles.dropdownItem} onClick={()=>setType("incident")}><h3>Incident</h3></li>
-        <li className={styles.dropdownItem} onClick={()=>setType("problem")}><h3>Problem</h3></li>
-        <li className={styles.dropdownItem} onClick={()=>setType("task")}><h3>Task</h3></li>
-    </ul>
-</div>
-:
-null
-}
-</div> */}

@@ -1,9 +1,9 @@
 import Logo from "./assets/Logo.png";
-import styles from "./CustomerDashboardHeader.module.css";
+import CogWheel from "./assets/cogwheel.png";
+import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import CogWheel from "./assets/cogwheel.png";
+import styles from "./CustomerDashboardHeader.module.css";
 import AddZendeskTicket from "../popupWindows/AddZendeskTicket";
 import AddJiraRequest from "../popupWindows/AddJiraRequest";
 import AddJiraComment from "../popupWindows/AddJiraComment";
@@ -25,22 +25,22 @@ export default function CustomerDashboardHeader() {
   const [customer, setCustomer] = useState("");
   const [open, setOpen] = useState(false);
   
-  let menuRef = useRef();
-  useEffect(()=>{
-    let handler = (e)=>{
-      if(!menuRef.current.contains(e.target)){
-        setOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-  });
+  // let menuRef = useRef();
+  // useEffect(()=>{
+  //   let handler = (e)=>{
+  //     if(!menuRef.current.contains(e.target)){
+  //       setOpen(false);
+  //     }
+  //   };
+  //   document.addEventListener("mousedown", handler);
+  // });
 
   let customerEmail = localStorage.getItem('email');
   async function getInfo() {
     try {
       const response = await axios.get(
         "https://localhost:7001/api/DashboardInfo/Customer",{ params: { email: customerEmail } });
-      console.log(response);
+      //console.log(response);
       setActive(response.data.activeTickets);
       setClosed(response.data.closedTickets);
       setCustomer(response.data.customer);
@@ -57,7 +57,7 @@ export default function CustomerDashboardHeader() {
   }
 
   return (
-    <div id={styles.headerContainer}>
+    <div id={styles.headerContainer} >
       <AddJiraRequest trigger={addJiraRequest} setTrigger={setAddJiraRequest}></AddJiraRequest>
       <AddJiraComment trigger={addJiraComment} setTrigger={setAddJiraComment}></AddJiraComment>
       <AddZendeskTicket trigger={addZenTicketPopup} setTrigger={setAddZenTicketPopup}></AddZendeskTicket>
@@ -77,7 +77,7 @@ export default function CustomerDashboardHeader() {
         <p id={styles.userName}>{customer}</p>
         <div id={styles.logout} onClick={logout}>Logout</div>
         
-        <div id={styles.menuContainer} ref={menuRef}>
+        <div id={styles.menuContainer}>
           <div id={styles.menuTrigger} onClick={()=>{setOpen(!open)}}>
             <img src={CogWheel} id={styles.cogwheelDropdown} alt="CogWheel" />
           </div>

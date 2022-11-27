@@ -16,19 +16,29 @@ namespace ConsoleUser.Controllers
     [ApiController]
     public class NewTicketController : ControllerBase
     {
+        private readonly IConfiguration configuration;
+        public NewTicketController(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddTicket(NewTicketFromFrontend newTicketFromFrontend)
         {
-            string BasicAuth = "Basic cmFuanVyYXZlZGV2QGdtYWlsLmNvbTpXZWJkZXZfMjAyMg==";
-            string Cookie = "__cfruid=ceb12173d3cab3d119fbd3324ebacedd641c6ac7-1669319739; _zendesk_cookie=BAhJIhl7ImRldmljZV90b2tlbnMiOnt9fQY6BkVU--459ed01949a36415c1716b5711271c3d08918307";
+            var BasicAuth = configuration.GetValue<string>("ZendeskAuthKey");
+            var Cookie = configuration.GetValue<string>("ZendeskCookieKey");
+            var DomainUrl = configuration.GetSection("ZendeskAPI:Domain").Value;
+            var UsersUrl = configuration.GetSection("ZendeskAPI:Users").Value;
+            var MetrixUrl = configuration.GetSection("ZendeskAPI:Metrix").Value;
+            var TicketUrl = configuration.GetSection("ZendeskAPI:Tickets").Value;
             
-            var options = new RestClientOptions("https://native2881.zendesk.com")
+            var options = new RestClientOptions(DomainUrl)
             {
                 ThrowOnAnyError = true,
                 MaxTimeout = -1  // 1 second
             };
             var client = new RestClient(options);
-            var usersRequest = new RestRequest("/api/v2/users", Method.Get);
+            var usersRequest = new RestRequest(UsersUrl, Method.Get);
             usersRequest.AddHeader("Authorization", BasicAuth);
             usersRequest.AddHeader("Cookie", Cookie);
             RestResponse usersResponse = await client.ExecuteAsync(usersRequest);
@@ -38,7 +48,7 @@ namespace ConsoleUser.Controllers
             NewZendeskTicket.Ticket ticketData = CreateNewTicket(newTicketFromFrontend, zendeskUsers);
             ticketToAdd.ticket = ticketData;
 
-            var request = new RestRequest("/api/v2/tickets", Method.Post);
+            var request = new RestRequest(TicketUrl, Method.Post);
             request.AddHeader("Authorization", BasicAuth);
             request.AddHeader("Content-Type", "application/json");
             request.AddHeader("Cookie", Cookie);

@@ -65,29 +65,11 @@ input{
     display: flex;
     flex-direction: column;
 }
-#dropdownMenu{
-    position: absolute;
-    top:80px;
-    right: 20px;
-    background-color:#81E8FF;
-    color: black;
-    border-radius: 10px;
-    width: 200px;
-}
 ul{
     list-style: none;
     margin-left: 30px;
     padding: 0;
 }
-#dropdownMenu ul li h3{
-    font-size: 15px;
-    font-weight: normal;
-    color: black;
-    cursor: pointer;
-}
-#dropdownMenu ul li h3:hover{
-    font-weight: bold;
-} 
 #submitbuttons{
     display: flex;
     margin-top: 20px;
@@ -100,26 +82,3 @@ ul{
     border: none;
     border-radius: 10px;
 }
-#dropdownMenuPriority{
-    position: absolute;
-    top:80px;
-    right: 20px;
-    background-color:#81E8FF;
-    color: black;
-    border-radius: 10px;
-    width: 200px;
-}
-ul{
-    list-style: none;
-    margin-left: 30px;
-    padding: 0;
-}
-#dropdownMenuPriority ul li h3{
-    font-size: 15px;
-    font-weight: normal;
-    color: black;
-    cursor: pointer;
-}
-#dropdownMenuPriority ul li h3:hover{
-    font-weight: bold;
-} 
