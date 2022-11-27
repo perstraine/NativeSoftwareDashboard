@@ -7,6 +7,10 @@ import CogWheel from "./assets/cogwheel.png";
 import AddZendeskTicket from "../popupWindows/AddZendeskTicket";
 import AddJiraRequest from "../popupWindows/AddJiraRequest";
 
+let WindowState = {
+  open: false,
+  user: ''
+}
 export default function CustomerDashboardHeader() {
   useEffect(() => {
     getInfo();
@@ -35,7 +39,7 @@ export default function CustomerDashboardHeader() {
   async function getInfo() {
     try {
       const response = await axios.get(
-        "https://localhost:7001/api/DashboardInfo/customer",customerEmail);
+        "https://localhost:7001/api/DashboardInfo/Customer",{ params: { email: customerEmail } });
       console.log(response);
       setActive(response.data.activeTickets);
       setClosed(response.data.closedTickets);
@@ -49,7 +53,7 @@ export default function CustomerDashboardHeader() {
     }
 
   function OpenPopupWindow(){
-    
+    setAddZenTicketPopup(true)
   }
 
   return (
@@ -80,7 +84,7 @@ export default function CustomerDashboardHeader() {
               <ul>
               <li className={styles.dropdownItem} onClick={()=>setAddJiraRequest(true)}><h3>New Jira Request</h3></li>
               <li className={styles.dropdownItem} onClick={()=>setAddZenTicketPopup(true)}><h3>Add Jira Comment</h3></li>
-              <li className={styles.dropdownItem} onClick={()=>setAddZenTicketPopup(true)}><h3>Add Zendesk Ticket</h3></li>
+              <li className={styles.dropdownItem} onClick={OpenPopupWindow}><h3>Add Zendesk Ticket</h3></li>
               <li className={styles.dropdownItem} onClick={()=>setAddZenTicketPopup(true)}><h3>View Response Time</h3></li>
               </ul>
             </div>

@@ -59,7 +59,7 @@ namespace Zendesk.Controllers
         }
 
         [HttpGet]
-        [Route("customer")]
+        [Route("Customer")]
         public async Task<IActionResult> GetCustomerTickets(string email)
         {
             string BasicAuth = "Basic cmFuanVyYXZlZGV2QGdtYWlsLmNvbTpXZWJkZXZfMjAyMg==";
@@ -93,10 +93,11 @@ namespace Zendesk.Controllers
             var zendeskUsers = JsonConvert.DeserializeObject<ZendeskUsers>(userResponse.Content);
 
             // Creating Json for dashboard
-            var dashboardGeneralInfo = CreateUserTicketInfo(zendeskData, zendeskMetrics, zendeskUsers, email);
+            var dashboardGeneralInfo = CreateUserDetailsInfo(zendeskData, zendeskMetrics, zendeskUsers, email);
 
             return Ok(dashboardGeneralInfo);
         }
+
 
         // Dashboard specific JSON creation
         private static DashboardGeneralInfo CreateTicketInfo(ZendeskData? zendeskData, ZendeskMetrics? zendeskMetrics, ZendeskUsers? zendeskUsers)
@@ -145,24 +146,24 @@ namespace Zendesk.Controllers
         }
 
         // Custer Dashboard specific JSON creation
-        private static DashboardGeneralInfo CreateUserTicketInfo(ZendeskData? zendeskData, ZendeskMetrics? zendeskMetrics, ZendeskUsers? zendeskUsers, string email)
+        private static DashboardGeneralInfo CreateUserDetailsInfo(ZendeskData? zendeskData, ZendeskMetrics? zendeskMetrics, ZendeskUsers? zendeskUsers, string email)
         {
             //Finding Sunday of the week
             var sundayDate = DateTime.Today.ToLocalTime();
-            while(sundayDate.DayOfWeek != DayOfWeek.Sunday)
+            while (sundayDate.DayOfWeek != DayOfWeek.Sunday)
             {
                 sundayDate = sundayDate.AddDays(-1);
             }
-            
+
             //Finding the tickets
             var dashboardGeneralInfo = new DashboardGeneralInfo();
             dashboardGeneralInfo.id = 0;
-            
+
             //find user
             User loggedInUser = new User();
-            foreach(var user in zendeskUsers.users)
+            foreach (var user in zendeskUsers.users)
             {
-                if(user.email == email)
+                if (user.email == email)
                 {
                     loggedInUser = user;
                 }
@@ -171,28 +172,28 @@ namespace Zendesk.Controllers
 
             foreach (var ticket in zendeskData.tickets)
             {
-                if(ticket.status == "solved" || ticket.status == "closed" && ticket.requester_id == loggedInUser.id)
+                if (ticket.status == "solved" || ticket.status == "closed" && ticket.requester_id == loggedInUser.id)
                 {
                     var ticketid = ticket.id;
-                        foreach (var metrics in zendeskMetrics.ticket_metrics)
+                    foreach (var metrics in zendeskMetrics.ticket_metrics)
+                    {
+                        if (metrics.ticket_id == ticketid)
                         {
-                            if (metrics.ticket_id == ticketid)
+                            DateTime solvedDate = (DateTime)metrics.solved_at;
+                            // closed tickets added only if ticket is solved beween sunday and 7 days after it.
+                            if (solvedDate.ToLocalTime() >= sundayDate && solvedDate <= sundayDate.AddDays(7))
                             {
-                                DateTime solvedDate = (DateTime)metrics.solved_at;
-                                // closed tickets added only if ticket is solved beween sunday and 7 days after it.
-                                if (solvedDate.ToLocalTime() >= sundayDate && solvedDate <= sundayDate.AddDays(7)) 
-                                {
-                                    dashboardGeneralInfo.ClosedTickets++;
-                                }
+                                dashboardGeneralInfo.ClosedTickets++;
                             }
                         }
+                    }
                 }
                 else if (ticket.status != "on_hold" && ticket.status != "pending")
                 {
                     dashboardGeneralInfo.ActiveTickets++;
                 }
 
-                if(ticket.priority == "urgent" && ticket.status != "solved" && ticket.status != "closed")
+                if (ticket.priority == "urgent" && ticket.status != "solved" && ticket.status != "closed")
                 {
                     dashboardGeneralInfo.UrgentTickets++;
                 }
