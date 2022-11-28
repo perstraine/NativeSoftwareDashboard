@@ -1,4 +1,5 @@
 ﻿using ConsoleUser.Controllers;
+using ConsoleUser.Models;
 using ConsoleUser.Models.Domain;
 using ConsoleUser.Models.DTO;
 using ConsoleUser.Repositories;
@@ -41,6 +42,7 @@ namespace Zendesk.Controllers
             var DomainUrl = configuration.GetSection("ZendeskAPI:Domain").Value;
             var UsersUrl = configuration.GetSection("ZendeskAPI:Users").Value;
             var MetrixUrl = configuration.GetSection("ZendeskAPI:Metrix").Value;
+            //var UserTicketsUrl = configuration.GetSection("ZendeskAPI:UserTickets").Value;
 
             var options = new RestClientOptions(DomainUrl)
             {
@@ -87,6 +89,7 @@ namespace Zendesk.Controllers
                 }
             }
             var apiString = "/api/v2/users/" + userId + "/tickets/requested";
+            //var apiString = UsersUrl.ToString() + userId.ToString() + UserTicketsUrl.ToString();
             var userTicketRequest = new RestRequest(apiString, Method.Get);
             userTicketRequest.AddHeader("Authorization", BasicAuth);
             userTicketRequest.AddHeader("Cookie", Cookie);
@@ -96,6 +99,34 @@ namespace Zendesk.Controllers
             var dashboardUserTicketData = CreateUserTicketData(userTicket, zendeskUsers, zendeskMetrics.ticket_metrics, customers, supportLevel);
 
             return Ok(dashboardUserTicketData);
+        }
+
+        [HttpGet]
+        [Route("Response")]
+        public ConsoleUser.Models.CustomerSupportLevel GetCustomerResponse(string userType)
+        {
+            var customerSupportLevel = new ConsoleUser.Models.CustomerSupportLevel();
+            var supportLevel = customerSupportLevelRepository.GetAll();
+            var customers = customerRepository.GetAll();
+            var users = userRepository.GetAll();
+            
+
+            foreach(var customer in customers)
+            {
+                if(customer.CustomerCode == userType)
+                {
+                    foreach( var level in supportLevel)
+                    {
+                        if(customer.SupportLevel == level.SupportLevel)
+                        {
+                            return (level);
+                        }
+                    }
+                }
+            }
+
+
+            return (customerSupportLevel);
         }
 
         //Creating the tickets

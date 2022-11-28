@@ -25,7 +25,7 @@ function SupportTicket(props) {
       <p status-text-colour={props.ticket.trafficLight} className={styles.ticketText} id={styles.sub}> {props.ticket.subject}</p>
       <p status-text-colour={props.ticket.trafficLight} className={styles.ticketText} id={styles.status}> {props.ticket.status}</p>
       <p status-text-colour={props.ticket.trafficLight} className={styles.ticketText} id={styles.assign}> {props.ticket.assigned ? props.ticket.assigned : "Not assigned"}</p>
-      <p status-text-colour={props.ticket.trafficLight} className={styles.ticketText} id={styles.bill}> {props.ticket.billable==="true" ? "Yes" : "No"}</p>
+      <p status-text-colour={props.ticket.trafficLight} className={styles.ticketText} id={styles.bill}> {props.ticket.billable ? "Yes" : "No"}</p>
       <p status-text-colour={props.ticket.trafficLight} className={styles.ticketText} id={styles.priority}> {props.ticket.priority}</p>
       <p status-text-colour={props.ticket.trafficLight} className={styles.ticketText} id={styles.reqtime}> {props.ticket.requestedDate}</p>
       <p status-text-colour={props.ticket.trafficLight} className={styles.ticketText} id={styles.due}> {props.ticket.timeDue}</p>

@@ -6,6 +6,7 @@ function AddZendeskTicket(props) {
     useEffect(() => {
         getInfo();
       }, []);
+
     const[priorityOpen, setPriorityOpen] = useState(false);
     const[typeOpen, setTypeOpen] = useState(false);
     const[subject, setSubject] = useState("");
@@ -105,26 +106,6 @@ function AddZendeskTicket(props) {
                     </div>
                     <div id={styles.prioritytype} >
                         <div id={styles.prioritydropdown}>
-
-                            {/* <button onClick={handlePriorityOpen}>Priority</button>
-                            {priorityOpen ? (
-                                <ul >
-                                    <li>
-                                        <button>Low</button>
-                                    </li>
-                                    <li>
-                                        <button>Normal</button>
-                                    </li>
-                                    <li>
-                                        <button>High</button>
-                                    </li>
-                                    <li>
-                                        <button>Urgent</button>
-                                    </li>
-                                </ul>
-                            ) : null}
-                            {priorityOpen ? <div>Is Open</div> : <div>Is Closed</div>} */}
-
                             <label>Priority:</label>
                             <input type="priority"
                             placeholder="Priority"
@@ -151,7 +132,5 @@ function AddZendeskTicket(props) {
             </div>
         </div>
     ):"";
-
 }
-
 export default AddZendeskTicket

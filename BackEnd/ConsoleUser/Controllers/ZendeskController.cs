@@ -90,7 +90,7 @@ namespace Zendesk.Controllers
                     if (ticket.subject != null) dashboardTicket.Subject = ticket.subject;
                     if (ticket.status != null) dashboardTicket.Status = ticket.status;
                     if (ticket.assignee_id != null) dashboardTicket.Recipient = ticket.assignee_id.ToString();//TODO assignee or recepient
-                    if (ticket.custom_fields.Count>0) { dashboardTicket.Billable = GetBillableCustomField(ticket, billableId); } else { dashboardTicket.Billable = "false"; }
+                    if (ticket.custom_fields.Count>0) { dashboardTicket.Billable = GetBillableCustomField(ticket, billableId); } else { dashboardTicket.Billable = false; }
                     dashboardTicket.Priority = ticket.priority;
                     dashboardTicket.RequestedDate = ticket.created_at.ToLocalTime().ToString();
                     dashboardTicket.TimeDue = GetTimeDueMinusOffHours(dashboardTicket.Organisation, dashboardTicket.Priority, DateTime.Parse(dashboardTicket.RequestedDate), customers, supportLevel).ToString();
@@ -107,7 +107,7 @@ namespace Zendesk.Controllers
         }
 
         //Getting billable field
-        private static string GetBillableCustomField(Ticket ticket, string billableId)
+        private static bool GetBillableCustomField(Ticket ticket, string billableId)
         {
             var billable = new List<ConsoleUser.Models.Domain.CustomField>();
 
@@ -121,24 +121,15 @@ namespace Zendesk.Controllers
                 {
                     if (value == "")
                     {
-                        return "false";
+                        return false;
                     }
                     else
                     {
-
-                    if (fieldDict["value"].ToObject<bool>())
-                    {
-                        return "true";
-                    }
-                    else
-                    {
-                        return "false";
-
-                    }
+                        return (fieldDict["value"].ToObject<bool>());
                     }
                 }
             }
-            return "false";
+            return false;
         }
 
         //Finding user name from zendesk users api

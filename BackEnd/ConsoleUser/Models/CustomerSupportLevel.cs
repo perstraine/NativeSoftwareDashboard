@@ -5,7 +5,6 @@ namespace ConsoleUser.Models
     [Keyless]
     public class CustomerSupportLevel
     {
-        //public int Id { get; set; }
         public int SupportLevel { get; set; }   
         public int ResponseTimeUrgent { get; set; }
         public int ResponseTimeHigh { get; set; }
