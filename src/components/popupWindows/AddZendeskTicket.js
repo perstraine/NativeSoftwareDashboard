@@ -1,36 +1,32 @@
 import axios from 'axios';
-import { useEffect, useState, useRef } from "react";
+import {useState, useEffect} from "react";
 import styles from "./PopupWindows.module.css";
 
 function AddZendeskTicket(props) {
     useEffect(() => {
         getInfo();
       }, []);
-
-    const[priorityOpen, setPriorityOpen] = useState(false);
-    const[typeOpen, setTypeOpen] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
     const[subject, setSubject] = useState("");
     const[comment, setComment] = useState("");
-    const[priority, setPriority] = useState("");
-    const[type, setType] = useState("");
+    const[priority, setPriority] = useState("normal");
+    const[type, setType] = useState("question");
     const [customer, setCustomer] = useState("");
-
-    const handlePriorityOpen = () => {
-        setPriorityOpen(!priorityOpen);
-      };
 
     let customerEmail = localStorage.getItem('email');
     async function getInfo() {
       try {
+      const url = process.env.REACT_APP_API_BASE_URL + "/api/DashboardInfo/Customer";
+
         const response = await axios.get(
-          "https://localhost:7001/api/DashboardInfo/Customer",{ params: { email: customerEmail } });
+          url,{ params: { email: customerEmail } });
         //console.log(response);
         setCustomer(response.data.customer);
       } catch (error) {}
       }
 
-    const onSubmitClick = (e) => {
-        e.preventDefault();
+  const onSubmitClick = () => {
+    
         setSubject(subject);
         setComment(comment);
         setPriority(priority);
@@ -51,8 +47,9 @@ function AddZendeskTicket(props) {
             ]
             }
           };
-        console.log(ticket.ticket);
-        axios.post('https://localhost:7001/api/NewTicket',ticket.ticket)
+      console.log(ticket.ticket);
+      const url = process.env.REACT_APP_API_BASE_URL + "/api/NewTicket";
+        axios.post(url,ticket.ticket)
         .then((response) => {
             props.setTrigger(false);
             //console.log(response);
@@ -62,6 +59,7 @@ function AddZendeskTicket(props) {
             console.log(error);
 
         });
+    setDisableButton(false);
     }
 
     function handleChange(e) {
@@ -78,59 +76,99 @@ function AddZendeskTicket(props) {
             setType(e.target.value)
         } 
     }
-    return (props.trigger)?(
-        <div id={styles.popup} >
-            <div id={styles.popupinner}>
-                <div id={styles.userName}>
-                    {customer}
-                </div>
-                <div  id={styles.windowName}>
-                    New Zendesk Ticket
-                </div>
-                <form id={styles.formStyle}>
-                    <div id={styles.subject}>
-                        <label>Subject:</label>
-                        <input type="subject"
-                        placeholder="Subject"
-                        value={subject}
-                        name="subject"
-                        onChange={handleChange}></input>
-                    </div>
-                    <div id={styles.comment}>
-                        <label>Comment:</label>
-                        <input type="comment"
-                        placeholder="Comment"
-                        value={comment}
-                        name="comment"
-                        onChange={handleChange}></input>
-                    </div>
-                    <div id={styles.prioritytype} >
-                        <div id={styles.prioritydropdown}>
-                            <label>Priority:</label>
-                            <input type="priority"
-                            placeholder="Priority"
-                            value={priority}
-                            name="priority"
-                            onChange={handleChange}></input>
-
-                        </div>
-                        <div id={styles.typedropdown}>
-                            <label>Type:</label>
-                            <input type="type"
-                            placeholder="Type"
-                            value={type}
-                            name="type"
-                            onChange={handleChange}></input>
-                        </div>
-                      </div>
-                </form>
-                <div id={styles.submitbuttons}>
-                <button id={styles.closeButton} onClick={()=> props.setTrigger(false)}>Cancel</button>
-                <button id={styles.closeButton} onClick={onSubmitClick}>Ok</button>
-                </div>
-                {props.children}
+    return props.trigger ? (
+      <div id={styles.popup}>
+        <div id={styles.popupinner}>
+          <div id={styles.userName}>{customer}</div>
+          <div id={styles.windowName}>New Zendesk Ticket</div>
+          <form id={styles.formStyle}>
+            <div id={styles.subject}>
+              <label className={styles.label}>Subject:</label>
+              <input
+                className={styles.input}
+                type="subject"
+                placeholder="Subject"
+                value={subject}
+                name="subject"
+                onChange={handleChange}
+              ></input>
             </div>
+            <div id={styles.comment}>
+              <label className={styles.label}>Comment:</label>
+              <input
+                className={styles.input}
+                type="comment"
+                placeholder="Comment"
+                value={comment}
+                name="comment"
+                onChange={handleChange}
+              ></input>
+            </div>
+            <div id={styles.prioritytype}>
+              <div id={styles.prioritydropdown}>
+                <label className={styles.label}>Priority:</label>
+                <select
+                  className={styles.input}
+                  type="priority"
+                  placeholder="Priority"
+                  value={priority}
+                  name="priority"
+                  onChange={handleChange}
+                >
+                  <option value="urgent">Urgent</option>
+                  <option value="high">High</option>
+                  <option value="normal" selected>
+                    Normal
+                  </option>
+                  <option value="low">Low</option>
+                </select>
+              </div>
+              <div id={styles.typedropdown}>
+                <label className={styles.label}>Type:</label>
+                <select
+                  className={styles.input}
+                  type="type"
+                  placeholder="Type"
+                  value={type}
+                  name="type"
+                  onChange={handleChange}
+                >
+                  <option value="question" selected>
+                    Question
+                  </option>
+                  <option value="incident">Incident</option>
+                  <option value="problem">Problem</option>
+                  <option value="task">Task</option>
+                </select>
+              </div>
+            </div>
+          </form>
+          <div id={styles.submitbuttons}>
+            <button
+              id={styles.closeButton}
+              onClick={() => props.setTrigger(false)}
+            >
+              Cancel
+            </button>
+            <button
+              id={styles.closeButton}
+              onClick={() => {
+                if (!disableButton) {
+                  setDisableButton(true);
+                  onSubmitClick();
+                }
+              }}
+            >
+              Ok
+            </button>
+          </div>
+          {props.children}
         </div>
-    ):"";
+      </div>
+    ) : (
+      ""
+    );
+
 }
+
 export default AddZendeskTicket

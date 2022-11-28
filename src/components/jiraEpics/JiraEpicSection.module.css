@@ -88,6 +88,18 @@
 #epic[statuscolor="green"]{
     background-color: #7aff64;
     color: #000000;
+}#epic[statuscolor="palered"]{
+    background-color: #848ae4;
+    color: #000000;
+}#epic[statuscolor="paleorange"]{
+    background-color: #d59660;
+    color: #000000;
+}#epic[statuscolor="paleyellow"]{
+        background-color: #cac283;
+    color: #000000;
+}#epic[statuscolor="palegreen"]{
+    background-color: #9edf92;
+    color: #000000;
 }
 
 #chevronArrowDown {
@@ -128,8 +140,15 @@
     background-color: white;
     color: #000000;
     border-radius: 5px;
+    padding: 2px 0;
 }
 .dropdownItem{
     padding: 2px 4px;
     text-decoration: none;
+    border-radius: 5px;
+
+}
+
+.dropdownItem:hover{
+    background-color: #d3d3d3;
 }

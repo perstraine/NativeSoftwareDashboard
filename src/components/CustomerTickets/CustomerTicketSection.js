@@ -24,7 +24,8 @@ function CustomerTicketSection() {
     async function getTicket() {
       try {
         let userType = localStorage.getItem('userType');
-        const response = await axios.get('https://localhost:7001/api/CustomerView', { params: { userType: userType } });
+        const url = process.env.REACT_APP_API_BASE_URL + "/api/CustomerView";
+        const response = await axios.get(url, { params: { userType: userType } });
         setTicketList(response.data);
         setLoading(!loading);
       }

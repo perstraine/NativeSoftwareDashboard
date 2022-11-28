@@ -13,8 +13,9 @@ export default function DashboardHeader() {
   const [closed, setClosed] = useState(0);
   async function getInfo() {
     try {
+      const url = process.env.REACT_APP_API_BASE_URL + "/api/DashboardInfo";
       const response = await axios.get(
-        "https://localhost:7001/api/DashboardInfo"
+        url
       );
       setActive(response.data.activeTickets);
       setUrgent(response.data.urgentTickets);

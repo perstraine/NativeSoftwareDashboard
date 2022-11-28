@@ -38,9 +38,10 @@ export default function CustomerDashboardHeader() {
   let customerEmail = localStorage.getItem('email');
   async function getInfo() {
     try {
+      const url = process.env.REACT_APP_API_BASE_URL + "/api/DashboardInfo/Customer";
       const response = await axios.get(
-        "https://localhost:7001/api/DashboardInfo/Customer",{ params: { email: customerEmail } });
-      //console.log(response);
+        url,{ params: { email: customerEmail } }
+      );
       setActive(response.data.activeTickets);
       setClosed(response.data.closedTickets);
       setCustomer(response.data.customer);
@@ -82,10 +83,9 @@ export default function CustomerDashboardHeader() {
             <img src={CogWheel} id={styles.cogwheelDropdown} alt="CogWheel" />
           </div>
           {open?
-            <div id = {styles.dropdownMenu}>
+            <div id={styles.dropdownMenu} onClick={() => { setOpen(!open) }}>
               <ul>
               <li className={styles.dropdownItem} onClick={()=>setAddJiraRequest(true)}><h3>New Jira Request</h3></li>
-              <li className={styles.dropdownItem} onClick={()=>setAddJiraComment(true)}><h3>Add Jira Comment</h3></li>
               <li className={styles.dropdownItem} onClick={()=>setAddZenTicketPopup(true)}><h3>Add Zendesk Ticket</h3></li>
               <li className={styles.dropdownItem} onClick={()=>setViewResponseTime(true)}><h3>View Response Time</h3></li>
               </ul>
