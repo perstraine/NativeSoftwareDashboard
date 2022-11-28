@@ -1,4 +1,5 @@
 ﻿using ConsoleUser.Controllers;
+using ConsoleUser.Models;
 using ConsoleUser.Models.Domain;
 using ConsoleUser.Models.DTO;
 using ConsoleUser.Repositories;
@@ -20,12 +21,14 @@ namespace Zendesk.Controllers
     [Route("api/[controller]")]
     public class CustomerViewController : ControllerBase
     {
+        private readonly IConfiguration configuration;
         private readonly IUserRepository userRepository;
         private readonly ICustomerRepository customerRepository;
         private readonly ISupportLevelRepository customerSupportLevelRepository;
 
-        public CustomerViewController(ICustomerRepository customerRepository, ISupportLevelRepository customerSupportLevelRepository, IUserRepository userRepository)
+        public CustomerViewController(IConfiguration configuration, ICustomerRepository customerRepository, ISupportLevelRepository customerSupportLevelRepository, IUserRepository userRepository)
         {
+            this.configuration = configuration;
             this.userRepository = userRepository;
             this.customerRepository = customerRepository;
             this.customerSupportLevelRepository = customerSupportLevelRepository;
@@ -34,9 +37,14 @@ namespace Zendesk.Controllers
         [HttpGet]
         public async Task<IActionResult> GetTickets(string userType)
         {
-            string BasicAuth = "Basic cmFuanVyYXZlZGV2QGdtYWlsLmNvbTpXZWJkZXZfMjAyMg==";
-            string Cookie = "__cf_bm=NV4J3cTJmKvuqQCpPM5uYQygQbMa1KqcKC74uEfpYRE-1669145356-0-AQ8bmpK/6KOJqFK753Q+XKYR/nOaz6GgpzbhtlKOOBFY/Do8Z5sRIUYKKWLDpkXAsMbZGbWPNXA/jgWFl1wblgDcguCWBfSeLrxzRVI4UGcD; __cfruid=353ffba05ab8b9f0ee0a58e3b51e838c95d2159f-1669143409; __cfruid=5b67cf441a7537636be54b819fa8ae1bf4e0c42a-1669145370; _zendesk_cookie=BAhJIhl7ImRldmljZV90b2tlbnMiOnt9fQY6BkVU--459ed01949a36415c1716b5711271c3d08918307";
-            var options = new RestClientOptions("https://native2881.zendesk.com")
+            var BasicAuth = configuration.GetValue<string>("ZendeskAuthKey");
+            var Cookie = configuration.GetValue<string>("ZendeskCookieKey");
+            var DomainUrl = configuration.GetSection("ZendeskAPI:Domain").Value;
+            var UsersUrl = configuration.GetSection("ZendeskAPI:Users").Value;
+            var MetrixUrl = configuration.GetSection("ZendeskAPI:Metrix").Value;
+            //var UserTicketsUrl = configuration.GetSection("ZendeskAPI:UserTickets").Value;
+
+            var options = new RestClientOptions(DomainUrl)
             {
                 ThrowOnAnyError = true,
                 MaxTimeout = -1  // 1 second
@@ -49,16 +57,16 @@ namespace Zendesk.Controllers
 
             foreach (var user in users)
             {
-                if(user.UserType == userType)
+                if (user.UserType == userType)
                 {
                     userEmail = user.Email;
                     break;
                 }
             }
-  
+
             var client = new RestClient(options);
-            var usersRequest = new RestRequest("/api/v2/users", Method.Get);
-            var metricsRequest = new RestRequest("/api/v2/ticket_metrics.json", Method.Get);
+            var usersRequest = new RestRequest(UsersUrl, Method.Get);
+            var metricsRequest = new RestRequest(MetrixUrl, Method.Get);
 
             usersRequest.AddHeader("Authorization", BasicAuth);
             metricsRequest.AddHeader("Authorization", BasicAuth);
@@ -81,25 +89,54 @@ namespace Zendesk.Controllers
                 }
             }
             var apiString = "/api/v2/users/" + userId + "/tickets/requested";
+            //var apiString = UsersUrl.ToString() + userId.ToString() + UserTicketsUrl.ToString();
             var userTicketRequest = new RestRequest(apiString, Method.Get);
             userTicketRequest.AddHeader("Authorization", BasicAuth);
             userTicketRequest.AddHeader("Cookie", Cookie);
             RestResponse UserTicketResponse = await client.ExecuteAsync(userTicketRequest);
-            var userTicket = JsonConvert.DeserializeObject<UserTicketData.UserTicketData>(UserTicketResponse.Content);
+            var userTicket = JsonConvert.DeserializeObject<ZendeskData>(UserTicketResponse.Content);
 
-            var dashboardUserTicketData = CreateUserTicketData(userTicket.tickets, zendeskUsers, zendeskMetrics.ticket_metrics, customers, supportLevel);
+            var dashboardUserTicketData = CreateUserTicketData(userTicket, zendeskUsers, zendeskMetrics.ticket_metrics, customers, supportLevel);
 
             return Ok(dashboardUserTicketData);
         }
 
+        [HttpGet]
+        [Route("Response")]
+        public ConsoleUser.Models.CustomerSupportLevel GetCustomerResponse(string userType)
+        {
+            var customerSupportLevel = new ConsoleUser.Models.CustomerSupportLevel();
+            var supportLevel = customerSupportLevelRepository.GetAll();
+            var customers = customerRepository.GetAll();
+            var users = userRepository.GetAll();
+            
+
+            foreach(var customer in customers)
+            {
+                if(customer.CustomerCode == userType)
+                {
+                    foreach( var level in supportLevel)
+                    {
+                        if(customer.SupportLevel == level.SupportLevel)
+                        {
+                            return (level);
+                        }
+                    }
+                }
+            }
+
+
+            return (customerSupportLevel);
+        }
+
         //Creating the tickets
-        private static List<DashboardUserTicketData> CreateUserTicketData(List<UserTicketData.Ticket> tickets, ZendeskUsers? zendeskUsers, List<TicketMetric> ticketMetrices, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel)
+        private static List<DashboardUserTicketData> CreateUserTicketData(ZendeskData tickets, ZendeskUsers? zendeskUsers, List<TicketMetric> ticketMetrices, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel)
         {
             if(tickets == null) { return null; }
 
             var dashboardUserTicketData = new List<DashboardUserTicketData>();
 
-            foreach (var ticket in tickets)
+            foreach (var ticket in tickets.tickets)
             {
                 var userTicketData = new DashboardUserTicketData();
                 userTicketData.Id = ticket.id;
@@ -121,7 +158,7 @@ namespace Zendesk.Controllers
             return dashboardUserTicketData;
         }
 
-        private static string GetFirstUpdate(UserTicketData.Ticket ticket, List<TicketMetric> ticketMetrices)
+        private static string GetFirstUpdate(Ticket ticket, List<TicketMetric> ticketMetrices)
         {
             foreach (var ticketMatrix in ticketMetrices)
             {
@@ -134,7 +171,7 @@ namespace Zendesk.Controllers
             return ticket.created_at.ToLocalTime().ToString();
         }
 
-        private static string GetLastUpdate(UserTicketData.Ticket ticket, List<TicketMetric> ticketMetrices)
+        private static string GetLastUpdate(Ticket ticket, List<TicketMetric> ticketMetrices)
         {
             foreach (var ticketMatrix in ticketMetrices)
             {
@@ -147,7 +184,7 @@ namespace Zendesk.Controllers
             return ticket.created_at.ToLocalTime().ToString();
         }
 
-        private static string GetTimeDueMinusOffHours(UserTicketData.Ticket ticket, DateTime requestedDate, string priority, ZendeskUsers? zendeskUsers, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel)//DateTime requestedDate, UserTicketData.Ticket ticket, IEnumerable<ConsoleUser.Models.User> zendeskUsers, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel)
+        private static string GetTimeDueMinusOffHours(Ticket ticket, DateTime requestedDate, string priority, ZendeskUsers? zendeskUsers, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel)//DateTime requestedDate, UserTicketData.Ticket ticket, IEnumerable<ConsoleUser.Models.User> zendeskUsers, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel)
         {
             requestedDate = requestedDate.ToLocalTime();
             string organisation = GetZendeskUserName(zendeskUsers, ticket);
@@ -228,7 +265,7 @@ namespace Zendesk.Controllers
             return timeDue.ToString();
         }
 
-        private static string GetZendeskUserName(ZendeskUsers? zendeskUsers, UserTicketData.Ticket ticket)
+        private static string GetZendeskUserName(ZendeskUsers? zendeskUsers, Ticket ticket)
         {
             foreach (var user in zendeskUsers.users)
             {

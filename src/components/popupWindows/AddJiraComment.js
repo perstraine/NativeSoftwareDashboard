@@ -3,7 +3,7 @@ import { useEffect, useState, useRef } from "react";
 import styles from "./PopupWindows.module.css";
 
 
-function AddJiraRequest(props) {
+function AddJiraComment(props) {
     return (props.trigger)?(
         <div id={styles.popup} >
             <div id={styles.popupinner}>
@@ -11,13 +11,13 @@ function AddJiraRequest(props) {
                     TechSolutions
                 </div>
                 <div  id={styles.windowName}>
-                    Add Jira Request
+                    Add New Jira Comment                
                 </div>
             <button id={styles.closeButton} onClick={()=> props.setTrigger(false)}>Cancel</button>
             </div>
         </div>):"";
 }
 
-export default AddJiraRequest
+export default AddJiraComment
 
 

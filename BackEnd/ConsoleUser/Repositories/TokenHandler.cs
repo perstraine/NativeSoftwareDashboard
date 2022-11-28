@@ -21,10 +21,6 @@ namespace ConsoleUser.Repositories
             claims.Add(new Claim(ClaimTypes.UserData, user.UserName));
             claims.Add(new Claim(ClaimTypes.Email, user.Email));
 
-            //user.ForEach((role) =>
-            //{
-            //    claims.Add(new Claim(ClaimTypes.Role, role));
-            //});
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken(

@@ -33,6 +33,11 @@ input{
     font-size: 30px;
     font-weight: bolder;
 }
+#windowName p{
+    color: black;
+    font-size: 20px;
+    font-weight: lighter;
+}
 #formStyle{
     width: 100%;
 }
@@ -65,61 +70,38 @@ input{
     display: flex;
     flex-direction: column;
 }
-#dropdownMenu{
-    position: absolute;
-    top:80px;
-    right: 20px;
-    background-color:#81E8FF;
-    color: black;
-    border-radius: 10px;
-    width: 200px;
-}
 ul{
     list-style: none;
     margin-left: 30px;
     padding: 0;
 }
-#dropdownMenu ul li h3{
-    font-size: 15px;
-    font-weight: normal;
-    color: black;
-    cursor: pointer;
-}
-#dropdownMenu ul li h3:hover{
-    font-weight: bold;
-} 
 #submitbuttons{
     display: flex;
     margin-top: 20px;
     gap: 20px;
 }
-#submitbuttons button{
+button{
     width: 100%;
     height: 50px;
     background-color: #7b73ff;
     border: none;
     border-radius: 10px;
+    font-weight: bolder;
 }
-#dropdownMenuPriority{
-    position: absolute;
-    top:80px;
-    right: 20px;
-    background-color:#81E8FF;
+#responseTable{
     color: black;
-    border-radius: 10px;
-    width: 200px;
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 30px;
 }
-ul{
-    list-style: none;
-    margin-left: 30px;
-    padding: 0;
-}
-#dropdownMenuPriority ul li h3{
-    font-size: 15px;
-    font-weight: normal;
-    color: black;
-    cursor: pointer;
-}
-#dropdownMenuPriority ul li h3:hover{
+#responseTable, th, td {
+    border: 2px solid black;
+  }
+#tableHeader{
+    background-color: black;
     font-weight: bold;
-} 
+    color: white;
+}
+
+
