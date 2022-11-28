@@ -26,7 +26,8 @@ function AddJiraRequest(props) {
   }
   async function submitComment() {
     try {
-      await axios.post("https://localhost:7001/api/Jira/request", {
+      const url = process.env.REACT_APP_API_BASE_URL + "/api/Jira/request";
+      await axios.post(url, {
         name: name,
         subject: subject,
           email: email,

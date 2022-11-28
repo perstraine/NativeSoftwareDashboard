@@ -23,14 +23,16 @@ export default function Login() {
   useEffect(() => {
     setLoginToken(localStorage.getItem("token"));
     if(logintoken)
-      {const config = { headers: { Authorization: `Bearer ${logintoken}` } };
-      axios.get("https://localhost:7001/Auth/login",config)
+    {
+      const config = { headers: { Authorization: `Bearer ${logintoken}` } };
+      const url = process.env.REACT_APP_API_BASE_URL + "/Auth/login";
+      axios.get(url,config)
         .then((response) => {
           console.log(response);
           if (response.data === 'User Authorised') {
             if (localStorage.getItem("userType") === "Staff") {
               navigate("/dashboard");
-            } else {
+            } else{
               navigate("/customerdashboard");
             }
           }
@@ -52,12 +54,14 @@ export default function Login() {
       }
   }
 
-    const buttonClick = (e) => {
+  const buttonClick = (e) => {
+    console.log("OVERHERE", process.env.REACT_APP_API_BASE_URL);
       setLoading(!loading);
       e.preventDefault();
       setEmail(email);
       setPassword(password);
-      axios.post('https://localhost:7001/Auth/login', {
+      const url = process.env.REACT_APP_API_BASE_URL + "/Auth/login";
+      axios.post(url, {
         userEmail:email,
         password:password
       })

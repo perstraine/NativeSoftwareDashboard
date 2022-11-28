@@ -34,8 +34,9 @@ export default function CustomerDashboardHeader() {
 
   async function getInfo() {
     try {
+      const url = process.env.REACT_APP_API_BASE_URL + "/api/DashboardInfo";
       const response = await axios.get(
-        "https://localhost:7001/api/DashboardInfo"
+        url
       );
       setActive(response.data.activeTickets);
       setClosed(response.data.closedTickets);

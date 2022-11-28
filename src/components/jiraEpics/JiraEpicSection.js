@@ -20,11 +20,12 @@ export default function JiraEpicSection() {
   }, []);
     async function getJira() {
       try {
-          setUserType(localStorage.getItem('userType'))
-          const response = await axios.get("https://localhost:7001/api/Jira", {
+        setUserType(localStorage.getItem('userType'))
+        const url = process.env.REACT_APP_API_BASE_URL + "/api/Jira"
+          const response = await axios.get(url, {
             params: { userType: userType },
           });
-          let sorted = await quickSort(response.data)
+          let sorted = quickSort(response.data)
         console.log(response);
           setJira(sorted);
       setLoading(!loading);
@@ -34,7 +35,7 @@ export default function JiraEpicSection() {
                 console.log(error);
               };
   }
-  async function quickSort(list) {
+  function quickSort(list) {
     if (list.length < 2) return list;
     let pivot = list[0];
     let left = [];
@@ -73,13 +74,14 @@ export default function JiraEpicSection() {
       {loading ? (
         <FadeLoader color="#81E8FF" height={17} margin={6} width={4} />
       ) : (
+          jira.length > 0?
         jira.map((epic) => {
           if (userType === "Staff") {
             return <JiraEpicIssue key={epic.id} epic={epic} />;
           } else {
             return <JiraEpicCustomer key={epic.id} epic={epic} />;
           }
-        })
+        }):<div> No Jira Issues Found </div>
       )}
       <div>
         <div id={styles.chevronArrowDown}></div>

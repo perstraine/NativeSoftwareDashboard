@@ -45,8 +45,6 @@ namespace ConsoleUser.Controllers
                 jiraEpicIssues = CreateEpicInfoClient(jiraData, userType);
 
             }
-            Console.WriteLine(jiraEpicIssues[0].Name);
-
             return Ok(jiraEpicIssues);
         }
 
@@ -63,7 +61,7 @@ namespace ConsoleUser.Controllers
                     jiraEpic.StartDate = issue.fields.created;
                     jiraEpic.DueDate = issue.fields.duedate;
                     jiraEpic.Complete = issue.fields.aggregateprogress.percent;
-                    jiraEpic.url = issue.fields.status.iconUrl + "browse/" + issue.key;
+                    jiraEpic.urgencyColour = jiraEpic.Complete > 100 ? "palered" : jiraEpic.Complete > 90 ? "paleorange" : jiraEpic.Complete > 75 ? "paleyellow" : "palegreen";
                     epicList.Add(jiraEpic);
                 }
 

@@ -16,12 +16,18 @@ function Dashboard() {
   const logintoken = localStorage.getItem('token');
   const userType = localStorage.getItem('userType');
     const config = { headers: { Authorization: `Bearer ${logintoken}` } };
-    if (logintoken) // && userType === 'Staff')
+    if (logintoken)
     {
       try {
+        const url = process.env.REACT_APP_API_BASE_URL + "/Auth/login";
         await axios
-          .get("https://localhost:7001/Auth/login", config);
-        setLoggedIn(true)
+          .get(url, config);
+        if (userType === "Staff") {
+          setLoggedIn(true)
+        }
+        else {
+          navigate('/')
+        }
       } 
       catch (error) {
         navigate('/');

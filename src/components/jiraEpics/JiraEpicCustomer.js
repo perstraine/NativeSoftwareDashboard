@@ -6,7 +6,7 @@ import AddJiraComment from "./AddJiraComment";
 export default function JiraEpicCustomer({ epic }) {
     const [isOpen, setIsOpen] = useState(false);
   const [addJiraCommentPopup, setAddJiraCommentPopup] = useState(false);
-    
+    console.log(epic.urgencyColour)
   let refUrl = useRef();
   useEffect(() => {
     let handler = (event) => {
@@ -39,15 +39,6 @@ export default function JiraEpicCustomer({ epic }) {
         <div className={styles.dot} statuscolor={epic.urgencyColour}></div>
         {isOpen && (
           <div id={styles.dropdown}>
-            <div>
-              <a
-                href={epic.url}
-                target="_blank"
-                className={styles.dropdownItem}
-              >
-                View in Jira
-              </a>
-            </div>
             <div className={styles.dropdownItem} onClick={()=>{setAddJiraCommentPopup(true)}}>
               Comment
             </div>
