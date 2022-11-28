@@ -55,7 +55,7 @@ namespace ConsoleUser.Controllers
             
             request.AddParameter("application/json", ticketToAdd, ParameterType.RequestBody);
 
-            RestResponse response = client.Execute(request);
+            client.Execute(request);
 
             return Ok();
         }
@@ -63,7 +63,7 @@ namespace ConsoleUser.Controllers
         private NewZendeskTicket.Ticket CreateNewTicket(NewTicketFromFrontend? responseData, ZendeskUsers? zendeskUsers)
         {
             NewZendeskTicket.CustomField billable = new NewZendeskTicket.CustomField();
-            billable.id = 12765904262169;
+            billable.id = 12920144709785;
             billable.value = true;
 
             var newticket = new NewZendeskTicket.Ticket();

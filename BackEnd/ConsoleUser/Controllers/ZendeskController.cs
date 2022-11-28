@@ -89,7 +89,7 @@ namespace Zendesk.Controllers
                     if (ticket.subject != null) dashboardTicket.Subject = ticket.subject;
                     if (ticket.status != null) dashboardTicket.Status = ticket.status;
                     if (ticket.assignee_id != null) dashboardTicket.Recipient = ticket.assignee_id.ToString();//TODO assignee or recepient
-                    if (ticket.custom_fields[0] != null) { dashboardTicket.Billable = GetBillableCustomField(ticket.custom_fields[0]); } else { dashboardTicket.Billable = false; }
+                    if (ticket.custom_fields.Count>0) { dashboardTicket.Billable = GetBillableCustomField(ticket.custom_fields[0]); } else { dashboardTicket.Billable = "false"; }
                     dashboardTicket.Priority = ticket.priority;
                     dashboardTicket.RequestedDate = ticket.created_at.ToLocalTime().ToString();
                     dashboardTicket.TimeDue = GetTimeDueMinusOffHours(dashboardTicket.Organisation, dashboardTicket.Priority, DateTime.Parse(dashboardTicket.RequestedDate), customers, supportLevel).ToString();
@@ -106,11 +106,20 @@ namespace Zendesk.Controllers
         }
 
         //Getting billable field
-        private static bool GetBillableCustomField(object jObject)
+        private static string GetBillableCustomField(object jObject)
         {
             var jsonString = JsonConvert.SerializeObject(jObject);
             var fieldDict = JObject.Parse(jsonString);
-            return fieldDict["value"].ToObject<bool>();
+            
+            if (fieldDict["value"].ToObject<bool>())
+            {
+                return "true";
+            }
+            else
+            {
+                return "false";
+
+            }
         }
 
         //Finding user name from zendesk users api

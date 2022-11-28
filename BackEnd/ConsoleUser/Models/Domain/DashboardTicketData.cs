@@ -9,7 +9,7 @@ namespace ConsoleUser.Models.Domain
         [AllowNull] public string Subject { get; set; }
         [AllowNull] public string Status { get; set; }
         [AllowNull] public string Recipient { get; set; }
-        [AllowNull] public bool Billable { get; set; }
+        [AllowNull] public string Billable { get; set; }
         [AllowNull] public string Priority { get; set; }
         [AllowNull] public string RequestedDate { get; set; } // TODO confirm requested or created time
         [AllowNull] public string TimeDue { get; set; }
