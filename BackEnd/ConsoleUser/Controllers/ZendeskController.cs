@@ -41,6 +41,7 @@ namespace Zendesk.Controllers
             var DomainUrl = configuration.GetSection("ZendeskAPI:Domain").Value;
             var TicketUrl = configuration.GetSection("ZendeskAPI:Tickets").Value;
             var UsersUrl = configuration.GetSection("ZendeskAPI:Users").Value;
+            var BillableId = configuration.GetValue<string>("BillableId");
 
             var options = new RestClientOptions(DomainUrl)
             {
@@ -69,13 +70,13 @@ namespace Zendesk.Controllers
             var supportLevel = customerSupportLevelRepository.GetAll();
 
             // Creating Json for dashboard
-            var dashboardTickets = CreateTicketInfo(zendeskData, zendeskUsers, customers, supportLevel);
+            var dashboardTickets = CreateTicketInfo(zendeskData, zendeskUsers, customers, supportLevel, BillableId);
 
             return Ok(dashboardTickets);
         }
 
         // Dashboard specific JSON creation
-        private static List<DashboardTicketData> CreateTicketInfo(ZendeskData? zendeskData, ZendeskUsers? zendeskUsers, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel)
+        private static List<DashboardTicketData> CreateTicketInfo(ZendeskData? zendeskData, ZendeskUsers? zendeskUsers, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel, string billableId)
         {
             var ticketList = new List<DashboardTicketData>();
             foreach (var ticket in zendeskData.tickets)
@@ -89,7 +90,7 @@ namespace Zendesk.Controllers
                     if (ticket.subject != null) dashboardTicket.Subject = ticket.subject;
                     if (ticket.status != null) dashboardTicket.Status = ticket.status;
                     if (ticket.assignee_id != null) dashboardTicket.Recipient = ticket.assignee_id.ToString();//TODO assignee or recepient
-                    if (ticket.custom_fields.Count>0) { dashboardTicket.Billable = GetBillableCustomField(ticket.custom_fields[0]); } else { dashboardTicket.Billable = "false"; }
+                    if (ticket.custom_fields.Count>0) { dashboardTicket.Billable = GetBillableCustomField(ticket, billableId); } else { dashboardTicket.Billable = "false"; }
                     dashboardTicket.Priority = ticket.priority;
                     dashboardTicket.RequestedDate = ticket.created_at.ToLocalTime().ToString();
                     dashboardTicket.TimeDue = GetTimeDueMinusOffHours(dashboardTicket.Organisation, dashboardTicket.Priority, DateTime.Parse(dashboardTicket.RequestedDate), customers, supportLevel).ToString();
@@ -106,20 +107,38 @@ namespace Zendesk.Controllers
         }
 
         //Getting billable field
-        private static string GetBillableCustomField(object jObject)
+        private static string GetBillableCustomField(Ticket ticket, string billableId)
         {
-            var jsonString = JsonConvert.SerializeObject(jObject);
-            var fieldDict = JObject.Parse(jsonString);
-            
-            if (fieldDict["value"].ToObject<bool>())
-            {
-                return "true";
-            }
-            else
-            {
-                return "false";
+            var billable = new List<ConsoleUser.Models.Domain.CustomField>();
 
+            foreach(var customField in ticket.custom_fields)
+            {
+                var jsonString = JsonConvert.SerializeObject(customField);
+                var fieldDict = JObject.Parse(jsonString);
+                var id = fieldDict["id"].ToObject<long>().ToString();
+                var value = fieldDict["value"].ToString();
+                if (id == billableId)
+                {
+                    if (value == "")
+                    {
+                        return "false";
+                    }
+                    else
+                    {
+
+                    if (fieldDict["value"].ToObject<bool>())
+                    {
+                        return "true";
+                    }
+                    else
+                    {
+                        return "false";
+
+                    }
+                    }
+                }
             }
+            return "false";
         }
 
         //Finding user name from zendesk users api

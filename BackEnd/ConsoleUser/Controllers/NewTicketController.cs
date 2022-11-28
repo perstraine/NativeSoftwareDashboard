@@ -31,7 +31,8 @@ namespace ConsoleUser.Controllers
             var UsersUrl = configuration.GetSection("ZendeskAPI:Users").Value;
             var MetrixUrl = configuration.GetSection("ZendeskAPI:Metrix").Value;
             var TicketUrl = configuration.GetSection("ZendeskAPI:Tickets").Value;
-            
+            var BillableId = configuration.GetValue<string>("BillableId");
+
             var options = new RestClientOptions(DomainUrl)
             {
                 ThrowOnAnyError = true,
@@ -45,7 +46,7 @@ namespace ConsoleUser.Controllers
             var zendeskUsers = JsonConvert.DeserializeObject<ZendeskUsers>(usersResponse.Content);
 
             NewZendeskTicket.NewTicket ticketToAdd = new NewZendeskTicket.NewTicket();
-            NewZendeskTicket.Ticket ticketData = CreateNewTicket(newTicketFromFrontend, zendeskUsers);
+            NewZendeskTicket.Ticket ticketData = CreateNewTicket(newTicketFromFrontend, zendeskUsers, BillableId);
             ticketToAdd.ticket = ticketData;
 
             var request = new RestRequest(TicketUrl, Method.Post);
@@ -60,10 +61,10 @@ namespace ConsoleUser.Controllers
             return Ok();
         }
 
-        private NewZendeskTicket.Ticket CreateNewTicket(NewTicketFromFrontend? responseData, ZendeskUsers? zendeskUsers)
+        private NewZendeskTicket.Ticket CreateNewTicket(NewTicketFromFrontend? responseData, ZendeskUsers? zendeskUsers, string customFieldBillableId)
         {
             NewZendeskTicket.CustomField billable = new NewZendeskTicket.CustomField();
-            billable.id = 12920144709785;
+            billable.id = long.Parse(customFieldBillableId);
             billable.value = true;
 
             var newticket = new NewZendeskTicket.Ticket();
