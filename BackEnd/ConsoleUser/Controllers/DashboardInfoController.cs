@@ -182,7 +182,6 @@ namespace Zendesk.Controllers
                     loggedInUser = user;
                 }
             }
-            dashboardGeneralInfo.Customer = loggedInUser.name;
 
             foreach (var ticket in zendeskData.tickets)
             {
