@@ -5,7 +5,8 @@ import styles from "../popupWindows/PopupWindows.module.css";
 
 function AddJiraComment(props) {
     const [name, setName] = useState('');
-    const [comment, setComment] = useState('');
+  const [comment, setComment] = useState('');
+  const [disableButton, setDisableButton] = useState(false);
     function handleChange(e) {
         if (e.target.name === "name") {
             setName(e.target.value);
@@ -13,7 +14,8 @@ function AddJiraComment(props) {
             setComment(e.target.value);
         }
     }
-    async function submitComment() {
+  async function submitComment() {
+      setDisableButton(true)
       try {
           const url = process.env.REACT_APP_API_BASE_URL + "/api/Jira/comment";
             await axios.post(url, {
@@ -27,7 +29,8 @@ function AddJiraComment(props) {
         } finally {
             setName('');
             setComment('');
-            props.setTrigger(false);
+        props.setTrigger(false);
+        setDisableButton(false);
         }
     }
     return props.trigger ? (
@@ -48,14 +51,13 @@ function AddJiraComment(props) {
             </div>
             <div id={styles.comment}>
               <label className={styles.label}>Comment:</label>
-                        <textarea 
-                            id={styles.textArea}
+              <textarea
+                id={styles.textArea}
                 className={styles.input}
                 name="comment"
                 value={comment}
                 onChange={handleChange}
-              >
-              </textarea>
+              ></textarea>
             </div>
           </form>
           <div id={styles.submitbuttons}>
@@ -65,7 +67,9 @@ function AddJiraComment(props) {
             >
               Cancel
             </button>
-                    <button id={styles.closeButton} onClick={submitComment}>Ok</button>
+            <button id={styles.closeButton} onClick={() => { if(!disableButton)submitComment() }}>
+              Ok
+            </button>
           </div>
         </div>
       </div>

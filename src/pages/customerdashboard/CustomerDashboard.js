@@ -32,6 +32,8 @@ function CustomerDashboard() {
         } 
         catch (error) {
           navigate('/');
+          console.log(error);
+
         }
       } 
       else 

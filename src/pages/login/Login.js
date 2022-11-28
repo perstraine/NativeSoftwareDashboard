@@ -39,7 +39,6 @@ export default function Login() {
           else{
             setErrorMessage("Email and password does not match. Please try again.")
           }
-
         })
       .catch((err) =>{
 
@@ -59,6 +58,7 @@ export default function Login() {
       setLoading(!loading);
       e.preventDefault();
       setEmail(email);
+      localStorage.setItem('email',email);
       setPassword(password);
       const url = process.env.REACT_APP_API_BASE_URL + "/Auth/login";
       axios.post(url, {
