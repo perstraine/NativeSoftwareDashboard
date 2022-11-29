@@ -38,6 +38,7 @@ namespace Zendesk.Controllers
         {
             var BasicAuth = configuration.GetValue<string>("ZendeskAuthKey");
             var Cookie = configuration.GetValue<string>("ZendeskCookieKey");
+            var TicketsUrl = configuration.GetValue<string>("TicketsUrl");
             var DomainUrl = configuration.GetSection("ZendeskAPI:Domain").Value;
             var TicketUrl = configuration.GetSection("ZendeskAPI:Tickets").Value;
             var UsersUrl = configuration.GetSection("ZendeskAPI:Users").Value;
@@ -70,13 +71,13 @@ namespace Zendesk.Controllers
             var supportLevel = customerSupportLevelRepository.GetAll();
 
             // Creating Json for dashboard
-            var dashboardTickets = CreateTicketInfo(zendeskData, zendeskUsers, customers, supportLevel, BillableId);
+            var dashboardTickets = CreateTicketInfo(zendeskData, zendeskUsers, customers, supportLevel, BillableId, TicketsUrl);
 
             return Ok(dashboardTickets);
         }
 
         // Dashboard specific JSON creation
-        private static List<DashboardTicketData> CreateTicketInfo(ZendeskData? zendeskData, ZendeskUsers? zendeskUsers, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel, string billableId)
+        private static List<DashboardTicketData> CreateTicketInfo(ZendeskData? zendeskData, ZendeskUsers? zendeskUsers, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel, string billableId, string ticketsUrl)
         {
             var ticketList = new List<DashboardTicketData>();
             foreach (var ticket in zendeskData.tickets)
@@ -95,7 +96,7 @@ namespace Zendesk.Controllers
                     dashboardTicket.RequestedDate = ticket.created_at.ToLocalTime().ToString();
                     dashboardTicket.TimeDue = GetTimeDueMinusOffHours(dashboardTicket.Organisation, dashboardTicket.Priority, DateTime.Parse(dashboardTicket.RequestedDate), customers, supportLevel).ToString();
                     if (ticket.type != null) dashboardTicket.Type = ticket.type;
-                    if (ticket.url != null) dashboardTicket.url = "https://native9107.zendesk.com/agent/tickets/" + ticket.id.ToString();
+                    if (ticket.url != null) dashboardTicket.url = ticketsUrl + ticket.id.ToString();
                     dashboardTicket.TrafficLight = GetTrafficLight(DateTime.Parse(dashboardTicket.TimeDue));
                     ticketList.Add(dashboardTicket);
                 }
