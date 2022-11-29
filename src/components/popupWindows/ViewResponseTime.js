@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import styles from "./PopupWindows.module.css";
 
 function ViewResponseTime(props) {
@@ -12,9 +12,10 @@ function ViewResponseTime(props) {
     let userType = localStorage.getItem('userType');
     async function getInfo() {
         if(props.trigger){
+            const url = process.env.REACT_APP_API_BASE_URL + "/api/CustomerView/Response";
             try {
                 const response = await axios.get(
-                    "https://localhost:7001/api/CustomerView/Response",{ params: { userType: userType } });
+                    url,{ params: { userType: userType } });
                     setSupportLevel(response.data);
                     //console.log(response.data);
             } 

@@ -42,7 +42,8 @@ namespace Zendesk.Controllers
             var DomainUrl = configuration.GetSection("ZendeskAPI:Domain").Value;
             var UsersUrl = configuration.GetSection("ZendeskAPI:Users").Value;
             var MetrixUrl = configuration.GetSection("ZendeskAPI:Metrix").Value;
-            //var UserTicketsUrl = configuration.GetSection("ZendeskAPI:UserTickets").Value;
+            var CustomerTicketsUrl = configuration.GetValue<string>("TicketsUrl");
+            
 
             var options = new RestClientOptions(DomainUrl)
             {
@@ -96,7 +97,7 @@ namespace Zendesk.Controllers
             RestResponse UserTicketResponse = await client.ExecuteAsync(userTicketRequest);
             var userTicket = JsonConvert.DeserializeObject<ZendeskData>(UserTicketResponse.Content);
 
-            var dashboardUserTicketData = CreateUserTicketData(userTicket, zendeskUsers, zendeskMetrics.ticket_metrics, customers, supportLevel);
+            var dashboardUserTicketData = CreateUserTicketData(userTicket, zendeskUsers, zendeskMetrics.ticket_metrics, customers, supportLevel, CustomerTicketsUrl);
 
             return Ok(dashboardUserTicketData);
         }
@@ -130,9 +131,9 @@ namespace Zendesk.Controllers
         }
 
         //Creating the tickets
-        private static List<DashboardUserTicketData> CreateUserTicketData(ZendeskData tickets, ZendeskUsers? zendeskUsers, List<TicketMetric> ticketMetrices, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel)
+        private static List<DashboardUserTicketData> CreateUserTicketData(ZendeskData tickets, ZendeskUsers? zendeskUsers, List<TicketMetric> ticketMetrices, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel, string CustomerTicketsUrl)
         {
-            if(tickets == null) { return null; }
+            if (tickets == null) { return null; }
 
             var dashboardUserTicketData = new List<DashboardUserTicketData>();
 
@@ -147,7 +148,7 @@ namespace Zendesk.Controllers
                 userTicketData.TimeDue = GetTimeDueMinusOffHours(ticket,ticket.created_at,ticket.priority,zendeskUsers,customers,supportLevel);
                 userTicketData.Priority = ticket.priority;
                 userTicketData.Type = ticket.type;
-                userTicketData.url = ticket.url;
+                userTicketData.url = CustomerTicketsUrl + ticket.id;
                 userTicketData.TrafficLight = GetTrafficLight(DateTime.Parse(userTicketData.TimeDue));
 
                 dashboardUserTicketData.Add(userTicketData);

@@ -6,12 +6,12 @@ function AddZendeskTicket(props) {
     useEffect(() => {
         getInfo();
       }, []);
-  const [disableButton, setDisableButton] = useState(false);
+    const[disableButton, setDisableButton] = useState(false);
     const[subject, setSubject] = useState("");
     const[comment, setComment] = useState("");
     const[priority, setPriority] = useState("normal");
     const[type, setType] = useState("question");
-    const [customer, setCustomer] = useState("");
+    const[customer, setCustomer] = useState("");
 
     let customerEmail = localStorage.getItem('email');
     async function getInfo() {
@@ -25,8 +25,12 @@ function AddZendeskTicket(props) {
       } catch (error) {}
       }
 
-  const onSubmitClick = () => {
-    
+      function disableOkButton(){
+        onSubmitClick();
+        
+      }
+      const onSubmitClick = () => {
+        setDisableButton(true);
         setSubject(subject);
         setComment(comment);
         setPriority(priority);
@@ -41,8 +45,7 @@ function AddZendeskTicket(props) {
               "email": localStorage.getItem('email'),
               "custom_fields": [
                 {
-                    "id": 12765904262169,
-                    "value": true
+                  "value": true
                 }
             ]
             }
@@ -59,7 +62,6 @@ function AddZendeskTicket(props) {
             console.log(error);
 
         });
-    setDisableButton(false);
     }
 
     function handleChange(e) {
@@ -144,23 +146,16 @@ function AddZendeskTicket(props) {
             </div>
           </form>
           <div id={styles.submitbuttons}>
-            <button
-              id={styles.closeButton}
-              onClick={() => props.setTrigger(false)}
-            >
-              Cancel
-            </button>
+            <button id={styles.closeButton} onClick={() => props.setTrigger(false)}> Cancel </button>
             <button
               id={styles.closeButton}
               onClick={() => {
-                if (!disableButton) {
+                if (!disableButton && comment!=='' && subject !== '') {
                   setDisableButton(true);
                   onSubmitClick();
                 }
               }}
-            >
-              Ok
-            </button>
+            > Ok </button>
           </div>
           {props.children}
         </div>
