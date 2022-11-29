@@ -40,7 +40,9 @@ function AddJiraComment(props) {
           <div id={styles.windowName}>Add Comment</div>
           <form id={styles.formStyle}>
             <div id={styles.subject}>
-              <label className={styles.label}>Name:</label>
+              <label className={styles.label} style={{ textAlign: "left" }}>
+                Name:
+              </label>
               <input
                 className={styles.input}
                 type="name"
@@ -50,7 +52,9 @@ function AddJiraComment(props) {
               ></input>
             </div>
             <div id={styles.comment}>
-              <label className={styles.label}>Comment:</label>
+              <label className={styles.label} style={{ textAlign: "left" }}>
+                Comment:
+              </label>
               <textarea
                 id={styles.textArea}
                 className={styles.input}
@@ -67,7 +71,12 @@ function AddJiraComment(props) {
             >
               Cancel
             </button>
-            <button id={styles.closeButton} onClick={() => { if(!disableButton)submitComment() }}>
+            <button
+              id={styles.closeButton}
+              onClick={() => {
+                if (!disableButton) submitComment();
+              }}
+            >
               Ok
             </button>
           </div>

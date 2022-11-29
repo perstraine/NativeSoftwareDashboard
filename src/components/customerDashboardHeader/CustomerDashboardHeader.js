@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import styles from "./CustomerDashboardHeader.module.css";
 import AddZendeskTicket from "../popupWindows/AddZendeskTicket";
 import AddJiraRequest from "../popupWindows/AddJiraRequest";
-import AddJiraComment from "../popupWindows/AddJiraComment";
 import ViewResponseTime from "../popupWindows/ViewResponseTime";
 
 export default function CustomerDashboardHeader() {
@@ -60,7 +59,6 @@ export default function CustomerDashboardHeader() {
   return (
     <div id={styles.headerContainer} >
       <AddJiraRequest trigger={addJiraRequest} setTrigger={setAddJiraRequest}></AddJiraRequest>
-      <AddJiraComment trigger={addJiraComment} setTrigger={setAddJiraComment}></AddJiraComment>
       <AddZendeskTicket trigger={addZenTicketPopup} setTrigger={setAddZenTicketPopup}></AddZendeskTicket>
       <ViewResponseTime trigger={viewResponseTime} setTrigger={setViewResponseTime}></ViewResponseTime>
       <div id={styles.logoContainer}>

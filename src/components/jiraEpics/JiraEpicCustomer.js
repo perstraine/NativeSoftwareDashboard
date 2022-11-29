@@ -6,7 +6,6 @@ import AddJiraComment from "./AddJiraComment";
 export default function JiraEpicCustomer({ epic }) {
     const [isOpen, setIsOpen] = useState(false);
   const [addJiraCommentPopup, setAddJiraCommentPopup] = useState(false);
-    console.log(epic.urgencyColour)
   let refUrl = useRef();
   useEffect(() => {
     let handler = (event) => {

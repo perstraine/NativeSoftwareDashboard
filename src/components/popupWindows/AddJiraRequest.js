@@ -71,7 +71,7 @@ function AddJiraRequest(props) {
             ></input>
           </div>
           <div id={styles.subject}>
-            <label className={styles.label}>Subjetc:</label>
+            <label className={styles.label}>Subject:</label>
             <input
               className={styles.input}
               type="name"
