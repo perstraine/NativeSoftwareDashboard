@@ -25,8 +25,8 @@ export default function JiraEpicSection() {
           const response = await axios.get(url, {
             params: { userType: userType },
           });
-          let sorted = quickSort(response.data)
-        console.log(response);
+        let sorted = quickSort(response.data)
+        if (sorted.length > 8) { sorted.length = 8; }
           setJira(sorted);
       setLoading(!loading);
           
