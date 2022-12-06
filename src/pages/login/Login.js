@@ -26,7 +26,7 @@ export default function Login() {
     {
       const config = { headers: { Authorization: `Bearer ${logintoken}` } };
       const url = process.env.REACT_APP_API_BASE_URL + "/Auth/login";
-      axios.get(url,config)
+      axios.get(url)
         .then((response) => {
           console.log(response);
           if (response.data === 'User Authorised') {

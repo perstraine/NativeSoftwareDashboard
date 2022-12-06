@@ -16,10 +16,12 @@ function AddZendeskTicket(props) {
     let customerEmail = localStorage.getItem('email');
     async function getInfo() {
       try {
-      const url = process.env.REACT_APP_API_BASE_URL + "/api/DashboardInfo/Customer";
-
+        let userToken = localStorage.getItem("token");
+        let customerEmail = localStorage.getItem('email');
+        const url = process.env.REACT_APP_API_BASE_URL + "/api/DashboardInfo/Customer";
+        const config = { headers: { Authorization: `Bearer ${userToken}` },  params: { email: customerEmail }};
         const response = await axios.get(
-          url,{ params: { email: customerEmail } });
+          url,config);
         //console.log(response);
         setCustomer(response.data.customer);
       } catch (error) {}

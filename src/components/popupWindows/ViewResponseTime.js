@@ -14,8 +14,10 @@ function ViewResponseTime(props) {
         if(props.trigger){
             const url = process.env.REACT_APP_API_BASE_URL + "/api/CustomerView/Response";
             try {
+                let userToken = localStorage.getItem("token");
+                const config = { headers: { Authorization: `Bearer ${userToken}` },  params: { userType: userType }};
                 const response = await axios.get(
-                    url,{ params: { userType: userType } });
+                    url,config);
                     setSupportLevel(response.data);
                     //console.log(response.data);
             } 

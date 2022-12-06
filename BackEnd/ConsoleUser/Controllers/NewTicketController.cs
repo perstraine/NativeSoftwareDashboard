@@ -9,10 +9,12 @@ using System.Net.Http.Headers;
 using System.Net;
 using System.Text;
 using System.ComponentModel;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ConsoleUser.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class NewTicketController : ControllerBase
     {

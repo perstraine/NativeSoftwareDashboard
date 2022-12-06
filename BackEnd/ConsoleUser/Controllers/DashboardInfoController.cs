@@ -2,6 +2,7 @@
 using ConsoleUser.Models.Domain;
 using ConsoleUser.Models.DTO;
 using ConsoleUser.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -69,6 +70,7 @@ namespace Zendesk.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [Route("Customer")]
         public async Task<IActionResult> GetCustomerTickets(string email)
         {

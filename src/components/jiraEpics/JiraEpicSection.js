@@ -20,11 +20,13 @@ export default function JiraEpicSection() {
   }, []);
     async function getJira() {
       try {
-        setUserType(localStorage.getItem('userType'))
-        const url = process.env.REACT_APP_API_BASE_URL + "/api/Jira"
-          const response = await axios.get(url, {
-            params: { userType: userType },
-          });
+        setUserType(localStorage.getItem('userType'));
+        let userToken = localStorage.getItem("token");
+        const config = { headers: { Authorization: `Bearer ${userToken}` }, params: { userType: userType } };
+        const url = process.env.REACT_APP_API_BASE_URL + "/api/Jira";
+          const response = await axios.get(url,
+            config
+            );
           let sorted = quickSort(response.data)
         console.log(response);
           setJira(sorted);

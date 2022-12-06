@@ -13,10 +13,12 @@ using System.Threading.Tasks;
 using ConsoleUser.Models.DTO;
 using Newtonsoft.Json.Linq;
 using System.Xml.Linq;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ConsoleUser.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class JiraController : ControllerBase
     {

@@ -1,13 +1,16 @@
 ﻿using ConsoleUser.Controllers;
+using ConsoleUser.DTO;
 using ConsoleUser.Models;
 using ConsoleUser.Models.Domain;
 using ConsoleUser.Models.DTO;
 using ConsoleUser.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -25,15 +28,20 @@ namespace Zendesk.Controllers
         private readonly IConfiguration configuration;
         private readonly ICustomerRepository customerRepository;
         private readonly ISupportLevelRepository customerSupportLevelRepository;
+        private readonly IUserRepository userRepository;
+        private readonly ITokenHandler tokenHandler;
 
-        public ZendeskController(IConfiguration configuration, ICustomerRepository customerRepository, ISupportLevelRepository customerSupportLevelRepository)
+        public ZendeskController(IConfiguration configuration, ICustomerRepository customerRepository, ISupportLevelRepository customerSupportLevelRepository, IUserRepository userRepository, ITokenHandler tokenHandler)
         {
             this.configuration = configuration;
             this.customerRepository = customerRepository;
             this.customerSupportLevelRepository = customerSupportLevelRepository;
+            this.userRepository = userRepository;
+            this.tokenHandler = tokenHandler;
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetTickets()
         {
             var BasicAuth = configuration.GetValue<string>("ZendeskAuthKey");

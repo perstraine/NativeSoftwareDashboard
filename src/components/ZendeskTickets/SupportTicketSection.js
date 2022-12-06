@@ -23,9 +23,10 @@ function SupportTicketSection() {
 
   async function getTicket() {
     try {
-      //let userType = localStorage.getItem(userType);
+      let userToken = localStorage.getItem("token");
+      const config = { headers: { Authorization: `Bearer ${userToken}` } };
       const url = process.env.REACT_APP_API_BASE_URL + "/api/Zendesk";
-      const response = await axios.get(url)
+      const response = await axios.get(url,config);
       setTicketList(response.data);
       setLoading(!loading);
     }

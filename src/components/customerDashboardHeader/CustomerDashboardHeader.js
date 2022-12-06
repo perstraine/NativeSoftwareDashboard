@@ -24,24 +24,19 @@ export default function CustomerDashboardHeader() {
   const [closed, setClosed] = useState(0);
   const [customer, setCustomer] = useState("");
   const [open, setOpen] = useState(false);
-  
-  // let menuRef = useRef();
-  // useEffect(()=>{
-  //   let handler = (e)=>{
-  //     if(!menuRef.current.contains(e.target)){
-  //       setOpen(false);
-  //     }
-  //   };
-  //   document.addEventListener("mousedown", handler);
-  // });
 
   let customerEmail = localStorage.getItem('email');
   async function getInfo() {
     try {
+      let userToken = localStorage.getItem("token");
+      const config = { headers: { Authorization: `Bearer ${userToken}` },  params: { email: customerEmail }};
       const url = process.env.REACT_APP_API_BASE_URL + "/api/DashboardInfo/Customer";
-      const response = await axios.get(
-        url,{ params: { email: customerEmail } }
+
+      const response = await axios.get(url, 
+        config
+        
       );
+
       setActive(response.data.activeTickets);
       setClosed(response.data.closedTickets);
       setCustomer(response.data.customer);
@@ -52,10 +47,6 @@ export default function CustomerDashboardHeader() {
       localStorage.removeItem('userType');
       navigate("/");
     }
-
-  function OpenPopupWindow(){
-    setAddZenTicketPopup(true)
-  }
 
   return (
     <div id={styles.headerContainer} >
