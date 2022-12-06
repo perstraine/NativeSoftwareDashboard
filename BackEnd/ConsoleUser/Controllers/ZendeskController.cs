@@ -28,16 +28,12 @@ namespace Zendesk.Controllers
         private readonly IConfiguration configuration;
         private readonly ICustomerRepository customerRepository;
         private readonly ISupportLevelRepository customerSupportLevelRepository;
-        private readonly IUserRepository userRepository;
-        private readonly ITokenHandler tokenHandler;
 
-        public ZendeskController(IConfiguration configuration, ICustomerRepository customerRepository, ISupportLevelRepository customerSupportLevelRepository, IUserRepository userRepository, ITokenHandler tokenHandler)
+        public ZendeskController(IConfiguration configuration, ICustomerRepository customerRepository, ISupportLevelRepository customerSupportLevelRepository)
         {
             this.configuration = configuration;
             this.customerRepository = customerRepository;
             this.customerSupportLevelRepository = customerSupportLevelRepository;
-            this.userRepository = userRepository;
-            this.tokenHandler = tokenHandler;
         }
 
         [HttpGet]
