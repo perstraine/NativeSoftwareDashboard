@@ -4,6 +4,7 @@ import styles from "../popupWindows/PopupWindows.module.css";
 
 
 function AddJiraComment(props) {
+  const BASE_URL = window.BASE_URL;
     const [name, setName] = useState('');
   const [comment, setComment] = useState('');
   const [disableButton, setDisableButton] = useState(false);
@@ -17,7 +18,7 @@ function AddJiraComment(props) {
   async function submitComment() {
       setDisableButton(true)
       try {
-          const url = process.env.REACT_APP_API_BASE_URL + "/api/Jira/comment";
+          const url = BASE_URL + "/api/Jira/comment";
             await axios.post(url, {
                 name: name,
                 message: comment,

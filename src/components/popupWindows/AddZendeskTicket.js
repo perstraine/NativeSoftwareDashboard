@@ -3,6 +3,7 @@ import {useState, useEffect} from "react";
 import styles from "./PopupWindows.module.css";
 
 function AddZendeskTicket(props) {
+  const BASE_URL = window.BASE_URL;
     useEffect(() => {
         getInfo();
       }, []);
@@ -16,7 +17,7 @@ function AddZendeskTicket(props) {
     let customerEmail = localStorage.getItem('email');
     async function getInfo() {
       try {
-      const url = process.env.REACT_APP_API_BASE_URL + "/api/DashboardInfo/Customer";
+      const url = BASE_URL + "/api/DashboardInfo/Customer";
 
         const response = await axios.get(
           url,{ params: { email: customerEmail } });
@@ -51,7 +52,7 @@ function AddZendeskTicket(props) {
             }
           };
       console.log(ticket.ticket);
-      const url = process.env.REACT_APP_API_BASE_URL + "/api/NewTicket";
+      const url = BASE_URL + "/api/NewTicket";
         axios.post(url,ticket.ticket)
         .then((response) => {
             props.setTrigger(false);

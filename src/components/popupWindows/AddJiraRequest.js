@@ -4,6 +4,7 @@ import styles from "./PopupWindows.module.css";
 
 
 function AddJiraRequest(props) {
+  const BASE_URL = window.BASE_URL;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [subject, setSubject] = useState("");
@@ -26,7 +27,7 @@ function AddJiraRequest(props) {
   }
   async function submitComment() {
     try {
-      const url = process.env.REACT_APP_API_BASE_URL + "/api/Jira/request";
+      const url = BASE_URL + "/api/Jira/request";
       await axios.post(url, {
         name: name,
         subject: subject,

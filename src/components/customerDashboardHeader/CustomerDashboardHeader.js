@@ -9,6 +9,7 @@ import AddJiraRequest from "../popupWindows/AddJiraRequest";
 import ViewResponseTime from "../popupWindows/ViewResponseTime";
 
 export default function CustomerDashboardHeader() {
+  const BASE_URL = window.BASE_URL;
   useEffect(() => {
     getInfo();
   }, []);
@@ -37,7 +38,7 @@ export default function CustomerDashboardHeader() {
   let customerEmail = localStorage.getItem('email');
   async function getInfo() {
     try {
-      const url = process.env.REACT_APP_API_BASE_URL + "/api/DashboardInfo/Customer";
+      const url = BASE_URL + "/api/DashboardInfo/Customer";
       const response = await axios.get(
         url,{ params: { email: customerEmail } }
       );
