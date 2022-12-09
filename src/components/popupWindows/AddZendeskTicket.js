@@ -13,7 +13,8 @@ function AddZendeskTicket(props) {
   const[type, setType] = useState("question");
   const[customer, setCustomer] = useState("");
 
-  let customerEmail = localStorage.getItem('email');
+  const customerEmail = localStorage.getItem('email');
+  const userType = localStorage.getItem('userType');
   async function getInfo() {
     try {
     const url = process.env.REACT_APP_API_BASE_URL + "/api/DashboardInfo/Customer";
@@ -84,6 +85,9 @@ function AddZendeskTicket(props) {
     <div id={styles.popup}>
       <div id={styles.popupinner}>
         <div id={styles.userName}>{customer}</div>
+        <div id={styles.userName}>
+                    {userType}
+                </div>
         <div id={styles.windowName}>New Zendesk Ticket</div>
         <form id={styles.formStyle}>
           <div id={styles.subject}>

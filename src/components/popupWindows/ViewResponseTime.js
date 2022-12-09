@@ -9,7 +9,7 @@ function ViewResponseTime(props) {
 
     const [supportLevel, setSupportLevel] = useState("");
     
-    let userType = localStorage.getItem('userType');
+    const userType = localStorage.getItem('userType');
     async function getInfo() {
         if(props.trigger){
             const url = process.env.REACT_APP_API_BASE_URL + "/api/CustomerView/Response";
@@ -30,7 +30,7 @@ function ViewResponseTime(props) {
         <div id={styles.popup} >
             <div id={styles.popupinner}>
                 <div id={styles.userName}>
-                    TechSolutions
+                    {userType}
                 </div>
                 <div  id={styles.windowName}>
                     <div>View Response Time</div>

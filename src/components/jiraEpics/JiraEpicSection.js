@@ -85,9 +85,6 @@ export default function JiraEpicSection() {
           }
         }):<div> No Jira Issues Found </div>
       )}
-      <div>
-        <div id={styles.chevronArrowDown}></div>
-      </div>
     </div>
   );
 }

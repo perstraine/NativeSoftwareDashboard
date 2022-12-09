@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios';
-import { useEffect, useState, CSSProperties } from 'react'
+import { useEffect, useState } from 'react'
 import styles from "./SupportTicket.module.css"
 import SupportTicket from './SupportTicket'
 import FadeLoader  from "react-spinners/FadeLoader";
@@ -64,10 +64,6 @@ function SupportTicketSection() {
       /> :
       TicketElements
       } 
-
-      <div>
-        <div id={styles.chevronArrowDown}></div>
-      </div>
     </div>
   )
 }

@@ -4,11 +4,12 @@ import styles from "./PopupWindows.module.css";
 
 
 function AddJiraComment(props) {
+    const userType = localStorage.getItem('userType');
     return (props.trigger)?(
         <div id={styles.popup} >
             <div id={styles.popupinner}>
                 <div id={styles.userName}>
-                    TechSolutions
+                    {userType}
                 </div>
                 <div  id={styles.windowName}>
                     Add New Jira Comment                
