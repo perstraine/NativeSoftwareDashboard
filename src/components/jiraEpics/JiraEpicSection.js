@@ -21,13 +21,17 @@ export default function JiraEpicSection() {
   }, []);
     async function getJira() {
       try {
-        setUserType(localStorage.getItem('userType'))
+
+        setUserType(localStorage.getItem('userType'));
+        let userToken = localStorage.getItem("token");
+        const config = { headers: { Authorization: `Bearer ${userToken}` }, params: { userType: userType } };
         const url = BASE_URL + "/api/Jira"
-          const response = await axios.get(url, {
-            params: { userType: userType },
-          });
-        let sorted = quickSort(response.data)
-        if (sorted.length > 8) { sorted.length = 8; }
+          const response = await axios.get(url,
+            config
+            );
+          let sorted = quickSort(response.data)
+          if (sorted.length > 8) { sorted.length = 8; }
+
           setJira(sorted);
       setLoading(!loading);
           
@@ -84,9 +88,6 @@ export default function JiraEpicSection() {
           }
         }):<div> No Jira Issues Found </div>
       )}
-      <div>
-        <div id={styles.chevronArrowDown}></div>
-      </div>
     </div>
   );
 }

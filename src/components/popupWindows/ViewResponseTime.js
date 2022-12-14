@@ -10,13 +10,15 @@ function ViewResponseTime(props) {
 
     const [supportLevel, setSupportLevel] = useState("");
     
-    let userType = localStorage.getItem('userType');
+    const userType = localStorage.getItem('userType');
     async function getInfo() {
         if(props.trigger){
             const url = BASE_URL + "/api/CustomerView/Response";
             try {
+                let userToken = localStorage.getItem("token");
+                const config = { headers: { Authorization: `Bearer ${userToken}` },  params: { userType: userType }};
                 const response = await axios.get(
-                    url,{ params: { userType: userType } });
+                    url,config);
                     setSupportLevel(response.data);
                     //console.log(response.data);
             } 
@@ -29,7 +31,7 @@ function ViewResponseTime(props) {
         <div id={styles.popup} >
             <div id={styles.popupinner}>
                 <div id={styles.userName}>
-                    TechSolutions
+                    {userType}
                 </div>
                 <div  id={styles.windowName}>
                     <div>View Response Time</div>

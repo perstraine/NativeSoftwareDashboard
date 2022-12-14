@@ -14,9 +14,11 @@ export default function DashboardHeader() {
   const [closed, setClosed] = useState(0);
   async function getInfo() {
     try {
+      let userToken = localStorage.getItem("token");
+      const config = { headers: { Authorization: `Bearer ${userToken}` } };
       const url = BASE_URL + "/api/DashboardInfo";
       const response = await axios.get(
-        url
+        url, config
       );
       setActive(response.data.activeTickets);
       setUrgent(response.data.urgentTickets);

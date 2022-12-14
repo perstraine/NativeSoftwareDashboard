@@ -25,8 +25,12 @@ function CustomerTicketSection() {
     async function getTicket() {
       try {
         let userType = localStorage.getItem('userType');
+        let userToken = localStorage.getItem("token");
+        const config = { headers: { Authorization: `Bearer ${userToken}`}, params: { userType: userType }} ;
         const url = BASE_URL + "/api/CustomerView";
-        const response = await axios.get(url, { params: { userType: userType } });
+
+        const response = await axios.get(url, config);
+
         setTicketList(response.data);
         setLoading(!loading);
       }

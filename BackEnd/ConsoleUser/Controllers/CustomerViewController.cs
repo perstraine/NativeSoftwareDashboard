@@ -3,6 +3,7 @@ using ConsoleUser.Models;
 using ConsoleUser.Models.Domain;
 using ConsoleUser.Models.DTO;
 using ConsoleUser.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -19,6 +20,7 @@ namespace Zendesk.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class CustomerViewController : ControllerBase
     {
         private readonly IConfiguration configuration;

@@ -1,6 +1,6 @@
 import React from 'react'
 import axios from 'axios';
-import { useEffect, useState, CSSProperties } from 'react'
+import { useEffect, useState } from 'react'
 import styles from "./SupportTicket.module.css"
 import SupportTicket from './SupportTicket'
 import FadeLoader  from "react-spinners/FadeLoader";
@@ -24,9 +24,11 @@ function SupportTicketSection() {
 
   async function getTicket() {
     try {
-      //let userType = localStorage.getItem(userType);
+      let userToken = localStorage.getItem("token");
+      const config = { headers: { Authorization: `Bearer ${userToken}` } };
       const url = BASE_URL + "/api/Zendesk";
-      const response = await axios.get(url)
+      const response = await axios.get(url,config);
+
       setTicketList(response.data);
       setLoading(!loading);
     }
@@ -64,10 +66,6 @@ function SupportTicketSection() {
       /> :
       TicketElements
       } 
-
-      <div>
-        <div id={styles.chevronArrowDown}></div>
-      </div>
     </div>
   )
 }

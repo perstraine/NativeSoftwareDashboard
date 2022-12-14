@@ -1,13 +1,16 @@
 ﻿using ConsoleUser.Controllers;
+using ConsoleUser.DTO;
 using ConsoleUser.Models;
 using ConsoleUser.Models.Domain;
 using ConsoleUser.Models.DTO;
 using ConsoleUser.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -34,6 +37,7 @@ namespace Zendesk.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetTickets()
         {
             var BasicAuth = configuration.GetValue<string>("ZendeskAuthKey");

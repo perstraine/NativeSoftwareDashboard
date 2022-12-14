@@ -25,6 +25,7 @@ function AddJiraRequest(props) {
         break;
     }
   }
+  const userType = localStorage.getItem('userType');
   async function submitComment() {
     try {
       const url = BASE_URL + "/api/Jira/request";
@@ -48,7 +49,7 @@ function AddJiraRequest(props) {
   return props.trigger ? (
     <div id={styles.popup}>
       <div id={styles.popupinner}>
-        <div id={styles.userName}>TechSolutions</div>
+        <div id={styles.userName}>{userType}</div>
         <div id={styles.windowName}>New Jira Request</div>
         <form id={styles.formStyle}>
           <div id={styles.subject}>
