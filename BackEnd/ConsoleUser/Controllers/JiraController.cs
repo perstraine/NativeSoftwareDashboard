@@ -18,7 +18,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace ConsoleUser.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize]
+
     [ApiController]
     public class JiraController : ControllerBase
     {
@@ -27,7 +27,9 @@ namespace ConsoleUser.Controllers
         public JiraController(IConfiguration configuration){
             this.configuration = configuration;
         }
+        
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> JiraEpicTickets(string userType)
         {
             var BasicAuth = configuration.GetValue<string>("JiraAuthKey");
@@ -141,10 +143,13 @@ namespace ConsoleUser.Controllers
             }
             return epicList;
         }
+
         [HttpPost]
         [Route("comment")]
+        [Authorize]
         public async Task<IActionResult> addJiraComment(JiraComment jiraComment)
         {
+            Console.WriteLine("Reached BackEnd");
             var BasicAuth = configuration.GetValue<string>("JiraAuthKey");
             var DomainUrl = configuration.GetSection("JiraApi:Domain").Value;
             var options = new RestClientOptions(DomainUrl)
@@ -169,6 +174,7 @@ namespace ConsoleUser.Controllers
         }
         [HttpPost]
         [Route("request")]
+        [Authorize]
         public async Task<IActionResult> newJiraRequest(NewJiraRequest newJiraRequest){
             var SendGridEmail = configuration.GetSection("SendGrid:Email").Value;
 

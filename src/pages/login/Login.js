@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import FadeLoader  from "react-spinners/FadeLoader";
 
 export default function Login() {
+  const BASE_URL = window.BASE_URL;
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [logintoken, setLoginToken] = useState('');
@@ -25,8 +26,8 @@ export default function Login() {
     if(logintoken)
     {
       const config = { headers: { Authorization: `Bearer ${logintoken}` } };
-      const url = process.env.REACT_APP_API_BASE_URL + "/Auth/login";
-      axios.get(url)
+      const url = BASE_URL + "/Auth/login";
+      axios.get(url,config)
         .then((response) => {
           console.log(response);
           if (response.data === 'User Authorised') {
@@ -54,13 +55,12 @@ export default function Login() {
   }
 
   const buttonClick = (e) => {
-    console.log("OVERHERE", process.env.REACT_APP_API_BASE_URL);
       setLoading(!loading);
       e.preventDefault();
       setEmail(email);
       localStorage.setItem('email',email);
       setPassword(password);
-      const url = process.env.REACT_APP_API_BASE_URL + "/Auth/login";
+      const url = BASE_URL + "/Auth/login";
       axios.post(url, {
         userEmail:email,
         password:password
@@ -79,7 +79,7 @@ export default function Login() {
           setLoading(false);
         })
         .catch((error) => {
-          console.log('wew',error);
+          console.log(error);
             setErrorMessage(
               "Email and password does not match. Please try again."
             );

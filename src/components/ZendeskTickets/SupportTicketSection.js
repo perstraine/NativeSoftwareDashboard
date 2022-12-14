@@ -6,6 +6,7 @@ import SupportTicket from './SupportTicket'
 import FadeLoader  from "react-spinners/FadeLoader";
 
 function SupportTicketSection() {
+  const BASE_URL = window.BASE_URL;
   const [loading, setLoading] = useState(true);
   const [ticketList, setTicketList] = useState([]);
 
@@ -25,8 +26,9 @@ function SupportTicketSection() {
     try {
       let userToken = localStorage.getItem("token");
       const config = { headers: { Authorization: `Bearer ${userToken}` } };
-      const url = process.env.REACT_APP_API_BASE_URL + "/api/Zendesk";
+      const url = BASE_URL + "/api/Zendesk";
       const response = await axios.get(url,config);
+
       setTicketList(response.data);
       setLoading(!loading);
     }

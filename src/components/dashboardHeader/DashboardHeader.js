@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 export default function DashboardHeader() {
+  const BASE_URL = window.BASE_URL;
   useEffect(() => {
     getInfo();
   }, []);
@@ -15,7 +16,7 @@ export default function DashboardHeader() {
     try {
       let userToken = localStorage.getItem("token");
       const config = { headers: { Authorization: `Bearer ${userToken}` } };
-      const url = process.env.REACT_APP_API_BASE_URL + "/api/DashboardInfo";
+      const url = BASE_URL + "/api/DashboardInfo";
       const response = await axios.get(
         url, config
       );

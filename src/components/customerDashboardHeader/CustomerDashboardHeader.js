@@ -9,6 +9,7 @@ import AddJiraRequest from "../popupWindows/AddJiraRequest";
 import ViewResponseTime from "../popupWindows/ViewResponseTime";
 
 export default function CustomerDashboardHeader() {
+  const BASE_URL = window.BASE_URL;
   useEffect(() => {
     getInfo();
   }, []);
@@ -28,13 +29,10 @@ export default function CustomerDashboardHeader() {
   async function getInfo() {
     try {
       let userToken = localStorage.getItem("token");
-      const config = { headers: { Authorization: `Bearer ${userToken}` },  params: { email: customerEmail }};
-      const url = process.env.REACT_APP_API_BASE_URL + "/api/DashboardInfo/Customer";
+      const config = { headers: { Authorization: `Bearer ${userToken}`},  params: { email: customerEmail }};
+      const url = BASE_URL + "/api/DashboardInfo/Customer";
 
-      const response = await axios.get(url, 
-        config
-        
-      );
+      const response = await axios.get(url, config);
 
       setActive(response.data.activeTickets);
       setClosed(response.data.closedTickets);

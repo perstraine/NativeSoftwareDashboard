@@ -6,6 +6,7 @@ import JiraEpicCustomer from "./JiraEpicCustomer";
 import FadeLoader from "react-spinners/FadeLoader";
 
 export default function JiraEpicSection() {
+  const BASE_URL = window.BASE_URL;
   const [loading, setLoading] = useState(true);
   const [userType, setUserType] = useState(localStorage.getItem("userType"));
   const [jira, setJira] = useState([]);
@@ -20,15 +21,17 @@ export default function JiraEpicSection() {
   }, []);
     async function getJira() {
       try {
+
         setUserType(localStorage.getItem('userType'));
         let userToken = localStorage.getItem("token");
         const config = { headers: { Authorization: `Bearer ${userToken}` }, params: { userType: userType } };
-        const url = process.env.REACT_APP_API_BASE_URL + "/api/Jira";
+        const url = BASE_URL + "/api/Jira"
           const response = await axios.get(url,
             config
             );
           let sorted = quickSort(response.data)
-        console.log(response);
+          if (sorted.length > 8) { sorted.length = 8; }
+
           setJira(sorted);
       setLoading(!loading);
           

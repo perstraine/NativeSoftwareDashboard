@@ -3,7 +3,8 @@ import {useState, useEffect} from "react";
 import styles from "./PopupWindows.module.css";
 
 function AddZendeskTicket(props) {
-  useEffect(() => {
+const BASE_URL = window.BASE_URL;  
+useEffect(() => {
       getInfo();
     }, []);
   const[disableButton, setDisableButton] = useState(false);
@@ -17,14 +18,14 @@ function AddZendeskTicket(props) {
   const userType = localStorage.getItem('userType');
   async function getInfo() {
     try {
-    const url = process.env.REACT_APP_API_BASE_URL + "/api/DashboardInfo/Customer";
+      const url = BASE_URL + "/api/DashboardInfo/Customer";
 
       const response = await axios.get(
         url,{ params: { email: customerEmail } });
       //console.log(response);
       setCustomer(response.data.customer);
     } catch (error) {}
-    }
+  }
 
     const onSubmitClick = () => {
       console.log('clicked');
@@ -49,7 +50,7 @@ function AddZendeskTicket(props) {
     const userToken = localStorage.getItem("token");
     const config = {
       method: 'post',
-      url : process.env.REACT_APP_API_BASE_URL + "/api/NewTicket",
+      url : BASE_URL + "/api/NewTicket",
       headers: { 
         'Authorization': `Bearer ${userToken}`, 
         'Content-Type': 'application/json'

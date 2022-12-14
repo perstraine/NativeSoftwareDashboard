@@ -6,6 +6,7 @@ import CustomerTicket from './CustomerTicket';
 import FadeLoader  from "react-spinners/FadeLoader";
 
 function CustomerTicketSection() {
+  const BASE_URL = window.BASE_URL;
     const [loading, setLoading] = useState(true);
     const [ticketList, setTicketList] = useState([]);
   
@@ -26,7 +27,7 @@ function CustomerTicketSection() {
         let userType = localStorage.getItem('userType');
         let userToken = localStorage.getItem("token");
         const config = { headers: { Authorization: `Bearer ${userToken}`}, params: { userType: userType }} ;
-        const url = process.env.REACT_APP_API_BASE_URL + "/api/CustomerView";
+        const url = BASE_URL + "/api/CustomerView";
 
         const response = await axios.get(url, config);
 

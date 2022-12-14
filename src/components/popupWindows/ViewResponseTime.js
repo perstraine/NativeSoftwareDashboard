@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import styles from "./PopupWindows.module.css";
 
 function ViewResponseTime(props) {
+    const BASE_URL = window.BASE_URL;
     useEffect(() => {
         getInfo();
     }, [props.trigger]);
@@ -12,7 +13,7 @@ function ViewResponseTime(props) {
     const userType = localStorage.getItem('userType');
     async function getInfo() {
         if(props.trigger){
-            const url = process.env.REACT_APP_API_BASE_URL + "/api/CustomerView/Response";
+            const url = BASE_URL + "/api/CustomerView/Response";
             try {
                 let userToken = localStorage.getItem("token");
                 const config = { headers: { Authorization: `Bearer ${userToken}` },  params: { userType: userType }};
