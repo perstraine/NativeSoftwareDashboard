@@ -8,6 +8,7 @@ import JiraEpicSection from '../../components/jiraEpics/JiraEpicSection';
 import styles from "./CustomerDashboard.module.css"
 
 function CustomerDashboard() {
+  const BASE_URL = window.BASE_URL;
     const [loggedIn,setLoggedIn] = useState(false)
     const navigate = useNavigate();
     useEffect(() => {
@@ -20,7 +21,7 @@ function CustomerDashboard() {
       if (logintoken)
       {
         try {
-          const url = process.env.REACT_APP_API_BASE_URL + "/Auth/login";
+          const url = BASE_URL + "/Auth/login";
           await axios
             .get(url, config);
           if (userType !== "Staff") {
