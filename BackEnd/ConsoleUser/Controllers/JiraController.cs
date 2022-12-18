@@ -178,7 +178,12 @@ namespace ConsoleUser.Controllers
         public async Task<IActionResult> newJiraRequest(NewJiraRequest newJiraRequest){
             var SendGridEmail = configuration.GetSection("SendGrid:Email").Value;
 
+            //Uncomment out next line when building application
+            // var apiKey = configuration.GetSection("SendGrid:API").Value;
+
+            //Comment out next line when Building Application
             var apiKey = Environment.GetEnvironmentVariable("SendGrid_API");
+
             var client = new SendGridClient(apiKey);
             var from = new EmailAddress(SendGridEmail, newJiraRequest.name);
             var subject = newJiraRequest.subject;

@@ -28,13 +28,23 @@ function AddJiraRequest(props) {
   const userType = localStorage.getItem('userType');
   async function submitComment() {
     try {
-      const url = BASE_URL + "/api/Jira/request";
-      await axios.post(url, {
+      let userToken = localStorage.getItem("token");
+      const parameters = {
         name: name,
         subject: subject,
-          email: email,
-        message: comment
-      });
+        email: email,
+        message: comment,
+      };
+      const config = {
+        method: "post",
+        url: BASE_URL + "/api/Jira/request",
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+          "Content-Type": "application/json",
+        },
+        data: parameters,
+      };
+      await axios(config);
       window.alert("Request Sent Successfully");
     } catch {
       window.alert("Failed to Send Request");
