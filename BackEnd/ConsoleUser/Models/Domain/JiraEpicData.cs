@@ -7,7 +7,7 @@ namespace ConsoleUser.Models.Domain
         [AllowNull] public string id { get; set; }
         [AllowNull] public string Account { get; set; }
         [AllowNull] public string Name { get; set; }
-        [AllowNull] public DateTime StartDate { get; set; } // TODO confirm requested or creted time
+        [AllowNull] public DateTime StartDate { get; set; }
         [AllowNull] public DateTime DueDate { get; set; }
         [AllowNull] public double? StoryPoints { get; set; }
         [AllowNull] public double? Budget { get; set; }

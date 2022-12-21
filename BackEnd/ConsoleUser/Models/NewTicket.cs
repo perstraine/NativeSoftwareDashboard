@@ -1,5 +1,6 @@
 ﻿namespace NewZendeskTicket
 {
+    //Data for adding a new ticket in Zendesk
     public class CustomField
     {
         public long id { get; set; }

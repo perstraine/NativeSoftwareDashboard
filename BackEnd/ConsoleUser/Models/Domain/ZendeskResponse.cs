@@ -2,6 +2,7 @@
 
 namespace ConsoleUser.Models.Domain
 {
+    //Response from Zendesk for all tickets from all the users.
     public class ZendeskData
     {
         [AllowNull] public List<Ticket> tickets { get; set; }

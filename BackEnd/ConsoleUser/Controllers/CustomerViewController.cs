@@ -137,8 +137,10 @@ namespace Zendesk.Controllers
         {
             if (tickets == null) { return null; }
 
+            //Create an empty list of tickets
             var dashboardUserTicketData = new List<DashboardUserTicketData>();
 
+            //Looping throught tickets to create new JSON object to send to frontend
             foreach (var ticket in tickets.tickets)
             {
                 var userTicketData = new DashboardUserTicketData();
@@ -161,6 +163,7 @@ namespace Zendesk.Controllers
             return dashboardUserTicketData;
         }
 
+        //Getting first updated time
         private static string GetFirstUpdate(Ticket ticket, List<TicketMetric> ticketMetrices)
         {
             foreach (var ticketMatrix in ticketMetrices)
@@ -174,6 +177,7 @@ namespace Zendesk.Controllers
             return ticket.created_at.ToLocalTime().ToString();
         }
 
+        //Getting last updated time
         private static string GetLastUpdate(Ticket ticket, List<TicketMetric> ticketMetrices)
         {
             foreach (var ticketMatrix in ticketMetrices)
@@ -187,8 +191,10 @@ namespace Zendesk.Controllers
             return ticket.created_at.ToLocalTime().ToString();
         }
 
+        //Getting time due minus off business hours and weekends
         private static string GetTimeDueMinusOffHours(Ticket ticket, DateTime requestedDate, string priority, ZendeskUsers? zendeskUsers, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel)//DateTime requestedDate, UserTicketData.Ticket ticket, IEnumerable<ConsoleUser.Models.User> zendeskUsers, IEnumerable<ConsoleUser.Models.Customer> customers, IEnumerable<ConsoleUser.Models.CustomerSupportLevel> supportLevel)
         {
+            //TODO add public holidays
             requestedDate = requestedDate.ToLocalTime();
             string organisation = GetZendeskUserName(zendeskUsers, ticket);
             //If ticket logged after hours, then log time changed to next working day morning.
@@ -268,6 +274,7 @@ namespace Zendesk.Controllers
             return timeDue.ToString();
         }
 
+        //Getting zendesk username from users
         private static string GetZendeskUserName(ZendeskUsers? zendeskUsers, Ticket ticket)
         {
             foreach (var user in zendeskUsers.users)
@@ -280,8 +287,10 @@ namespace Zendesk.Controllers
             return "null";
         }
         
+        //Assiging traffic light colours to tickets based on time
         private static string GetTrafficLight(DateTime timeDue)
         {
+            //TODO to be added to database.
             float veryHigh = 2;
             float high = 8;
             float normal = 24;
@@ -290,6 +299,7 @@ namespace Zendesk.Controllers
             return dueHours <= veryHigh ? "red" : dueHours <= high ? "orange" : dueHours <= normal ? "yellow" : "green";
         }
         
+        //Sorting tickets based of due date
         private static List<DashboardUserTicketData> QuickSortTickets(List<DashboardUserTicketData> dashboardUserTicketData, int leftIndex, int rightIndex)
         {
             var i = leftIndex;

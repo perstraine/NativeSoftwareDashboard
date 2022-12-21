@@ -1,6 +1,6 @@
 ﻿namespace ConsoleUser.Models.Domain
 {
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
+    //Details about Zendesk Users
     public class Photo
     {
         public string url { get; set; }

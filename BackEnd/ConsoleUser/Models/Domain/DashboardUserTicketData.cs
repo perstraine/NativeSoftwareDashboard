@@ -2,6 +2,7 @@
 
 namespace ConsoleUser.Models.Domain
 {
+    //Zendesk tickets from a particular user to be displayed on dashboard
     public class DashboardUserTicketData
     {
         [AllowNull] public int Id { get; set; }

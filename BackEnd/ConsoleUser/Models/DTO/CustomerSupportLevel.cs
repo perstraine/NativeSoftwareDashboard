@@ -1,5 +1,6 @@
 ﻿namespace ConsoleUser.Models.DTO
 {
+    //Suppoet level details from database
     public class CustomerSupportLevel
     {
         public int SupportLevel { get; set; }   

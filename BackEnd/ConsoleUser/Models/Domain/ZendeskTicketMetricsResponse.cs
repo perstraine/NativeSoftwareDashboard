@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace ConsoleUser.Models.Domain
 {
-    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
+    //More details about a ticket from ZendeskTicketMetrics
     public class AgentWaitTimeInMinutes
     {
         public object calendar { get; set; }

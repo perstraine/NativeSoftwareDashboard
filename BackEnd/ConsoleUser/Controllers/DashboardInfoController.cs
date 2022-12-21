@@ -16,6 +16,7 @@ using System.Net.Sockets;
 
 namespace Zendesk.Controllers
 {
+    //Getting other information for the dashboard
     [ApiController]
     [Route("api/[controller]")]
     public class DashboardInfoController : ControllerBase

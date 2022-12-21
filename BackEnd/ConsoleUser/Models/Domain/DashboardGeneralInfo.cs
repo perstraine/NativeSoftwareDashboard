@@ -2,6 +2,7 @@
 
 namespace ConsoleUser.Models.Domain
 {
+    //Model for dashboard general information 
     public class DashboardGeneralInfo
     {
         [AllowNull] public int id { get; set; }

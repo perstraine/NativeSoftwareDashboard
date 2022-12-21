@@ -2,6 +2,7 @@
 
 namespace ConsoleUser.Models
 {
+    //User data in database
     public class User
     {
         public Guid Id { get; set; }

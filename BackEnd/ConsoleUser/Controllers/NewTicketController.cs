@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ConsoleUser.Controllers
 {
+    //Creating new tickets for Zendesk
     [Route("api/[controller]")]
     [Authorize]
     [ApiController]

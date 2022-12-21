@@ -21,6 +21,7 @@ using System.Threading;
 
 namespace Zendesk.Controllers
 {
+    //Getting ticket data from Zendesk part of the dashboard
     [ApiController]
     [Route("api/[controller]")]
     public class ZendeskController : ControllerBase
@@ -61,7 +62,6 @@ namespace Zendesk.Controllers
             ticketRequest.AddHeader("Authorization", BasicAuth);
             usersRequest.AddHeader("Authorization", BasicAuth);
 
-            //TODO do we actually need cookies
             ticketRequest.AddHeader("Cookie", Cookie);
             usersRequest.AddHeader("Cookie", Cookie);
 
@@ -94,7 +94,7 @@ namespace Zendesk.Controllers
                     dashboardTicket.Organisation = GetZendeskUserName(zendeskUsers, ticket);
                     if (ticket.subject != null) dashboardTicket.Subject = ticket.subject;
                     if (ticket.status != null) dashboardTicket.Status = ticket.status;
-                    if (ticket.assignee_id != null) dashboardTicket.Recipient = ticket.assignee_id.ToString();//TODO assignee or recepient
+                    if (ticket.assignee_id != null) dashboardTicket.Recipient = ticket.assignee_id.ToString();
                     if (ticket.custom_fields.Count>0) { dashboardTicket.Billable = GetBillableCustomField(ticket, billableId); } else { dashboardTicket.Billable = false; }
                     dashboardTicket.Priority = ticket.priority;
                     dashboardTicket.RequestedDate = ticket.created_at.ToLocalTime().ToString();

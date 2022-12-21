@@ -1,5 +1,6 @@
 ﻿namespace ConsoleUser.Models
 {
+    //Data from frontend when user clicks add ticket
     public class CustomField
     {
         public long id { get; set; }

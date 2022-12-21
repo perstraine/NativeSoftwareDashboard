@@ -11,6 +11,7 @@ using System.Security.Claims;
 
 namespace ConsoleUser.Controllers
 {
+    //Gettings users from database
     [ApiController]
     [Route("api/[controller]")]
     public class CustomerController2 : Controller

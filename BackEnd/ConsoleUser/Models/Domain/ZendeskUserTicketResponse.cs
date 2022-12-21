@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 namespace UserTicketData
 {
+    //More details about ticket from a particular user
     public class UserTicketData
     {
         public List<Ticket> tickets { get; set; }
