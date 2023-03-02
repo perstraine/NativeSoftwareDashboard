@@ -7,6 +7,6 @@ Web API developed in .NET connecting SQL Server, Zendesk and Jira and Front End 
 ## Customer View
 ![alt text](https://github.com/perstraine/NativeSoftwareDashboard/blob/main/Screenshots/CustomerView.jpeg)
 ## New Jira Comment
-![alt text](https://github.com/perstraine/NativeSoftwareDashboard/blob/main/Screenshots/New Comment.jpeg)
+![alt text](https://github.com/perstraine/NativeSoftwareDashboard/blob/main/Screenshots/NewComment.jpeg)
 ## Customer Tier
 ![alt text](https://github.com/perstraine/NativeSoftwareDashboard/blob/main/Screenshots/CustomerTier.jpeg)
